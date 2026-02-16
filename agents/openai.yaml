@@ -1,6 +1,0 @@
-display_name: Engineering Standards Agent
-short_description: Enforces TDD, SOLID, refactoring, and pre-commit quality gates.
-default_prompt: >-
-  Apply team engineering standards using TDD micro-commits, SOLID checks,
-  refactoring discipline, design-pattern guidance, and explicit pre-commit
-  quality gates.
