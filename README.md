@@ -210,6 +210,8 @@ engineering-standards/
 │   ├── SOLID_PRINCIPLES.md             # SOLID principles deep-dive (multi-language)
 │   ├── JAVA_STANDARDS.md            # Java-specific conventions
 │   ├── KOTLIN_STANDARDS.md            # Kotlin-specific conventions
+│   ├── TYPESCRIPT_STANDARDS.md        # TypeScript-specific conventions
+│   ├── NEXTJS_STANDARDS.md            # Next.js framework conventions
 │   └── PRE_COMMIT_CHECKLIST.md        # Pre-commit quality checklist
 │
 ├── AGENTS.md                           # OpenCode / Copilot / Cline rules
@@ -230,23 +232,31 @@ engineering-standards/
 │   ├── code-review.md
 │   ├── micro-commit-workflow.md
 │   ├── java.md
-│   └── kotlin.md
+│   ├── kotlin.md
+│   ├── typescript.md
+│   └── nextjs.md
 │
 ├── .cursor/rules/                      # Cursor rules
 │   ├── engineering-standards.md
 │   ├── code-review.md
 │   ├── java.md
-│   └── kotlin.md
+│   ├── kotlin.md
+│   ├── typescript.md
+│   └── nextjs.md
 │
 ├── .github/                            # GitHub Copilot
 │   ├── copilot-instructions.md
 │   └── instructions/
 │       ├── code-quality.instructions.md
 │       ├── java.instructions.md
-│       └── kotlin.instructions.md
+│       ├── kotlin.instructions.md
+│       ├── typescript.instructions.md
+│       └── nextjs.instructions.md
 │
 ├── .clinerules/                        # Cline rules
-│   └── engineering-standards.md
+│   ├── engineering-standards.md
+│   ├── typescript.md
+│   └── nextjs.md
 ```
 
 ## Tool-Specific Features

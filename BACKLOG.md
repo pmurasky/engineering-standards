@@ -4,7 +4,9 @@ Tracking document for improvements to the engineering standards project.
 
 ## P1 - Should Fix (Significant improvement)
 
-- [ ] **Add TypeScript/JavaScript standards** -- Globs in all tool configs promise coverage for `*.ts, *.js` but no standards doc exists. Create `docs/TYPESCRIPT_STANDARDS.md`.
+- [x] **Add TypeScript/JavaScript standards** -- Added `docs/TYPESCRIPT_STANDARDS.md`.
+
+- [x] **Add Next.js standards** -- Added `docs/NEXTJS_STANDARDS.md` for App Router architecture, data fetching, caching, security, and testing guidance.
 
 - [ ] **Add Python standards** -- Globs promise coverage for `*.py` but no standards doc exists. Create `docs/PYTHON_STANDARDS.md`.
 

@@ -47,7 +47,7 @@ Open a GitHub issue describing:
 
 ### Adding a New Language
 
-Follow the pattern established by Java and Kotlin:
+Follow the pattern established by Java, Kotlin, and TypeScript:
 
 1. Create `docs/<LANGUAGE>_STANDARDS.md`.
 2. Create tool-specific rule files:
@@ -56,6 +56,15 @@ Follow the pattern established by Java and Kotlin:
    - `.github/instructions/<language>.instructions.md` with `applyTo: "**/*.<ext>"`
    - `.clinerules/<language>.md` (if Cline supports path-scoped rules)
 3. Update globs in existing code-review and testing rules if the file extension is not already included.
+4. Update the project structure tree in `README.md`.
+
+### Adding a Framework Standards Document
+
+For framework-level guidance (for example Next.js):
+
+1. Create `docs/<FRAMEWORK>_STANDARDS.md`.
+2. Add it to `docs/CODING_STANDARDS.md`.
+3. Add references to it in tool configs that should load it.
 4. Update the project structure tree in `README.md`.
 
 ### Commit Messages

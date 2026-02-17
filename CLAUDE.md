@@ -62,6 +62,8 @@ When you need detailed guidance, read the relevant file:
 - `docs/CODING_STANDARDS.md` - Standards index (table of contents)
 - `docs/JAVA_STANDARDS.md` - Java-specific conventions (when working with Java)
 - `docs/KOTLIN_STANDARDS.md` - Kotlin-specific conventions (when working with Kotlin)
+- `docs/TYPESCRIPT_STANDARDS.md` - TypeScript-specific conventions (when working with TypeScript)
+- `docs/NEXTJS_STANDARDS.md` - Next.js framework conventions (when working with Next.js)
 - `docs/PRE_COMMIT_CHECKLIST.md` - Pre-commit quality checklist
 - `docs/DESIGN_PATTERNS.md` - Design patterns catalog and guidance
 - `docs/SOLID_PRINCIPLES.md` - SOLID principles with multi-language examples

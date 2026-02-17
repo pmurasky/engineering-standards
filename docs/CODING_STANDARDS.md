@@ -54,6 +54,12 @@ This document serves as the table of contents for all coding standards and pract
 ### [KOTLIN_STANDARDS.md](./KOTLIN_STANDARDS.md)
 **Kotlin-specific conventions** (read when working with Kotlin)
 
+### [TYPESCRIPT_STANDARDS.md](./TYPESCRIPT_STANDARDS.md)
+**TypeScript-specific conventions** (read when working with TypeScript)
+
+### [NEXTJS_STANDARDS.md](./NEXTJS_STANDARDS.md)
+**Next.js framework conventions** (read when working with Next.js)
+
 ## Quick Reference
 
 ### For New Team Members
@@ -85,5 +91,5 @@ If anything is unclear or needs discussion:
 
 ---
 
-**Last Updated**: February 16, 2026
-**Version**: 5.0 (Added SOLID_PRINCIPLES.md to index)
+**Last Updated**: February 17, 2026
+**Version**: 5.1 (Added TypeScript and Next.js standards to index)

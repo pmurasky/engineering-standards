@@ -52,3 +52,5 @@ Read these files for detailed guidance:
 - `docs/SOLID_PRINCIPLES.md` - SOLID principles with multi-language examples
 - `docs/JAVA_STANDARDS.md` - Java conventions (when working with Java)
 - `docs/KOTLIN_STANDARDS.md` - Kotlin conventions (when working with Kotlin)
+- `docs/TYPESCRIPT_STANDARDS.md` - TypeScript conventions (when working with TypeScript)
+- `docs/NEXTJS_STANDARDS.md` - Next.js framework conventions (when working with Next.js)

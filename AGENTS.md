@@ -70,6 +70,8 @@ For language-agnostic coding practices, SOLID examples, testing, and TDD: @docs/
 For the standards index (table of contents): @docs/CODING_STANDARDS.md
 For Java-specific conventions (when working with Java): @docs/JAVA_STANDARDS.md
 For Kotlin-specific conventions (when working with Kotlin): @docs/KOTLIN_STANDARDS.md
+For TypeScript-specific conventions (when working with TypeScript): @docs/TYPESCRIPT_STANDARDS.md
+For Next.js framework conventions (when working with Next.js): @docs/NEXTJS_STANDARDS.md
 For the pre-commit quality checklist: @docs/PRE_COMMIT_CHECKLIST.md
 For design patterns guidance: @docs/DESIGN_PATTERNS.md
 For SOLID principles with multi-language examples: @docs/SOLID_PRINCIPLES.md
