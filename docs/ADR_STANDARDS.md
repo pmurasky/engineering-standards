@@ -41,7 +41,7 @@ docs/adr/
 
 ## Status
 
-Proposed | Accepted | Deprecated | Superseded by [ADR-NNNN](./NNNN-slug.md)
+Proposed | Accepted | Deprecated | Superseded by `ADR-NNNN` (`NNNN-slug.md`)
 
 ## Date
 
@@ -120,7 +120,7 @@ When a decision is reversed or significantly changed:
 
 1. Write a new ADR explaining the new decision and why the old one no longer applies
 2. In the new ADR's **Context** section, reference the old ADR
-3. Update the old ADR's **Status** to `Superseded by [ADR-NNNN](./NNNN-slug.md)`
+3. Update the old ADR's **Status** to `Superseded by ADR-NNNN (NNNN-slug.md)`
 4. Do NOT modify any other content in the old ADR
 
 ### Deprecating an ADR
