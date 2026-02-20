@@ -474,16 +474,17 @@ a pom.xml file. Now it logs a warning and continues processing.
 ## Dependencies
 
 ### Dependency Management
-- Keep dependencies up-to-date
-- Avoid dependencies with known vulnerabilities
-- Document reason for each major dependency
-- Prefer well-maintained libraries
+- **Always use the latest stable (GA) release** when adding a new dependency — never intentionally start on an older version
+- Avoid dependencies with known vulnerabilities — verify against [NVD](https://nvd.nist.gov/), [OSV](https://osv.dev/), or [GitHub Advisory Database](https://github.com/advisories) before adding
+- Document the reason for each major dependency in the commit message
+- Prefer well-maintained libraries (active releases, responsive maintainers)
 - Check licenses for compatibility
 
 ### Version Pinning
-- Pin exact versions in build files
-- Document why specific versions are used
-- Regular dependency updates (monthly review)
+- **Direct dependencies**: pin the exact latest stable version explicitly at the time of addition
+- **BOM-managed ecosystems** (Spring Boot, Quarkus, Micronaut, etc.): trust the BOM — do NOT manually pin transitive dependency versions; the BOM ensures a patched, compatible set
+- Update dependencies when vulnerabilities are disclosed, not just on a scheduled cadence
+- Regular dependency review (monthly) to proactively catch newly disclosed CVEs
 
 ## Security Practices
 
@@ -500,10 +501,10 @@ a pom.xml file. Now it logs a warning and continues processing.
 - Avoid injection vulnerabilities
 
 ### Dependency Security
-- Regular security audits of dependencies
-- Monitor for security advisories
-- Update vulnerable dependencies promptly
-- Use dependency scanning tools
+- **Before adding**: verify no known CVEs using NVD, OSV, or GitHub Advisory Database
+- **When vulnerabilities are disclosed**: update immediately, do not wait for a scheduled review
+- Integrate dependency scanning in CI (e.g., OWASP Dependency-Check, Dependabot, Snyk) — fail the build on critical/high CVEs
+- Monitor security advisories for all production dependencies
 
 ## Performance Guidelines
 
