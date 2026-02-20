@@ -84,7 +84,7 @@ val name = config.projectName!!
 ### Function Design
 
 Apply the same standards from CODING_PRACTICES.md:
-- **Maximum 15 lines per function** (excluding blanks/braces)
+- **Maximum 20 lines per function** (excluding blanks/braces)
 - Prefer expression bodies for simple functions
 - Use named arguments for functions with multiple parameters
 - Default parameter values where appropriate
@@ -236,6 +236,17 @@ fun `should calculate correct score with multiple penalties`() {
 }
 ```
 
+### Architecture Testing with ArchUnit
+
+ArchUnit enforces architectural constraints as standard JUnit 5 tests: layer boundaries, package cycles, dependency direction, and naming conventions. ArchUnit has first-class Kotlin support and analyzes compiled bytecode, so data classes, companion objects, and extension functions are all visible.
+
+- **Full documentation**: [ARCHUNIT_STANDARDS.md](./ARCHUNIT_STANDARDS.md)
+- **Configuration**: `config/archunit/archunit.properties`
+- **Dependency**: `com.tngtech.archunit:archunit-junit5:1.4.1` (test scope)
+- **Note**: Kotlin `internal` visibility compiles to `public` + `@JvmSynthetic` -- ArchUnit sees these as public. Be aware when writing visibility-based rules.
+
+Use detekt for Kotlin code style (naming, complexity, formatting) and ArchUnit for architecture enforcement. They serve complementary purposes.
+
 ### Gradle Kotlin DSL
 
 **Use `build.gradle.kts`:**
@@ -260,15 +271,186 @@ dependencies {
 
 ## Code Quality Tools
 
+For the overarching static analysis philosophy, zero-tolerance policy, suppression strategy, incremental adoption, and cross-language tool matrix, see [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md). This section covers Kotlin-specific configuration and integration.
+
 **Static Analysis:**
+- **detekt**: Primary Kotlin static analysis tool (comprehensive rule set)
+- **PMD**: Supplementary analysis (limited Kotlin support: 2 rules)
 - **ktlint**: Formatting and linting
-- **detekt**: Static code analysis
-- Configure to enforce these standards
+- **ArchUnit**: Architecture testing as unit tests -- layer boundaries, package cycles, dependency direction (see [ARCHUNIT_STANDARDS.md](./ARCHUNIT_STANDARDS.md))
 
 **Same rules apply:**
-- 15-line method maximum
+- 20-line method maximum
 - 0-2 private method guideline
-- 80%+ test coverage
+- 80%+ unit test coverage (unit tests only -- integration/E2E tests do not count toward coverage)
+- No duplicated code
+
+### detekt vs PMD: When to Use Each
+
+| Concern | Tool | Why |
+|---------|------|-----|
+| Complexity (method length, class size, cyclomatic) | **detekt** | Full Kotlin AST support with configurable thresholds |
+| Naming conventions | **detekt** | Understands Kotlin naming patterns (backtick tests, companion objects) |
+| Style and idioms | **detekt** | Kotlin-specific rules (scope functions, expression bodies, etc.) |
+| Performance | **detekt** | Detects spread operator misuse, `ForEachOnRange`, sequences |
+| Potential bugs | **detekt** | Nullable type safety, unreachable code, mutable state issues |
+| Exception handling | **detekt** | Swallowed exceptions, too-generic catch/throw |
+| Coroutine correctness | **detekt** | `GlobalScope` usage, `sleep` vs `delay`, dispatcher injection |
+| KDoc documentation | **detekt** | Undocumented public APIs, outdated docs |
+| Function name length | **PMD** | `FunctionNameTooShort` (min 3 chars) |
+| equals/hashCode contract | **PMD** | `OverrideBothEqualsAndHashcode` (catches manual overrides) |
+
+**Recommendation**: Run both tools. detekt handles the vast majority of analysis; PMD catches two additional edge cases that detekt does not duplicate.
+
+### detekt Configuration
+
+This repo provides a curated detekt configuration at `config/detekt/detekt.yml`. Thresholds are aligned with our engineering standards.
+
+**Key thresholds enforced:**
+
+| Metric | Threshold | Standard Reference |
+|--------|-----------|-------------------|
+| Cyclomatic complexity | 10 per method | CODING_PRACTICES.md |
+| Cognitive complexity | 15 per method | CODING_PRACTICES.md |
+| Method length | 20 lines | KOTLIN_STANDARDS.md |
+| Class size | 300 lines | CODING_PRACTICES.md |
+| Parameter count | 5 max (5 triggers) | CODING_PRACTICES.md |
+| Nesting depth | 3 levels | CODING_PRACTICES.md |
+| Max return statements | 3 | CODING_PRACTICES.md |
+| String literal duplication | 3 max | DRY principle |
+| Max line length | 120 chars | Kotlin conventions |
+
+**Rule sets enabled:**
+- **Complexity** -- method length, class size, cyclomatic/cognitive complexity, parameter count, nesting depth
+- **Coroutines** -- `GlobalScope` usage, dispatcher injection, `sleep` vs `delay`
+- **Empty Blocks** -- empty catch/if/when/for/while/try blocks
+- **Exceptions** -- too-generic catch/throw, swallowed exceptions, stack trace preservation
+- **Naming** -- class/function/variable naming patterns, package naming, boolean prefixes
+- **Performance** -- spread operator, `ForEachOnRange`, array primitives, sequences
+- **Potential Bugs** -- null safety, unreachable code, mutable collections, platform types
+- **Style** -- magic numbers, wildcard imports, unused code, expression bodies, idiomatic Kotlin
+- **Comments** -- undocumented public APIs, outdated KDoc, deprecated block tags
+
+### PMD 7 Kotlin Configuration
+
+This repo provides a Kotlin PMD 7 ruleset at `config/pmd/kotlin-ruleset.xml`. PMD 7 has limited Kotlin support (2 rules across 2 categories):
+
+- **Best Practices**: `FunctionNameTooShort` -- function names must be at least 3 characters
+- **Error Prone**: `OverrideBothEqualsAndHashcode` -- must override both or neither
+
+### Gradle Integration
+
+```kotlin
+// build.gradle.kts
+plugins {
+    kotlin("jvm") version "2.3.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    pmd
+}
+
+// detekt configuration
+detekt {
+    config.setFrom("config/detekt/detekt.yml")
+    buildUponDefaultConfig = true  // Use our config on top of defaults
+    allRules = false               // Only activate rules marked active: true
+    parallel = true                // Faster analysis on multi-core machines
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        sarif.required.set(true)
+    }
+}
+
+// PMD configuration (supplementary)
+pmd {
+    toolVersion = "7.21.0"
+    ruleSetFiles = files("config/pmd/kotlin-ruleset.xml")
+    ruleSets = listOf()  // Clear defaults -- use only our custom ruleset
+    isIgnoreFailures = false
+    isConsoleOutput = true
+}
+
+tasks.withType<Pmd> {
+    // PMD needs the Kotlin module for Kotlin file analysis
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+```
+
+Run analysis:
+```bash
+./gradlew detekt           # Run detekt on all sources
+./gradlew detektMain       # Run detekt on main sources only
+./gradlew detektTest       # Run detekt on test sources only
+./gradlew pmdMain          # Run PMD on main sources
+./gradlew check            # Runs both as part of the check lifecycle
+```
+
+### Suppression Strategies
+
+#### detekt Suppression
+
+When a rule produces a false positive, suppress at the narrowest scope:
+
+```kotlin
+// Suppress a specific rule on a function
+@Suppress("TooGenericExceptionCaught")  // Justified: top-level error handler
+fun handleRequest(request: Request): Response {
+    return try {
+        processRequest(request)
+    } catch (e: Exception) {
+        Response.error(e.message ?: "Unknown error")
+    }
+}
+
+// Suppress on a class
+@Suppress("TooManyFunctions")  // Justified: test class with many test cases
+class OrderServiceTest { ... }
+```
+
+**Guidelines:**
+- Always include a justification comment explaining WHY the suppression is needed
+- Suppress at the narrowest scope possible (function > class > file)
+- Never suppress rules globally in `detekt.yml` to hide violations -- fix the code instead
+- Use `@Suppress("RuleName")` (Kotlin standard annotation)
+- Track suppressions in code reviews
+- Consider `//noinspection` for IDE-level suppressions only
+
+#### PMD Suppression
+
+```kotlin
+// Suppress with annotation
+@SuppressWarnings("PMD.FunctionNameTooShort")  // Justified: domain-specific abbreviation
+fun tx(): Transaction { ... }
+
+// Suppress with NOPMD comment (use sparingly)
+fun eq(other: Any?): Boolean = this == other  // NOPMD - intentional short name for DSL
+```
+
+#### Baseline Files
+
+For existing projects adopting these standards, use detekt's baseline feature to track pre-existing issues without blocking CI:
+
+```bash
+# Generate baseline of current violations
+./gradlew detektBaseline
+
+# detekt will then only report NEW violations
+```
+
+Configure in `build.gradle.kts`:
+```kotlin
+detekt {
+    baseline = file("config/detekt/baseline.xml")
+}
+```
+
+**Important**: Baseline files are a migration tool, not a permanent suppression mechanism. Plan to eliminate baseline violations over time.
 
 ## Common Kotlin Idioms
 
@@ -312,8 +494,16 @@ Leverage modern Kotlin features:
 - Inline value classes for type safety
 - Follow Kotlin 2.0+ idioms
 
+## Related Documents
+
+- [CODING_PRACTICES.md](./CODING_PRACTICES.md) -- Language-agnostic coding standards
+- [SOLID_PRINCIPLES.md](./SOLID_PRINCIPLES.md) -- SOLID principles with multi-language examples
+- [DESIGN_PATTERNS.md](./DESIGN_PATTERNS.md) -- Design patterns guidance
+- [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md) -- Static analysis philosophy and cross-language tool matrix
+- [ARCHUNIT_STANDARDS.md](./ARCHUNIT_STANDARDS.md) -- Architecture testing with ArchUnit (Java/Kotlin)
+
 ---
 
-**Last Updated**: February 16, 2026  
-**Version**: 1.1  
+**Last Updated**: February 19, 2026  
+**Version**: 1.2  
 **Kotlin Version**: 2.3.0

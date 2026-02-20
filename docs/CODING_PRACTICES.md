@@ -34,8 +34,8 @@ This document outlines language-agnostic coding practices, testing expectations,
 - Follow SOLID principles
 - Prefer composition over inheritance
 - **Keep methods small and focused (single responsibility)**
-- **Maximum method length: 15 lines of code** (excluding blank lines and braces)
-  - If a method exceeds 15 lines, extract helper methods
+- **Maximum method length: 15-20 lines of code** (excluding blank lines and braces; see language-specific standards for exact limit)
+  - If a method exceeds the limit, extract helper methods
   - This enforces single responsibility and improves testability
   - Exception: Test methods may be longer if needed for clarity
 - Avoid code duplication (DRY principle)
@@ -140,14 +140,11 @@ See [KOTLIN_STANDARDS.md](./KOTLIN_STANDARDS.md#package-organization-domain-driv
 - Don't swallow exceptions silently
 
 ### Logging
-- Use appropriate log levels:
-  - **ERROR**: Application errors, exceptions
-  - **WARN**: Recoverable issues, deprecated usage
-  - **INFO**: Significant events, lifecycle changes
-  - **DEBUG**: Detailed diagnostic information
-  - **TRACE**: Very detailed diagnostic information
-- Include context in log messages (dependency name, version, etc.)
-- No sensitive information in logs (passwords, tokens)
+- Use appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE)
+- Use structured logging with required fields (timestamp, level, message, service, correlation_id)
+- Include context as structured key-value fields, not embedded in message strings
+- No sensitive information in logs (passwords, tokens, PII)
+- See [LOGGING_STANDARDS.md](./LOGGING_STANDARDS.md) for full standards on structured logging, correlation IDs, and PII handling
 
 ## Testing Standards
 
@@ -225,13 +222,16 @@ Violations of this rule are considered serious quality issues:
 - Repeated violations indicate need for additional training
 
 ### Test Coverage Requirements
-- **Minimum Coverage**: 80% overall
-- **Critical Paths**: 100% coverage for:
+
+**Coverage is calculated from unit tests only.** Integration tests, end-to-end tests, and other test types are valuable for quality assurance but do NOT count toward coverage thresholds. This ensures that core logic is verified in fast, isolated, deterministic tests.
+
+- **Minimum Coverage**: 80% overall (unit tests only)
+- **Critical Paths**: 100% coverage (unit tests only) for:
   - Core business logic and domain rules
   - Payment or financial calculations
   - Authentication and authorization flows
   - Data transformation and validation pipelines
-- **Branch Coverage**: Minimum 75%
+- **Branch Coverage**: Minimum 75% (unit tests only)
 
 ### Test Types
 
@@ -306,6 +306,40 @@ public void shouldFilterOutVulnerableVersions() {
 - Consider separate test suite for performance tests
 - Document expected performance characteristics
 
+### Test Execution Tiers
+
+Different test types run at different stages. This balances fast feedback with thorough validation.
+
+| When | What Runs | Why |
+|------|-----------|-----|
+| Before every commit | Unit tests | Fast, isolated, deterministic — no reason to skip |
+| Before pushing (pre-push) | Unit tests + integration tests | Catch cross-component issues before they reach the team |
+| CI pipeline (on every push/PR) | Unit tests + integration tests + E2E | Hard gate — enforces full validation before merge |
+
+**Rules:**
+- **Unit tests are mandatory before every commit.** No exceptions. If unit tests fail, do not commit.
+- **Integration tests should run before pushing.** Use a pre-push hook or run manually. If integration tests fail, fix locally before pushing.
+- **CI is the hard gate.** Even if a developer skips pre-push hooks, CI catches failures before merge. CI failures block the PR.
+- **Never skip tests to "push faster."** If integration tests are too slow to run pre-push, that's a signal to optimize the test suite, not to skip them.
+
+**Example pre-push hook:**
+```bash
+# .git/hooks/pre-push
+#!/bin/bash
+echo "Running pre-push checks..."
+
+# Run unit tests (should already pass from pre-commit)
+# ./gradlew test || exit 1
+# npm test || exit 1
+
+# Run integration tests
+# ./gradlew integrationTest || exit 1
+# npm run test:integration || exit 1
+# pytest tests/integration/ || exit 1
+
+echo "All pre-push checks passed"
+```
+
 ## Code Review Checklist
 
 ### Functionality
@@ -319,11 +353,11 @@ public void shouldFilterOutVulnerableVersions() {
 - [ ] No code duplication
 - [ ] Appropriate use of design patterns
 - [ ] SOLID principles applied
-- [ ] **All methods are 15 lines or fewer**
+- [ ] **All methods are within language-specific line limit** (15-20 lines; see language standards)
 - [ ] **Commit is focused on single logical change** (micro commit)
 
 ### Testing
-- [ ] Adequate test coverage (minimum 80%)
+- [ ] Adequate unit test coverage (minimum 80%, unit tests only)
 - [ ] Tests are meaningful and not just for coverage
 - [ ] Tests follow naming conventions
 - [ ] Integration/E2E tests for new features
@@ -420,16 +454,22 @@ a pom.xml file. Now it logs a warning and continues processing.
 - Static analysis must pass
 
 ### Pre-commit Checks
-- Run tests locally before committing
+- Run unit tests locally before committing
 - Format code according to standards
 - Remove debug statements and commented code
 - Update documentation if needed
 
+### Pre-push Checks
+- Run unit tests + integration tests before pushing
+- Use a pre-push hook to automate this (see Test Execution Tiers above)
+- If integration tests fail, fix locally before pushing
+
 ### Continuous Integration
-- All tests must pass on CI
-- Code coverage must meet minimum threshold
+- All tests must pass on CI (unit + integration + E2E)
+- Unit test coverage must meet minimum threshold (unit tests only)
 - Security scans must pass
 - Build artifacts must be generated successfully
+- CI is the hard gate — failures block the PR from merging
 
 ## Dependencies
 
@@ -519,7 +559,7 @@ a pom.xml file. Now it logs a warning and continues processing.
 
 **CRITICAL RULE: Always Follow TDD Before Refactoring**
 
-Before refactoring ANY code, you MUST ensure comprehensive test coverage exists. This is a non-negotiable requirement.
+Before refactoring ANY code, you MUST ensure comprehensive unit test coverage exists. This is a non-negotiable requirement. Coverage thresholds are measured from unit tests only.
 
 #### Why TDD Before Refactoring?
 
@@ -544,22 +584,22 @@ Every commit must be **production-ready** (tests pass + builds + lint clean). Ma
 
 **Step 1: STOP - Check Test Coverage**
 
-Before touching ANY code, verify test coverage:
+Before touching ANY code, verify unit test coverage:
 
 ```bash
-# Run tests to establish baseline, e.g.:
+# Run unit tests to establish baseline, e.g.:
 # ./gradlew test | npm test | pytest | go test ./... | dotnet test
 
-# Check coverage report, e.g.:
+# Check coverage report (unit tests only), e.g.:
 # ./gradlew test jacocoTestReport | npm run test:coverage
 # pytest --cov | go test -cover ./...
 
 # For critical paths, consider mutation testing (e.g., pitest, stryker)
 ```
 
-**Requirements:**
-- **Minimum 80% line coverage** for code being refactored
-- **100% coverage for critical business logic** (scoring, analysis, report generation)
+**Requirements (unit tests only -- integration/E2E tests do not count toward these thresholds):**
+- **Minimum 80% line coverage** for code being refactored (unit tests only)
+- **100% coverage for critical business logic** (scoring, analysis, report generation) (unit tests only)
 - **All existing tests must pass** before starting
 
 **Step 2: RED - Write Failing Test (DON'T COMMIT YET)**
@@ -864,7 +904,7 @@ Commit 3: fix lint errors (finally production-ready ✓)
 #### Summary: The TDD Micro-Commit Mantra
 
 **Remember this workflow:**
-1. **STOP** - Check existing test coverage (80% minimum required)
+1. **STOP** - Check existing unit test coverage (80% minimum required, unit tests only)
 2. **RED** - Write failing test (don't commit yet)
 3. **GREEN** - Write minimum code to pass → **COMMIT** (production-ready)
 4. **REFACTOR** - Improve code structure → **COMMIT** (production-ready)

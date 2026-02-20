@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SpotBugs Exclusion Filter
+    =========================
+    This file defines bugs to EXCLUDE from SpotBugs analysis.
+
+    Usage:
+    - Maven:  <excludeFilterFile>config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+    - Gradle: excludeFilter.set(file("config/spotbugs/spotbugs-exclude.xml"))
+
+    Guidelines:
+    - Every exclusion MUST have a comment explaining WHY
+    - Prefer narrow matches (Class + Method + Bug) over broad Package matches
+    - NEVER suppress SECURITY category globally
+    - Review exclusions quarterly for relevance
+    - See docs/SPOTBUGS_STANDARDS.md for full filter syntax reference
+
+    Last Updated: February 19, 2026
+-->
+<FindBugsFilter>
+
+    <!-- ===================================================================
+         SECTION 1: Experimental Detectors
+         Experimental bugs have higher false-positive rates and are not
+         suitable for CI enforcement. Suppress entirely.
+         =================================================================== -->
+    <Match>
+        <Bug category="EXPERIMENTAL"/>
+    </Match>
+
+    <!-- ===================================================================
+         SECTION 2: Generated Code
+         Generated code (Protobuf, OpenAPI, JAXB, MapStruct, etc.) should
+         not be analyzed -- we don't control its patterns.
+         Adjust package names to match your project's generated code.
+         =================================================================== -->
+    <!--
+    <Match>
+        <Package name="com.myapp.generated"/>
+    </Match>
+    <Match>
+        <Package name="~.*\.proto\..*"/>
+    </Match>
+    -->
+
+    <!-- ===================================================================
+         SECTION 3: Test Code
+         Test code often intentionally triggers patterns that would be bugs
+         in production (null handling, exception throwing, etc.).
+         Uncomment if SpotBugs is configured to analyze test sources.
+         =================================================================== -->
+    <!--
+    <Match>
+        <Class name="~.*Test"/>
+    </Match>
+    <Match>
+        <Class name="~.*Tests"/>
+    </Match>
+    <Match>
+        <Class name="~.*TestCase"/>
+    </Match>
+    <Match>
+        <Package name="~.*\.test\..*"/>
+    </Match>
+    -->
+
+    <!-- ===================================================================
+         SECTION 4: Low-Severity Bugs (Rank 16-20: Of Concern)
+         Rank 16-20 bugs have low confidence and high false-positive rates.
+         Suppress for CI; review in periodic deep scans.
+         =================================================================== -->
+    <!--
+    <Match>
+        <Rank value="16"/>
+    </Match>
+    -->
+
+    <!-- ===================================================================
+         SECTION 5: Known False Positives
+         Specific bug patterns that produce false positives in common
+         patterns. Each suppression documents the reason.
+         =================================================================== -->
+
+    <!-- DTO / Value Object classes intentionally expose mutable fields.
+         Suppress EI_EXPOSE_REP and EI_EXPOSE_REP2 for DTO packages.
+         Fix: Apply only to DTO packages, not globally. -->
+    <!--
+    <Match>
+        <And>
+            <Package name="~.*\.dto\..*"/>
+            <Or>
+                <Bug pattern="EI_EXPOSE_REP"/>
+                <Bug pattern="EI_EXPOSE_REP2"/>
+            </Or>
+        </And>
+    </Match>
+    -->
+
+    <!-- Spring Boot application classes use static main method.
+         SE_BAD_FIELD can trigger on injected fields in @SpringBootApplication. -->
+    <!--
+    <Match>
+        <Class name="~.*Application"/>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
+    -->
+
+    <!-- ===================================================================
+         SECTION 6: Project-Specific Exclusions
+         Add project-specific exclusions below. Each MUST have a comment
+         explaining the justification.
+         =================================================================== -->
+
+</FindBugsFilter>

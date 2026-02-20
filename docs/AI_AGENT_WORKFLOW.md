@@ -34,7 +34,57 @@ A commit with failing tests is **never** acceptable. If your change breaks tests
 
 ## 📋 Mandatory Workflow for AI Agents
 
+### Selecting Work
+
+When the user asks what to work on next (or you need to suggest work), consult **GitHub Issues**:
+
+```bash
+# List open issues by priority
+gh issue list --label "P1: should fix" --state open
+gh issue list --label "P2: nice to have" --state open
+
+# View a specific issue
+gh issue view <number>
+```
+
+**Priority order**: P1 issues before P2. Within a priority, prefer issues that unblock other work.
+
+When starting work on an issue, reference it in your commit messages (e.g., `feat(python): add Python standards (closes #2)`).
+
+### Closing Issues When Complete
+
+**CRITICAL**: After completing work on an issue, you MUST close it. Use the `gh` CLI:
+
+```bash
+# Close issue with a summary comment
+gh issue close <number> --comment "Completed in commit <hash>.
+
+Implementation includes:
+- Key feature 1
+- Key feature 2
+- Test coverage: X%
+- All tests pass ✅
+- Build succeeds ✅
+
+All acceptance criteria met."
+```
+
+**Complete workflow for issues:**
+1. ✅ Implement the feature/fix
+2. ✅ Write tests and verify coverage
+3. ✅ Commit the changes
+4. ✅ Push to remote (`git push`)
+5. ✅ **Close the GitHub issue with summary (`gh issue close`)**
+
+**Never forget step 5!** Closing issues keeps the project board clean and provides a clear audit trail of what was completed.
+
 ### Before Making ANY Code Changes
+
+**Step 0: Pull Latest Changes**
+```bash
+git pull
+```
+Ensure you are working on the latest code before making any changes. This prevents merge conflicts and avoids duplicating work that has already been done.
 
 **Step 1: Read and Acknowledge**
 ```
@@ -42,7 +92,7 @@ AI Agent: I will follow the micro-commit workflow documented in docs/AI_AGENT_WO
 ```
 
 **Step 2: Create Task List**
-Use the TodoWrite tool to break down the work:
+Use your task tracking tool to break down the work:
 ```
 Example for "Add timestamp to report filenames":
 1. Extract timestamp generation into separate method (refactor)
@@ -336,38 +386,32 @@ git commit -m "add timestamps to reports"
 
 ## 🔄 Workflow Integration with Tools
 
-### Using TodoWrite Tool
+### Using Task Tracking
 
-**ALWAYS use TodoWrite to track micro-commits:**
+**ALWAYS use your task tracking tool to track micro-commits:**
 
-```kotlin
-// At start of feature
-todowrite([
-  {id: "1", content: "Refactor: extract helper method", status: "pending"},
-  {id: "2", content: "Feature: implement core logic", status: "pending"},
-  {id: "3", content: "Test: update test assertions", status: "pending"},
-  {id: "4", content: "Docs: update README", status: "pending"}
-])
+```
+At start of feature, create a task list:
+  1. Refactor: extract helper method        [pending]
+  2. Feature: implement core logic          [pending]
+  3. Test: update test assertions           [pending]
+  4. Docs: update README                    [pending]
 
-// Before starting each task
-todowrite([
-  {id: "1", content: "Refactor: extract helper method", status: "in_progress"},
+Before starting each task, mark it in progress:
+  1. Refactor: extract helper method        [in_progress]
   ...
-])
 
-// After committing each task
-todowrite([
-  {id: "1", content: "Refactor: extract helper method", status: "completed"},
+After committing each task, mark it complete:
+  1. Refactor: extract helper method        [completed]
   ...
-])
 ```
 
 ### Using Bash Tool for Tests
 
-**ALWAYS run tests before committing:**
+**ALWAYS run unit tests before committing:**
 
 ```bash
-# Run your project's test suite (optionally filter to relevant tests), e.g.:
+# Run your project's unit test suite (optionally filter to relevant tests), e.g.:
 # ./gradlew test --tests "RelevantTestClass"
 # npm test -- --grep "RelevantTest"
 # pytest tests/test_relevant.py
@@ -379,6 +423,16 @@ todowrite([
    # If any fail → fix before committing
 ```
 
+**Run integration tests before pushing:**
+
+```bash
+# Run integration tests in addition to unit tests before pushing, e.g.:
+# ./gradlew integrationTest | npm run test:integration
+# pytest tests/integration/ | go test -tags=integration ./...
+
+# If any fail → fix locally before pushing
+```
+
 ---
 
 ## 📚 Reference Documents
@@ -388,8 +442,10 @@ Before making changes, review:
 1. **[PRE_COMMIT_CHECKLIST.md](PRE_COMMIT_CHECKLIST.md)** - SOLID principles, design patterns
 2. **[CODING_STANDARDS.md](CODING_STANDARDS.md)** - Code quality standards
 3. **[CODING_PRACTICES.md](CODING_PRACTICES.md)** - Language-agnostic best practices
-4. **[JAVA_STANDARDS.md](JAVA_STANDARDS.md)** - Java-specific guidelines
-5. **[KOTLIN_STANDARDS.md](KOTLIN_STANDARDS.md)** - Kotlin-specific guidelines
+4. **[GO_STANDARDS.md](GO_STANDARDS.md)** - Go-specific guidelines
+5. **[JAVA_STANDARDS.md](JAVA_STANDARDS.md)** - Java-specific guidelines
+6. **[KOTLIN_STANDARDS.md](KOTLIN_STANDARDS.md)** - Kotlin-specific guidelines
+7. **[PYTHON_STANDARDS.md](PYTHON_STANDARDS.md)** - Python-specific guidelines
 
 ---
 
@@ -429,11 +485,11 @@ Before making changes, review:
 
 **AI Agent Process**:
 ```
-1. Check test coverage:
+1. Check unit test coverage:
    # Run your project's test suite with coverage reporting, e.g.:
    # ./gradlew test jacocoTestReport | npm run test:coverage
    # pytest --cov | go test -cover ./...
-   # Verify >80% coverage exists
+   # Verify >80% unit test coverage exists (unit tests only)
 
 2. Create task list:
    - Refactor: Extract payment logic to PaymentService → COMMIT
@@ -471,15 +527,16 @@ Before making changes, review:
 
 **Before ANY code change:**
 ```
-1. Create task list (TodoWrite)
+1. Create task list (use your task tracking tool)
 2. For each task:
    a. Mark as "in_progress"
     b. Make ONE logical change
-   c. Run your project's test suite
-   d. Verify: all tests pass
+   c. Run unit tests
+   d. Verify: all unit tests pass
    e. Commit with clear message
    f. Mark as "completed"
 3. Update documentation (separate commit)
+4. Before pushing: run integration tests
 ```
 
 **Commit message template:**
@@ -491,10 +548,18 @@ Before making changes, review:
 - Any important context or rationale
 ```
 
-**Test before commit:**
+**Test before commit (unit tests):**
 ```bash
-# Run your project's test suite, e.g.:
+# Run your project's unit test suite, e.g.:
 # ./gradlew test | npm test | pytest | go test ./... | dotnet test
+```
+
+**Test before push (unit + integration tests):**
+```bash
+# Run integration tests in addition to unit tests before pushing, e.g.:
+# ./gradlew test integrationTest | npm run test:all
+# pytest | pytest tests/integration/
+# go test ./... && go test -tags=integration ./...
 ```
 
 ---
@@ -523,21 +588,21 @@ If you encounter these situations, STOP and ask the user:
 
 **Before refactoring ANY code:**
 
-1. **Check Test Coverage**
+1. **Check Unit Test Coverage**
    ```bash
    # Run your project's test suite with coverage reporting, e.g.:
    # ./gradlew test jacocoTestReport | npm run test:coverage
    # pytest --cov | go test -cover ./...
    ```
    
-2. **Requirements:**
-   - ✅ Minimum 80% line coverage for code being refactored
-   - ✅ 100% coverage for critical paths (scoring, analysis, reports)
+2. **Requirements (unit tests only -- integration/E2E tests do not count toward these thresholds):**
+   - ✅ Minimum 80% unit test line coverage for code being refactored
+   - ✅ 100% unit test coverage for critical paths (scoring, analysis, reports)
    - ✅ All existing tests must PASS
 
-3. **If Coverage is Insufficient:**
+3. **If Unit Test Coverage is Insufficient:**
    - STOP refactoring
-   - Write tests FIRST
+   - Write unit tests FIRST
    - Use Pattern 2 (TDD approach) to add tests
    - Then proceed with refactoring
 
@@ -581,14 +646,14 @@ For Each Refactoring:
 NEVER:
 - Skip running tests after refactoring
 - Batch multiple refactorings into one commit
-- Refactor code without test coverage
+- Refactor code without unit test coverage
 - Continue if tests fail after refactoring
 ```
 
 ### When to Refactor
 
 **Proactive Refactoring (Do these automatically):**
-- Method exceeds 15 lines → Extract methods
+- Method exceeds language-specific line limit (15-20 lines) → Extract methods
 - Class exceeds 300 lines → Split responsibilities
 - Duplicated code appears → Extract to shared method
 - Hard-coded dependencies → Inject via constructor

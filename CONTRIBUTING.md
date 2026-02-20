@@ -4,7 +4,7 @@ Thank you for your interest in improving these engineering standards. This docum
 
 ## Project Overview
 
-This project provides reusable engineering standards for AI coding agents. The `docs/` directory is the single source of truth -- tool-specific config files (`.claude/rules/`, `.cursor/rules/`, `.github/instructions/`, `.clinerules/`, `.opencode/`) reference docs but do not duplicate their content.
+This project provides reusable engineering standards for AI coding agents. The `docs/` directory is the single source of truth -- tool-specific config files (`.claude/rules/`, `.cursor/rules/`, `.github/instructions/`, `.opencode/`) reference docs but do not duplicate their content.
 
 ## How to Contribute
 
@@ -32,10 +32,9 @@ Open a GitHub issue describing:
 - `.cursor/rules/` -- Cursor rules. Use `alwaysApply` or `globs` frontmatter.
 - `.github/instructions/` -- GitHub Copilot path-scoped instructions. Use `applyTo` frontmatter.
 - `.github/copilot-instructions.md` -- GitHub Copilot repo-wide instructions.
-- `.clinerules/` -- Cline rules. Supports `paths` frontmatter.
 - `.opencode/agents/` -- OpenCode agent definitions.
 - `.opencode/commands/` -- OpenCode slash commands.
-- `AGENTS.md` -- Read by OpenCode, GitHub Copilot, and Cline.
+- `AGENTS.md` -- Read by OpenCode and GitHub Copilot.
 - `CLAUDE.md` -- Read by Claude Code (and Copilot as fallback).
 
 ### Adding a New Standards Document
@@ -43,28 +42,18 @@ Open a GitHub issue describing:
 1. Create the markdown file in `docs/` (e.g., `docs/PYTHON_STANDARDS.md`).
 2. Add it to the index in `docs/CODING_STANDARDS.md`.
 3. Add references to it in all tool configs that should load it.
-4. For language-specific standards, add path-scoped rules with the appropriate glob pattern in `.claude/rules/`, `.cursor/rules/`, `.github/instructions/`, and `.clinerules/`.
+4. For language-specific standards, add path-scoped rules with the appropriate glob pattern in `.claude/rules/`, `.cursor/rules/`, and `.github/instructions/`.
 
 ### Adding a New Language
 
-Follow the pattern established by Java, Kotlin, and TypeScript:
+Follow the pattern established by Java and Kotlin:
 
 1. Create `docs/<LANGUAGE>_STANDARDS.md`.
 2. Create tool-specific rule files:
    - `.claude/rules/<language>.md` with `globs: "**/*.<ext>"`
    - `.cursor/rules/<language>.md` with `globs: "**/*.<ext>"`
    - `.github/instructions/<language>.instructions.md` with `applyTo: "**/*.<ext>"`
-   - `.clinerules/<language>.md` (if Cline supports path-scoped rules)
 3. Update globs in existing code-review and testing rules if the file extension is not already included.
-4. Update the project structure tree in `README.md`.
-
-### Adding a Framework Standards Document
-
-For framework-level guidance (for example Next.js):
-
-1. Create `docs/<FRAMEWORK>_STANDARDS.md`.
-2. Add it to `docs/CODING_STANDARDS.md`.
-3. Add references to it in tool configs that should load it.
 4. Update the project structure tree in `README.md`.
 
 ### Commit Messages
@@ -97,4 +86,4 @@ When adding a new rule or capability, add it to all supported tools where possib
 
 ## Backlog
 
-See `BACKLOG.md` for tracked enhancements and known gaps. If your contribution addresses a backlog item, reference it in your PR description.
+Enhancements and known gaps are tracked as [GitHub Issues](https://github.com/ford-personal/pmurasky_engineering_standards/issues). Use the issue templates when filing new requests. If your contribution addresses an open issue, reference it in your PR description (e.g., `Closes #12`).

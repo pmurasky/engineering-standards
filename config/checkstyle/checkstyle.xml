@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+    Engineering Standards - Checkstyle Configuration
+    =================================================
+
+    Opinionated Checkstyle 10.x configuration aligned with the engineering
+    standards defined in this repository. Based on the Google Java Style Guide
+    (https://google.github.io/styleguide/javaguide.html) with thresholds
+    matching the repo standards.
+
+    Enforces:
+      - Formatting and style (Google Java Style Guide)
+      - Javadoc on all public APIs (closes the gap from PMD's CommentRequired exclusion)
+      - Import ordering and cleanup
+      - Naming conventions
+      - Line length and file structure
+
+    Thresholds match the repo standards:
+      - Line length: 120 characters
+      - Method length: 20 lines max
+      - Class length: 300 lines max (file length: 500 lines max)
+      - Parameters: 5 max
+      - Boolean expression complexity: 4 max
+
+    Checkstyle version: 10.x (tested with 10.21.1)
+    Last updated: 2026-02-19
+-->
+
+<module name="Checker">
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+    <property name="charset" value="UTF-8"/>
+
+    <!-- ================================================================== -->
+    <!-- FILE-LEVEL CHECKS                                                  -->
+    <!-- ================================================================== -->
+
+    <!-- Files must end with a newline (Google Style 2.2) -->
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="lf"/>
+    </module>
+
+    <!-- No tab characters (Google Style 2.3.1) -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <!-- Line length: 120 chars (Google Style 4.4, relaxed from 100) -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    </module>
+
+    <!-- File length (repo standard: 300 lines for classes, allow 500 for file) -->
+    <module name="FileLength">
+        <property name="max" value="500"/>
+    </module>
+
+    <!-- Suppress warnings via @SuppressWarnings annotation -->
+    <module name="SuppressWarningsFilter"/>
+
+    <!-- ================================================================== -->
+    <!-- TREE WALKER (AST-based checks)                                     -->
+    <!-- ================================================================== -->
+
+    <module name="TreeWalker">
+
+        <!-- Enable @SuppressWarnings support -->
+        <module name="SuppressWarningsHolder"/>
+
+        <!-- ============================================================== -->
+        <!-- JAVADOC                                                        -->
+        <!-- Closes the gap from PMD's CommentRequired exclusion.           -->
+        <!-- Enforces Javadoc on all public classes, methods, and fields.   -->
+        <!-- ============================================================== -->
+
+        <!-- Require Javadoc on public types (Google Style 7.1) -->
+        <module name="MissingJavadocType">
+            <property name="scope" value="public"/>
+            <property name="excludeScope" value="nothing"/>
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, RECORD_DEF"/>
+        </module>
+
+        <!-- Require Javadoc on public methods (Google Style 7.1) -->
+        <module name="MissingJavadocMethod">
+            <property name="scope" value="public"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+            <property name="minLineCount" value="-1"/>
+            <property name="allowedAnnotations" value="Override, Test, ParameterizedTest, BeforeEach, AfterEach, BeforeAll, AfterAll, Nested"/>
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF"/>
+        </module>
+
+        <!-- Validate Javadoc content when present (Google Style 7.2-7.3) -->
+        <module name="JavadocMethod">
+            <property name="accessModifiers" value="public"/>
+            <property name="allowMissingParamTags" value="false"/>
+            <property name="allowMissingReturnTag" value="false"/>
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF"/>
+        </module>
+
+        <!-- Javadoc tag ordering (Google Style 7.4) -->
+        <module name="AtclauseOrder">
+            <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
+        </module>
+
+        <!-- Javadoc content location and style -->
+        <module name="JavadocContentLocationCheck"/>
+        <module name="JavadocBlockTagLocation"/>
+        <module name="NonEmptyAtclauseDescription"/>
+
+        <!-- Validate Javadoc on types when present -->
+        <module name="JavadocType">
+            <property name="scope" value="public"/>
+            <property name="allowMissingParamTags" value="false"/>
+        </module>
+
+        <!-- Javadoc paragraph and summary formatting -->
+        <module name="JavadocParagraph"/>
+        <module name="SingleLineJavadoc"/>
+        <module name="InvalidJavadocPosition"/>
+        <module name="JavadocStyle">
+            <property name="checkFirstSentence" value="false"/>
+        </module>
+
+        <!-- ============================================================== -->
+        <!-- NAMING CONVENTIONS                                             -->
+        <!-- Aligns with JAVA_STANDARDS.md naming conventions section       -->
+        <!-- ============================================================== -->
+
+        <!-- Package names: lowercase, no underscores (Google Style 5.2.1) -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
+
+        <!-- Type names: PascalCase (Google Style 5.2.2) -->
+        <module name="TypeName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, RECORD_DEF"/>
+        </module>
+
+        <!-- Method names: camelCase (Google Style 5.2.3) -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Field names: camelCase for instance, SCREAMING_SNAKE for constants (Google Style 5.2.4-5.2.5) -->
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+        <module name="ConstantName">
+            <property name="format" value="^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+        </module>
+        <module name="StaticVariableName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Parameter names: camelCase (Google Style 5.2.3) -->
+        <module name="ParameterName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Local variable names: camelCase, allow short names (Google Style 5.2.6) -->
+        <module name="LocalVariableName">
+            <property name="format" value="^[a-z_][a-zA-Z0-9]*$"/>
+        </module>
+        <module name="LocalFinalVariableName">
+            <property name="format" value="^[a-z_][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Lambda parameter names -->
+        <module name="LambdaParameterName">
+            <property name="format" value="^[a-z_][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Pattern variable names (Java 16+ instanceof pattern matching) -->
+        <module name="PatternVariableName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Record component names: camelCase -->
+        <module name="RecordComponentName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Type parameter names: single uppercase letter or uppercase name (Google Style 5.2.8) -->
+        <module name="ClassTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z0-9]*$"/>
+        </module>
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z0-9]*$"/>
+        </module>
+        <module name="MethodTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z0-9]*$"/>
+        </module>
+        <module name="RecordTypeParameterName">
+            <property name="format" value="^[A-Z][A-Z0-9]*$"/>
+        </module>
+
+        <!-- Abbreviation in names: max 2 consecutive uppercase (Google Style 5.2.9) -->
+        <module name="AbbreviationAsWordInName">
+            <property name="allowedAbbreviationLength" value="2"/>
+            <property name="ignoreFinal" value="false"/>
+            <property name="ignoreStatic" value="false"/>
+            <property name="ignoreStaticFinal" value="true"/>
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
+                PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF, RECORD_COMPONENT_DEF"/>
+        </module>
+
+        <!-- ============================================================== -->
+        <!-- IMPORTS                                                        -->
+        <!-- Google Style 3.3                                               -->
+        <!-- ============================================================== -->
+
+        <!-- No wildcard imports (Google Style 3.3.1) -->
+        <module name="AvoidStarImport">
+            <property name="allowStaticMemberImports" value="false"/>
+        </module>
+
+        <!-- No redundant imports -->
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+
+        <!-- Import ordering (Google Style 3.3.3) -->
+        <module name="CustomImportOrder">
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="separateLineBetweenGroups" value="true"/>
+            <property name="customImportOrderRules"
+                      value="STATIC###THIRD_PARTY_PACKAGE"/>
+            <property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>
+        </module>
+
+        <!-- ============================================================== -->
+        <!-- FORMATTING AND WHITESPACE                                      -->
+        <!-- Google Style 4.x                                               -->
+        <!-- ============================================================== -->
+
+        <!-- Indentation: 4 spaces (project convention) -->
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+            <property name="throwsIndent" value="8"/>
+            <property name="lineWrappingIndentation" value="8"/>
+            <property name="arrayInitIndent" value="4"/>
+        </module>
+
+        <!-- Braces: K&R style (Google Style 4.1) -->
+        <module name="LeftCurly">
+            <property name="option" value="eol"/>
+        </module>
+        <module name="RightCurly">
+            <property name="option" value="same"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_DO"/>
+        </module>
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+            <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT,
+                INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF, COMPACT_CTOR_DEF"/>
+        </module>
+        <module name="NeedBraces">
+            <property name="tokens" value="LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_IF, LITERAL_WHILE"/>
+        </module>
+
+        <!-- Whitespace rules (Google Style 4.6) -->
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="COMMA, SEMI, TYPECAST, LITERAL_IF, LITERAL_ELSE, LITERAL_WHILE,
+                LITERAL_DO, LITERAL_FOR, DO_WHILE"/>
+        </module>
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyLoops" value="true"/>
+            <property name="allowEmptyLambdas" value="true"/>
+            <property name="allowEmptyCatches" value="true"/>
+            <property name="ignoreEnhancedForColon" value="false"/>
+        </module>
+        <module name="NoWhitespaceBefore">
+            <property name="tokens" value="COMMA, SEMI, POST_INC, POST_DEC, DOT, LABELED_STAT, METHOD_REF"/>
+            <property name="allowLineBreaks" value="true"/>
+        </module>
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="AT, INC, DEC, UNARY_MINUS, UNARY_PLUS, BNOT, LNOT, DOT, ARRAY_DECLARATOR, INDEX_OP"/>
+        </module>
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="NoLineWrap">
+            <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT"/>
+        </module>
+        <module name="EmptyLineSeparator">
+            <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
+                STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF, COMPACT_CTOR_DEF"/>
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+        </module>
+        <module name="SeparatorWrap">
+            <property name="tokens" value="DOT"/>
+            <property name="option" value="nl"/>
+        </module>
+        <module name="SeparatorWrap">
+            <property name="tokens" value="COMMA"/>
+            <property name="option" value="EOL"/>
+        </module>
+        <module name="OperatorWrap">
+            <property name="option" value="NL"/>
+            <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF,
+                LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF, TYPE_EXTENSION_AND"/>
+        </module>
+
+        <!-- One statement per line (Google Style 4.3) -->
+        <module name="OneStatementPerLine"/>
+        <module name="MultipleVariableDeclarations"/>
+
+        <!-- Array style: Java style (Google Style 4.8.3.1) -->
+        <module name="ArrayTypeStyle"/>
+
+        <!-- ============================================================== -->
+        <!-- SIZE LIMITS                                                    -->
+        <!-- Aligns with repo standards: 20 lines/method, 300 lines/class  -->
+        <!-- ============================================================== -->
+
+        <!-- Method length (repo standard: 20 lines max) -->
+        <module name="MethodLength">
+            <property name="max" value="20"/>
+            <property name="countEmpty" value="false"/>
+        </module>
+
+        <!-- Parameter count (repo standard: 5 max) -->
+        <module name="ParameterNumber">
+            <property name="max" value="5"/>
+            <property name="ignoreOverriddenMethods" value="true"/>
+            <property name="tokens" value="METHOD_DEF"/>
+        </module>
+
+        <!-- Boolean expression complexity -->
+        <module name="BooleanExpressionComplexity">
+            <property name="max" value="4"/>
+        </module>
+
+        <!-- ============================================================== -->
+        <!-- CODING PRACTICES                                               -->
+        <!-- ============================================================== -->
+
+        <!-- Avoid empty statements (Google Style 4.8.1) -->
+        <module name="EmptyStatement"/>
+
+        <!-- Equals/hashCode contract -->
+        <module name="EqualsHashCode"/>
+        <module name="EqualsAvoidNull"/>
+
+        <!-- No fall-through in switch (Google Style 4.8.4.2) -->
+        <module name="FallThrough"/>
+        <module name="MissingSwitchDefault"/>
+        <module name="DefaultComesLast"/>
+
+        <!-- Modifier ordering (Google Style 4.8.7) -->
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <!-- No magic numbers in code -->
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2"/>
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+            <property name="ignoreFieldDeclaration" value="false"/>
+            <property name="constantWaiverParentToken"
+                      value="TYPECAST, METHOD_CALL, EXPR, ARRAY_INIT, UNARY_MINUS, UNARY_PLUS,
+                             ELIST, STAR, ASSIGN, PLUS, MINUS, DIV, LITERAL_NEW"/>
+        </module>
+
+        <!-- String comparison -->
+        <module name="StringLiteralEquality"/>
+
+        <!-- Simplify boolean expressions/returns -->
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
+        <!-- No nested try blocks -->
+        <module name="NestedTryDepth">
+            <property name="max" value="1"/>
+        </module>
+
+        <!-- Nesting depth (repo standard: 3 max) -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+        <module name="NestedForDepth">
+            <property name="max" value="2"/>
+        </module>
+
+        <!-- Avoid finalizer methods -->
+        <module name="NoFinalizer"/>
+
+        <!-- Overloaded methods grouped together (Google Style 3.4.2.1) -->
+        <module name="OverloadMethodsDeclarationOrder"/>
+
+        <!-- Variable declarations close to usage -->
+        <module name="VariableDeclarationUsageDistance">
+            <property name="allowedDistance" value="5"/>
+        </module>
+
+        <!-- Unused or unnecessary code -->
+        <module name="UnnecessaryParentheses"/>
+        <module name="UnnecessarySemicolonAfterOuterTypeDeclaration"/>
+        <module name="UnnecessarySemicolonAfterTypeMemberDeclaration"/>
+        <module name="UnnecessarySemicolonInEnumeration"/>
+        <module name="UnnecessarySemicolonInTryWithResources"/>
+
+        <!-- ============================================================== -->
+        <!-- CLASS DESIGN                                                   -->
+        <!-- ============================================================== -->
+
+        <!-- One top-level class per file (Google Style 3.4.1) -->
+        <module name="OneTopLevelClass"/>
+
+        <!-- Utility classes: private constructor -->
+        <module name="HideUtilityClassConstructor"/>
+
+        <!-- Fields at top of class -->
+        <module name="DeclarationOrder"/>
+
+        <!-- Visibility: prefer least visibility -->
+        <module name="VisibilityModifier">
+            <property name="allowPublicFinalFields" value="true"/>
+            <property name="allowPublicImmutableFields" value="true"/>
+            <property name="protectedAllowed" value="true"/>
+        </module>
+
+        <!-- Final classes with private constructors -->
+        <module name="FinalClass"/>
+
+        <!-- ============================================================== -->
+        <!-- MISCELLANEOUS                                                  -->
+        <!-- ============================================================== -->
+
+        <!-- Override annotation required (Google Style 6.2) -->
+        <module name="MissingOverride"/>
+
+        <!-- File structure: package then imports then types (Google Style 3.2-3.3) -->
+        <module name="OuterTypeFilename"/>
+
+        <!-- Annotation formatting -->
+        <module name="AnnotationLocation">
+            <property name="allowSamelineMultipleAnnotations" value="false"/>
+            <property name="allowSamelineSingleParameterlessAnnotation" value="true"/>
+            <property name="allowSamelineParameterizedAnnotation" value="false"/>
+        </module>
+
+        <!-- Upper-case L for long literals (Google Style 4.8.8) -->
+        <module name="UpperEll"/>
+
+        <!-- Catch parameter naming -->
+        <module name="CatchParameterName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Trailing comments style (avoid inline comments after code) -->
+        <module name="CommentsIndentation"/>
+
+    </module>
+
+    <!-- ================================================================== -->
+    <!-- EXCLUDED CHECKS (intentional)                                      -->
+    <!--                                                                    -->
+    <!-- FinalParameters      - Too noisy; matches PMD's exclusion of       -->
+    <!--                        MethodArgumentCouldBeFinal                  -->
+    <!-- FinalLocalVariable   - Too noisy; matches PMD's exclusion of       -->
+    <!--                        LocalVariableCouldBeFinal                   -->
+    <!-- JavadocVariable      - Javadoc on fields is not required; class    -->
+    <!--                        and method Javadoc is sufficient            -->
+    <!-- AvoidInlineConditionals - Ternaries are fine when simple           -->
+    <!-- TrailingComment      - Inline comments are acceptable in moderation-->
+    <!-- TodoComment          - TODOs are tracked by project management, not-->
+    <!--                        static analysis                            -->
+    <!-- RegexpSingleline     - Trailing whitespace handled by formatters   -->
+    <!-- Header/RegexpHeader  - No license header requirement               -->
+    <!-- ================================================================== -->
+
+</module>

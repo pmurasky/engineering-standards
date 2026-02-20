@@ -417,7 +417,7 @@ public Order findOrder(String orderId) {
 ## Function/Method Design
 
 Apply the same standards from CODING_PRACTICES.md:
-- **Maximum 15 lines per method** (excluding blanks/braces)
+- **Maximum 20 lines per method** (excluding blanks/braces)
 - Single responsibility per method
 - Maximum 5 parameters (use parameter objects or builders)
 - Prefer returning values over mutating state
@@ -630,6 +630,16 @@ void shouldApplyCorrectPenaltyPerSeverity(Severity severity, int expected) {
 }
 ```
 
+### Architecture Testing with ArchUnit
+
+ArchUnit enforces architectural constraints as standard JUnit 5 tests: layer boundaries, package cycles, dependency direction, and naming conventions. It catches violations that PMD/Checkstyle cannot detect.
+
+- **Full documentation**: [ARCHUNIT_STANDARDS.md](./ARCHUNIT_STANDARDS.md)
+- **Configuration**: `config/archunit/archunit.properties`
+- **Dependency**: `com.tngtech.archunit:archunit-junit5:1.4.1` (test scope)
+
+Include ArchUnit tests in the unit test suite. They run in the standard `test` phase alongside other JUnit 5 tests.
+
 ## Build Tool (Maven/Gradle)
 
 **Maven (`pom.xml`):**
@@ -660,17 +670,343 @@ java {
 
 ## Code Quality Tools
 
+For the overarching static analysis philosophy, zero-tolerance policy, suppression strategy, incremental adoption, and cross-language tool matrix, see [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md). This section covers Java-specific configuration and integration.
+
 **Static Analysis:**
-- **Checkstyle**: Formatting and style enforcement
-- **SpotBugs**: Bug pattern detection
+- **PMD**: Code quality, complexity, and best-practice enforcement (see configuration below)
+- **Checkstyle**: Formatting and style enforcement (see configuration below)
+- **SpotBugs**: Bytecode bug detection -- null dereferences, concurrency issues, security vulnerabilities (see [SPOTBUGS_STANDARDS.md](./SPOTBUGS_STANDARDS.md))
 - **Error Prone**: Compile-time bug detection
 - **SonarQube**: Comprehensive code quality analysis
+- **ArchUnit**: Architecture testing as unit tests -- layer boundaries, package cycles, dependency direction (see [ARCHUNIT_STANDARDS.md](./ARCHUNIT_STANDARDS.md))
 
 **Same rules apply:**
-- 15-line method maximum
+- 20-line method maximum
 - 0-2 private methods per class (SRP guideline)
-- 80%+ test coverage (JaCoCo)
+- 80%+ unit test coverage (JaCoCo, unit tests only -- integration/E2E tests do not count toward coverage)
 - No duplicated code
+
+### Checkstyle Configuration
+
+This repo provides a curated Checkstyle 10.x configuration at `config/checkstyle/checkstyle.xml`. Based on the Google Java Style Guide with thresholds aligned to our engineering standards.
+
+**Key areas enforced:**
+
+| Area | What It Enforces |
+|------|-----------------|
+| Javadoc | Public classes, methods, and constructors must have Javadoc with `@param`, `@return`, `@throws` |
+| Naming | PascalCase types, camelCase methods/fields, SCREAMING_SNAKE constants |
+| Imports | No wildcard imports, no unused imports, alphabetical ordering |
+| Formatting | K&R braces, 4-space indentation, 120-char line length |
+| Size limits | 20-line methods, 5 parameters max, 500-line files |
+| Coding | No magic numbers, no fall-through in switch, equals/hashCode contract |
+
+**Javadoc enforcement**: PMD's `CommentRequired` rule is intentionally excluded in favor of Checkstyle's more configurable Javadoc checks (`MissingJavadocType`, `MissingJavadocMethod`, `JavadocMethod`). Test methods annotated with `@Test`, `@ParameterizedTest`, `@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`, and `@Nested` are exempt from Javadoc requirements.
+
+### Checkstyle Maven Integration
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-checkstyle-plugin</artifactId>
+    <version>3.6.0</version>
+    <configuration>
+        <configLocation>config/checkstyle/checkstyle.xml</configLocation>
+        <consoleOutput>true</consoleOutput>
+        <failsOnError>true</failsOnError>
+        <includeTestSourceRoots>false</includeTestSourceRoots>
+        <linkXRef>false</linkXRef>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.21.1</version>
+        </dependency>
+    </dependencies>
+    <executions>
+        <execution>
+            <goals>
+                <goal>check</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
+Run Checkstyle:
+```bash
+mvn checkstyle:check      # Run Checkstyle analysis
+mvn checkstyle:checkstyle # Generate Checkstyle report without failing
+mvn verify                # Runs Checkstyle as part of the build lifecycle
+```
+
+### Checkstyle Gradle Integration
+
+```kotlin
+// build.gradle.kts
+plugins {
+    checkstyle
+}
+
+checkstyle {
+    toolVersion = "10.21.1"
+    configFile = file("config/checkstyle/checkstyle.xml")
+    isIgnoreFailures = false
+    isShowViolations = true
+    maxWarnings = 0
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    // Exclude test sources from Checkstyle
+    exclude("**/test/**")
+}
+```
+
+```groovy
+// build.gradle (Groovy DSL)
+plugins {
+    id 'checkstyle'
+}
+
+checkstyle {
+    toolVersion = "10.21.1"
+    configFile = file("config/checkstyle/checkstyle.xml")
+    ignoreFailures = false
+    showViolations = true
+    maxWarnings = 0
+}
+```
+
+Run Checkstyle:
+```bash
+./gradlew checkstyleMain  # Run Checkstyle on main sources
+./gradlew check           # Runs Checkstyle as part of the check lifecycle
+```
+
+### Checkstyle Suppression
+
+When a rule produces a false positive, suppress it at the narrowest scope possible:
+
+```java
+// Suppress a specific check on a single element
+@SuppressWarnings("checkstyle:MagicNumber")  // Justified: HTTP status codes are well-known
+public static final int HTTP_OK = 200;
+
+// Suppress Javadoc requirement on a specific method
+@SuppressWarnings("checkstyle:MissingJavadocMethod")  // Internal helper, self-documenting name
+int calculatePenalty(Finding finding) { ... }
+```
+
+**Guidelines:**
+- Always include a justification comment explaining WHY the suppression is needed
+- Prefer `@SuppressWarnings("checkstyle:CheckName")` over suppression filters
+- Never disable checks globally to hide violations -- fix the code instead
+- Track suppressions in code reviews
+
+### PMD 7 Configuration
+
+This repo provides a curated Java PMD 7 ruleset at `config/pmd/java-ruleset.xml`. Rules are selected individually (not bulk category imports) with thresholds aligned to our engineering standards.
+
+**Key thresholds enforced:**
+
+| Metric | Threshold | Standard Reference |
+|--------|-----------|-------------------|
+| Cyclomatic complexity | 10 per method | CODING_PRACTICES.md |
+| Cognitive complexity | 15 per method | CODING_PRACTICES.md |
+| Method length (NCSS) | 20 lines | JAVA_STANDARDS.md |
+| Class length (NCSS) | 300 lines | CODING_PRACTICES.md |
+| Parameter count | 5 max | CODING_PRACTICES.md |
+| Nesting depth | 3 levels | CODING_PRACTICES.md |
+| Duplicate literals | 3 max | DRY principle |
+
+**Rule categories enabled:**
+- **Best Practices** -- unused code detection, loose coupling, stack trace preservation, test best practices
+- **Code Style** -- braces, imports, naming conventions, unnecessary constructs, modern Java patterns
+- **Design** -- complexity limits, class size, God class detection, SRP enforcement, exception design
+- **Error Prone** -- null checks, comparison errors, resource management, duplicate literals
+- **Multithreading** -- synchronization issues, double-checked locking, thread safety
+- **Performance** -- string handling, collection inefficiencies
+- **Security** -- hard-coded crypto keys, insecure IVs
+- **Documentation** -- uncommented empty constructors/methods
+
+**Intentionally excluded rules** (with rationale documented in the XML):
+- `AtLeastOneConstructor` -- too noisy for records and DTOs
+- `OnlyOneReturn` -- multiple returns improve readability
+- `LocalVariableCouldBeFinal` / `MethodArgumentCouldBeFinal` -- too noisy
+- `LawOfDemeter` -- too many false positives with fluent APIs and streams
+- `CommentRequired` -- handled by Checkstyle Javadoc rules instead (see `config/checkstyle/checkstyle.xml`)
+- `AvoidInstantiatingObjectsInLoops` -- modern JVMs handle this via escape analysis
+
+### PMD Maven Integration
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-pmd-plugin</artifactId>
+    <version>3.26.0</version>
+    <configuration>
+        <rulesets>
+            <ruleset>config/pmd/java-ruleset.xml</ruleset>
+        </rulesets>
+        <failOnViolation>true</failOnViolation>
+        <printFailingErrors>true</printFailingErrors>
+        <analysisCache>true</analysisCache>
+        <analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation>
+        <linkXRef>false</linkXRef>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.pmd</groupId>
+            <artifactId>pmd-java</artifactId>
+            <version>7.9.0</version>
+        </dependency>
+    </dependencies>
+    <executions>
+        <execution>
+            <goals>
+                <goal>check</goal>
+                <goal>cpd-check</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
+Run PMD:
+```bash
+mvn pmd:check          # Run PMD analysis
+mvn pmd:cpd-check      # Run copy-paste detection (DRY)
+mvn pmd:pmd            # Generate PMD report without failing
+mvn verify             # Runs PMD as part of the build lifecycle
+```
+
+### PMD Gradle Integration
+
+```kotlin
+// build.gradle.kts
+plugins {
+    pmd
+}
+
+pmd {
+    toolVersion = "7.9.0"
+    ruleSetFiles = files("config/pmd/java-ruleset.xml")
+    ruleSets = listOf() // Clear defaults -- use only our custom ruleset
+    isIgnoreFailures = false
+    isConsoleOutput = true
+}
+
+tasks.withType<Pmd> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+```
+
+```groovy
+// build.gradle (Groovy DSL)
+plugins {
+    id 'pmd'
+}
+
+pmd {
+    toolVersion = "7.9.0"
+    ruleSetFiles = files("config/pmd/java-ruleset.xml")
+    ruleSets = [] // Clear defaults -- use only our custom ruleset
+    ignoreFailures = false
+    consoleOutput = true
+}
+```
+
+Run PMD:
+```bash
+./gradlew pmdMain      # Run PMD on main sources
+./gradlew pmdTest      # Run PMD on test sources
+./gradlew check        # Runs PMD as part of the check lifecycle
+```
+
+### CPD (Copy-Paste Detection)
+
+CPD runs alongside PMD to detect duplicated code blocks, enforcing the DRY principle.
+
+**Maven** -- CPD is included via `cpd-check` goal (see Maven snippet above). Configure the minimum token count:
+
+```xml
+<configuration>
+    <!-- ... existing PMD config ... -->
+    <minimumTokens>100</minimumTokens> <!-- Minimum token length for duplicate detection -->
+</configuration>
+```
+
+**Gradle** -- CPD is included automatically with the `pmd` plugin. Configure via:
+
+```kotlin
+// build.gradle.kts
+tasks.withType<Cpd> {
+    minimumTokenCount.set(100)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+```
+
+### PMD Incremental Analysis
+
+PMD supports incremental analysis to speed up repeated runs. The analysis cache stores results from previous runs and only re-analyzes changed files.
+
+**Maven**: Set `analysisCache` to `true` (included in the Maven snippet above).
+
+**Gradle**: Enabled by default. The cache is stored at `build/pmd/pmd.cache`.
+
+**CI/CD**: Cache the `pmd.cache` file between pipeline runs to reduce analysis time. See the CI/CD integration guide (issue #30) for details.
+
+### PMD Suppression
+
+When a rule produces a false positive, suppress it at the narrowest scope possible:
+
+```java
+// Suppress a specific rule on a single method
+@SuppressWarnings("PMD.GodClass")  // Justified: orchestration class, refactoring tracked in JIRA-1234
+public class OrderWorkflow { ... }
+
+// Suppress in code with NOPMD comment (use sparingly)
+String output = System.getenv("HOME"); // NOPMD - required for environment detection
+```
+
+**Guidelines:**
+- Always include a justification comment explaining WHY the suppression is needed
+- Prefer `@SuppressWarnings("PMD.RuleName")` over `// NOPMD` comments
+- Never suppress rules globally in the ruleset to hide violations -- fix the code instead
+- Track suppressions in code reviews
+
+### SpotBugs Configuration
+
+This repo provides a sample SpotBugs exclusion filter at `config/spotbugs/spotbugs-exclude.xml`. SpotBugs analyzes compiled bytecode to find bugs that source-level tools cannot detect. See [SPOTBUGS_STANDARDS.md](./SPOTBUGS_STANDARDS.md) for comprehensive standards.
+
+**Key configuration:**
+
+| Setting | Value | Rationale |
+|---------|-------|-----------|
+| Effort | `Max` | Full interprocedural analysis |
+| Threshold | `Medium` | Balanced signal-to-noise ratio |
+| Max rank | `14` | Fail on Scariest + Scary + Troubling bugs |
+| Find Security Bugs | Always enabled | 138 OWASP Top 10 detectors |
+
+**What SpotBugs catches that PMD/Checkstyle cannot:**
+- Null pointer dereferences via data-flow analysis across methods
+- Concurrency bugs (race conditions, deadlocks, inconsistent synchronization)
+- Security vulnerabilities (SQL injection, XSS, path traversal, XXE)
+- Resource leaks tracked through bytecode lifecycles
+- Infinite recursive loops via call graph analysis
+
+**Suppression**: Use `@SuppressFBWarnings(value = "BUG_PATTERN", justification = "reason")`. Justification is mandatory. See [SPOTBUGS_STANDARDS.md](./SPOTBUGS_STANDARDS.md) for annotation rules.
 
 ## Common Anti-Patterns to Avoid
 
@@ -771,8 +1107,16 @@ public class Order {
 | Flexible Constructor Bodies | 25 | 513 |
 | Compact Source Files / Instance Main | 25 | 512 |
 
+## Related Documents
+
+- [CODING_PRACTICES.md](./CODING_PRACTICES.md) -- Language-agnostic coding standards
+- [SOLID_PRINCIPLES.md](./SOLID_PRINCIPLES.md) -- SOLID principles with multi-language examples
+- [DESIGN_PATTERNS.md](./DESIGN_PATTERNS.md) -- Design patterns guidance
+- [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md) -- Static analysis philosophy and cross-language tool matrix
+- [ARCHUNIT_STANDARDS.md](./ARCHUNIT_STANDARDS.md) -- Architecture testing with ArchUnit (Java/Kotlin)
+
 ---
 
-**Last Updated**: February 16, 2026
-**Version**: 2.0
+**Last Updated**: February 19, 2026
+**Version**: 2.1
 **Java Versions**: 21 (LTS), 25 (LTS)

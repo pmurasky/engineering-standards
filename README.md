@@ -2,9 +2,15 @@
 
 Reusable engineering standards for AI coding agents. Enforces coding practices, SOLID principles, TDD micro-commit workflows, and code quality standards across any project.
 
-**Works with**: OpenCode, Claude Code, Cursor, GitHub Copilot, Cline
+**Works with**: OpenCode, Claude Code, Cursor, GitHub Copilot
 
 ## Quick Start
+
+### OpenCode One-Line Install
+
+Paste this prompt into OpenCode to install the standards into your current project:
+
+> Clone https://github.com/pmurasky/pmurasky_engineering_standards.git, copy the `docs/` directory, `AGENTS.md`, `opencode.json`, and the `.opencode/` directory (including agents, commands, and skills) into this project's root.
 
 ### Option A: Copy files into your project
 
@@ -26,7 +32,7 @@ cp -r pmurasky_engineering_standards/docs your-project/
 | **Claude Code** | `CLAUDE.md`, `.claude/` |
 | **Cursor** | `.cursor/rules/` (also reads `AGENTS.md`) |
 | **GitHub Copilot** | `.github/copilot-instructions.md`, `.github/instructions/` (also reads `AGENTS.md`) |
-| **Cline** | `.clinerules/` (also reads `AGENTS.md`, `.cursorrules`) |
+
 
 ### Option B: Git submodule
 
@@ -127,15 +133,6 @@ Copy (or symlink) `.github/instructions/` from the submodule and update `docs/` 
 
 </details>
 
-<details>
-<summary><strong>Cline</strong> -- .clinerules/</summary>
-
-Copy (or symlink) `.clinerules/` from the submodule. Update any `docs/` references inside the copied rules to point to `engineering-standards/docs/`.
-
-Cline also reads `AGENTS.md` from the project root, so the OpenCode wrapper above works for Cline too.
-
-</details>
-
 #### Symlink alternative
 
 Instead of copying tool config directories, you can symlink them:
@@ -177,7 +174,7 @@ git submodule update --init --recursive
 ## What Gets Enforced
 
 ### Code Quality Rules
-- Maximum method length: 15 lines
+- Maximum method length: 15-20 lines (see language-specific standards)
 - Maximum class length: 300 lines
 - Maximum 0-2 private methods per class
 - Maximum 5 parameters per method
@@ -203,60 +200,109 @@ Follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> COMMIT cycle for all co
 ```
 engineering-standards/
 ├── docs/                               # Knowledge base (tool-agnostic)
-│   ├── AI_AGENT_WORKFLOW.md            # Micro-commit workflow for AI agents
+│   ├── ADR_STANDARDS.md               # Architecture Decision Records guidance
+│   ├── AI_AGENT_WORKFLOW.md           # Micro-commit workflow for AI agents
+│   ├── ARCHUNIT_STANDARDS.md          # Architecture testing with ArchUnit
+│   ├── CHECKSTYLE_STANDARDS.md        # Checkstyle style enforcement (Java)
 │   ├── CODING_PRACTICES.md            # Language-agnostic practices, SOLID & TDD
 │   ├── CODING_STANDARDS.md            # Standards index (table of contents)
-│   ├── DESIGN_PATTERNS.md              # GoF design patterns catalog and guidance
-│   ├── SOLID_PRINCIPLES.md             # SOLID principles deep-dive (multi-language)
-│   ├── JAVA_STANDARDS.md            # Java-specific conventions
+│   ├── CONVERSION_PLAN_TEMPLATE.md    # Conversion/porting plan template
+│   ├── DESIGN_PATTERNS.md             # GoF design patterns catalog and guidance
+│   ├── GO_STANDARDS.md                # Go-specific conventions
+│   ├── JAVA_STANDARDS.md              # Java-specific conventions
 │   ├── KOTLIN_STANDARDS.md            # Kotlin-specific conventions
-│   ├── TYPESCRIPT_STANDARDS.md        # TypeScript-specific conventions
-│   ├── NEXTJS_STANDARDS.md            # Next.js framework conventions
-│   └── PRE_COMMIT_CHECKLIST.md        # Pre-commit quality checklist
+│   ├── PRE_COMMIT_CHECKLIST.md        # Pre-commit quality checklist
+│   ├── PYTHON_STANDARDS.md            # Python-specific conventions
+│   ├── SECURITY_STANDARDS.md          # Security standards (auth, OWASP, API)
+│   ├── SOLID_PRINCIPLES.md            # SOLID principles deep-dive (multi-language)
+│   ├── SPOTBUGS_STANDARDS.md          # SpotBugs bytecode bug detection (Java)
+│   ├── STATIC_ANALYSIS_STANDARDS.md   # Static analysis (PMD, detekt, CPD)
+│   └── TYPESCRIPT_STANDARDS.md        # TypeScript/JavaScript conventions
 │
-├── AGENTS.md                           # OpenCode / Copilot / Cline rules
-├── CLAUDE.md                           # Claude Code rules
-├── opencode.json                       # OpenCode config
-├── .opencode/                          # OpenCode agents & commands
+├── config/                             # Static analysis configuration files
+│   ├── archunit/
+│   │   └── archunit.properties        # ArchUnit configuration
+│   ├── checkstyle/
+│   │   └── checkstyle.xml             # Checkstyle rules
+│   ├── detekt/
+│   │   └── detekt.yml                 # detekt (Kotlin) configuration
+│   ├── pmd/
+│   │   ├── java-ruleset.xml           # PMD Java ruleset
+│   │   └── kotlin-ruleset.xml         # PMD Kotlin ruleset
+│   └── spotbugs/
+│       └── spotbugs-exclude.xml       # SpotBugs exclusion filters
+│
+├── .opencode/                          # OpenCode agents, commands & skills
 │   ├── agents/
 │   │   ├── standards-build.md         # Primary: writes code following standards
 │   │   ├── standards-review.md        # Subagent: read-only code review
 │   │   └── pre-commit-check.md        # Subagent: pre-commit validation
-│   └── commands/
-│       ├── pre-commit.md              # /pre-commit
-│       ├── review-solid.md            # /review-solid
-│       ├── micro-commit.md            # /micro-commit
-│       └── refactor-check.md          # /refactor-check
+│   ├── commands/
+│   │   ├── code-quality.md            # /code-quality
+│   │   ├── commit-review.md           # /commit-review
+│   │   ├── micro-commit.md            # /micro-commit
+│   │   ├── new-feature.md             # /new-feature
+│   │   ├── pre-commit.md              # /pre-commit
+│   │   ├── refactor-check.md          # /refactor-check
+│   │   ├── review-solid.md            # /review-solid
+│   │   └── test-coverage.md           # /test-coverage
+│   └── skills/
+│       ├── coding-practices/SKILL.md  # Coding practices skill
+│       ├── design-patterns/SKILL.md   # Design patterns skill
+│       ├── go-standards/SKILL.md      # Go standards skill
+│       ├── java-standards/SKILL.md    # Java standards skill
+│       ├── kotlin-standards/SKILL.md  # Kotlin standards skill
+│       ├── micro-commit-workflow/SKILL.md # Micro-commit workflow skill
+│       ├── pre-commit-checklist/SKILL.md  # Pre-commit checklist skill
+│       ├── python-standards/SKILL.md  # Python standards skill
+│       ├── solid-principles/SKILL.md  # SOLID principles skill
+│       └── typescript-standards/SKILL.md  # TypeScript standards skill
 │
 ├── .claude/rules/                      # Claude Code modular rules
 │   ├── code-review.md
-│   ├── micro-commit-workflow.md
+│   ├── commit-message.md
+│   ├── go.md
 │   ├── java.md
 │   ├── kotlin.md
-│   ├── typescript.md
-│   └── nextjs.md
+│   ├── micro-commit-workflow.md
+│   ├── python.md
+│   ├── refactoring.md
+│   ├── testing.md
+│   └── typescript.md
 │
 ├── .cursor/rules/                      # Cursor rules
-│   ├── engineering-standards.md
 │   ├── code-review.md
+│   ├── engineering-standards.md
+│   ├── go.md
 │   ├── java.md
 │   ├── kotlin.md
-│   ├── typescript.md
-│   └── nextjs.md
+│   ├── python.md
+│   ├── refactoring.md
+│   └── typescript.md
 │
-├── .github/                            # GitHub Copilot
+├── .github/                            # GitHub Copilot & issue templates
 │   ├── copilot-instructions.md
-│   └── instructions/
-│       ├── code-quality.instructions.md
-│       ├── java.instructions.md
-│       ├── kotlin.instructions.md
-│       ├── typescript.instructions.md
-│       └── nextjs.instructions.md
+│   ├── instructions/
+│   │   ├── code-quality.instructions.md
+│   │   ├── go.instructions.md
+│   │   ├── java.instructions.md
+│   │   ├── kotlin.instructions.md
+│   │   ├── micro-commit.instructions.md
+│   │   ├── python.instructions.md
+│   │   └── typescript.instructions.md
+│   └── ISSUE_TEMPLATE/
+│       ├── config.yml
+│       ├── enhancement.yml
+│       ├── inconsistency.yml
+│       ├── new-standard.yml
+│       └── tool-parity.yml
 │
-├── .clinerules/                        # Cline rules
-│   ├── engineering-standards.md
-│   ├── typescript.md
-│   └── nextjs.md
+├── AGENTS.md                           # OpenCode / Copilot rules
+├── CLAUDE.md                           # Claude Code rules
+├── CONTRIBUTING.md                     # Contribution guidelines
+├── .gitignore                          # Git ignore rules
+├── opencode.json                       # OpenCode config
+└── README.md                           # This file
 ```
 
 ## Tool-Specific Features
@@ -270,10 +316,25 @@ OpenCode gets the richest experience with specialized agents and custom commands
 - `pre-commit-check` - Validates staged changes
 
 **Commands**:
-- `/pre-commit` - Run pre-commit quality checklist
-- `/review-solid` - Check for SOLID violations
+- `/code-quality` - Quick code quality scan with scored report
+- `/commit-review` - Audit recent commits against engineering standards
 - `/micro-commit` - Guide through micro-commit workflow
+- `/new-feature` - Guided TDD workflow for new feature implementation
+- `/pre-commit` - Run pre-commit quality checklist
 - `/refactor-check` - Verify test coverage before refactoring
+- `/review-solid` - Check for SOLID violations
+- `/test-coverage` - Analyze test coverage and identify gaps
+
+**Skills** (load on-demand with `skill` tool):
+- `coding-practices` - Language-agnostic coding practices and TDD
+- `solid-principles` - SOLID principles with multi-language examples
+- `design-patterns` - GoF design patterns catalog
+- `pre-commit-checklist` - Pre-commit quality checklist
+- `micro-commit-workflow` - TDD micro-commit workflow for AI agents
+- `go-standards` - Go-specific conventions
+- `java-standards` - Java-specific conventions
+- `kotlin-standards` - Kotlin-specific conventions
+- `python-standards` - Python-specific conventions
 
 ### Claude Code
 Uses `CLAUDE.md` for project-wide rules and `.claude/rules/` for modular, path-scoped rules that activate based on file globs.
@@ -283,9 +344,6 @@ Uses `.cursor/rules/` with `alwaysApply` and `globs` frontmatter for conditional
 
 ### GitHub Copilot
 Uses `.github/copilot-instructions.md` for repo-wide instructions and `.github/instructions/*.instructions.md` with `applyTo` frontmatter for path-scoped rules. Also reads `AGENTS.md`.
-
-### Cline
-Uses `.clinerules/` directory. Also auto-detects `AGENTS.md` and `.cursorrules`.
 
 ## Customization
 
@@ -327,11 +385,12 @@ To add project-specific standards on top of the shared ones:
 
 ## Compatibility Matrix
 
-| Feature | OpenCode | Claude Code | Cursor | Copilot | Cline |
-|---------|----------|-------------|--------|---------|-------|
-| Project rules | AGENTS.md | CLAUDE.md | .cursor/rules/ | .github/copilot-instructions.md | .clinerules/ |
-| Path-scoped rules | - | .claude/rules/ | globs frontmatter | applyTo frontmatter | paths frontmatter |
-| Custom agents | .opencode/agents/ | - | - | - | - |
-| Custom commands | .opencode/commands/ | - | - | - | - |
-| Reads AGENTS.md | Native | - | - | Yes | Yes |
-| Reads CLAUDE.md | Fallback | Native | - | Yes | - |
+| Feature | OpenCode | Claude Code | Cursor | Copilot |
+|---------|----------|-------------|--------|---------|
+| Project rules | AGENTS.md | CLAUDE.md | .cursor/rules/ | .github/copilot-instructions.md |
+| Path-scoped rules | - | .claude/rules/ | globs frontmatter | applyTo frontmatter |
+| Custom agents | .opencode/agents/ | - | - | - |
+| Custom commands | .opencode/commands/ | - | - | - |
+| Skills | .opencode/skills/ | - | - | - |
+| Reads AGENTS.md | Native | - | - | Yes |
+| Reads CLAUDE.md | Fallback | Native | - | Yes |

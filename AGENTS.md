@@ -27,7 +27,7 @@ Every commit MUST be production-ready:
 - Code is deployable
 
 ### 4. Code Quality Rules
-- Maximum method length: 15 lines (excluding blank lines and braces)
+- Maximum method length: 15-20 lines (excluding blank lines and braces; see language-specific standards for exact limit)
 - Maximum class length: 300 lines (consider refactoring if larger)
 - Maximum 0-2 private methods per class (SRP guideline)
 - Maximum 5 parameters per method (use parameter objects)
@@ -51,11 +51,24 @@ Use Conventional Commits:
 Types: feat, fix, refactor, test, docs, perf, chore
 
 ### 7. Testing Standards
-- Minimum 80% test coverage overall
-- 100% coverage for critical paths
+- Minimum 80% unit test coverage overall (unit tests only -- integration/E2E tests do not count toward coverage)
+- 100% unit test coverage for critical paths
 - Use Given-When-Then structure
 - Descriptive test names (e.g., `shouldSelectLatestVersionWhenAvailable`)
 - Never commit failing tests (every commit must be production-ready, no exceptions)
+
+### 8. Test Execution Tiers
+- **Before every commit**: Run unit tests (mandatory, no exceptions)
+- **Before pushing**: Run unit tests + integration tests
+- **CI pipeline**: Runs all tests (unit + integration + E2E) as hard gate before merge
+
+### 9. Refactoring Prerequisites
+**Never refactor without tests. No exceptions.**
+- Before refactoring, verify unit test coverage is at least 80% for the code being changed (unit tests only)
+- If coverage is below 80%, STOP and write unit tests FIRST (separate commits)
+- All tests MUST pass before starting any refactoring
+- After each refactoring step, run ALL tests and commit immediately
+- See `docs/AI_AGENT_WORKFLOW.md` and `docs/PRE_COMMIT_CHECKLIST.md` for full details
 
 ## External File Loading
 
@@ -68,21 +81,46 @@ Do NOT preemptively load all references. Use lazy loading based on actual need.
 For the micro-commit workflow and AI agent instructions: @docs/AI_AGENT_WORKFLOW.md
 For language-agnostic coding practices, SOLID examples, testing, and TDD: @docs/CODING_PRACTICES.md
 For the standards index (table of contents): @docs/CODING_STANDARDS.md
+For Go-specific conventions (when working with Go): @docs/GO_STANDARDS.md
 For Java-specific conventions (when working with Java): @docs/JAVA_STANDARDS.md
 For Kotlin-specific conventions (when working with Kotlin): @docs/KOTLIN_STANDARDS.md
-For TypeScript-specific conventions (when working with TypeScript): @docs/TYPESCRIPT_STANDARDS.md
-For Next.js framework conventions (when working with Next.js): @docs/NEXTJS_STANDARDS.md
+For Python-specific conventions (when working with Python): @docs/PYTHON_STANDARDS.md
+For TypeScript/JavaScript conventions (when working with TypeScript or JavaScript): @docs/TYPESCRIPT_STANDARDS.md
 For the pre-commit quality checklist: @docs/PRE_COMMIT_CHECKLIST.md
 For design patterns guidance: @docs/DESIGN_PATTERNS.md
 For SOLID principles with multi-language examples: @docs/SOLID_PRINCIPLES.md
+For static analysis standards (PMD, detekt, Checkstyle, CPD): @docs/STATIC_ANALYSIS_STANDARDS.md
+For Checkstyle style enforcement (Java only): @docs/CHECKSTYLE_STANDARDS.md
+For architecture testing with ArchUnit (Java/Kotlin): @docs/ARCHUNIT_STANDARDS.md
+For SpotBugs bytecode bug detection (Java only): @docs/SPOTBUGS_STANDARDS.md
+For Architecture Decision Records (ADR) guidance: @docs/ADR_STANDARDS.md
+For security standards (auth, secrets, OWASP, API security): @docs/SECURITY_STANDARDS.md
+For logging standards (structured logging, log levels, correlation IDs, PII): @docs/LOGGING_STANDARDS.md
+For conversion/porting plan template (gated phases, behavioral baseline, quality gates): @docs/CONVERSION_PLAN_TEMPLATE.md
 
 ## Before Making ANY Code Changes
 
-1. Read and acknowledge: "I will follow the micro-commit workflow"
-2. Create a task list using TodoWrite to break down the work
-3. Execute one task at a time, committing after each one
-4. Run tests before every commit
-5. Follow the pre-commit checklist
+1. Pull latest changes: `git pull`
+2. Read and acknowledge: "I will follow the micro-commit workflow"
+3. Create a task list to break down the work into micro-commits
+4. Execute one task at a time, committing after each one
+5. Run unit tests before every commit
+6. Run unit tests + integration tests before pushing
+7. Follow the pre-commit checklist
+
+## Selecting Work
+
+When asked what to work on next, consult GitHub Issues: `gh issue list --label "P1: should fix" --state open`. Prioritize P1 over P2. Reference issues in commits (e.g., `closes #2`). See `docs/AI_AGENT_WORKFLOW.md` for full details.
+
+## Closing Issues
+
+**CRITICAL**: After completing work on an issue, ALWAYS close it:
+
+```bash
+gh issue close <number> --comment "Completed in commit <hash>..."
+```
+
+Complete workflow: Implement → Test → Commit → Push → **Close Issue**. Never forget the final step!
 
 ## Red Flags (Stop and Ask User)
 
@@ -92,7 +130,7 @@ If you encounter these situations, STOP and ask:
 2. **Breaking change**: Change will break a public API
 3. **Test failures**: Tests failing after your change
 4. **Conflicting patterns**: Existing code doesn't follow SOLID
-5. **Missing tests**: Code being changed has < 80% coverage
+5. **Missing tests**: Code being changed has < 80% unit test coverage
 
 ## Agent Pledge
 

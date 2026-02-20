@@ -13,11 +13,12 @@ See [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md) for the full workflow.
 
 ### Checklist
 
-- [ ] **Coverage verified**: Minimum 80% for code being changed, 100% for critical paths
+- [ ] **Coverage verified**: Minimum 80% unit test coverage for code being changed, 100% for critical paths (unit tests only -- integration/E2E tests do not count toward coverage)
 - [ ] **Tests written**: New/updated tests follow Given-When-Then structure with edge cases
 - [ ] **Tests pass**: Run your project's test suite - all tests **PASS**
 - [ ] **Build succeeds**: Run your project's build - **SUCCEEDS**
 - [ ] **No lint errors**
+- [ ] **Static analysis passes**: No PMD, detekt, or Checkstyle violations (see [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md))
 - [ ] **Commit is focused**: One logical change per commit
 - [ ] **Commit message**: Follows conventional commits format
 - [ ] **Production-ready**: Code is deployable to production
@@ -32,21 +33,69 @@ See [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md) for the full workflow.
 
 ---
 
+## 🔧 Refactoring Prerequisites (MANDATORY)
+
+**CRITICAL: Never refactor without tests. No exceptions.**
+
+Before refactoring ANY code, you MUST complete ALL of the following:
+
+- [ ] **Check unit test coverage**: Run your project's coverage tool (e.g., `./gradlew test jacocoTestReport`, `npm run test:coverage`, `pytest --cov`, `go test -cover ./...`)
+- [ ] **Minimum 80% unit test line coverage** for the code being refactored (unit tests only -- integration/E2E tests do not count)
+- [ ] **100% unit test coverage for critical paths** (business logic, scoring, analysis, report generation)
+- [ ] **All existing tests pass** before starting any refactoring
+- [ ] **Tests are meaningful**: Not just for coverage numbers -- tests verify actual behavior
+
+### If Unit Test Coverage Is Below 80%
+
+**STOP. Do NOT refactor.** Instead:
+
+1. Write unit tests FIRST to reach 80% coverage (separate commits using TDD cycle)
+2. Verify all new tests pass
+3. Commit the tests: `test(<scope>): add tests for <component> before refactoring`
+4. THEN proceed with refactoring
+
+### After Each Refactoring Step
+
+- [ ] Run ALL tests (not just the ones you think are affected)
+- [ ] Verify build succeeds
+- [ ] Verify no lint errors
+- [ ] Commit immediately: `refactor(<scope>): <what was improved>`
+
+### Refactoring Red Flags
+
+- "I'll add tests later" -- NO. Tests FIRST, always.
+- "The code is simple, I don't need tests" -- Tests are required regardless of perceived simplicity.
+- "I'm just moving code around" -- Even simple moves can break dependencies. Tests required.
+- Batching multiple refactoring steps into one commit -- each step is its own commit.
+
+For the full refactoring workflow, see `docs/AI_AGENT_WORKFLOW.md`.
+
+---
+
 ## 📋 Quick Pre-Commit Checklist
 
 Before running `git commit`, verify:
 
-- [ ] **Production-ready: All tests pass** (run your project's test suite)
+- [ ] **Production-ready: All unit tests pass** (run your project's unit test suite)
 - [ ] **Production-ready: Code compiles** (run your project's build)
 - [ ] **Production-ready: No lint errors**
+- [ ] **Production-ready: Static analysis passes** (PMD/detekt/Checkstyle -- see [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md))
 - [ ] **Followed TDD micro-commit workflow** (RED → GREEN → COMMIT or REFACTOR → COMMIT)
 - [ ] **No SOLID violations** (see detailed checklist below)
 - [ ] **No design pattern anti-patterns** (see detailed checklist below)
-- [ ] **Methods ≤ 15 lines** (excluding data classes, comments, blank lines)
+- [ ] **Methods ≤ language-specific limit (15-20 lines)** (excluding data classes, comments, blank lines)
 - [ ] **Classes ≤ 300 lines** (if larger, consider refactoring)
 - [ ] **No duplicated code** (DRY principle)
 - [ ] **Proper KDoc comments** on public APIs
 - [ ] **Meaningful commit message** following conventional commits format
+
+## 📋 Quick Pre-Push Checklist
+
+Before running `git push`, verify:
+
+- [ ] **All unit tests pass** (should already pass from pre-commit)
+- [ ] **All integration tests pass** (run your project's integration test suite)
+- [ ] **No failures introduced** — if integration tests fail, fix locally before pushing
 
 ---
 
@@ -67,7 +116,7 @@ For the full SOLID guide with multi-language examples and real-world analogies, 
 
 **Red flags:**
 - Class > 300 lines
-- Method > 15 lines
+- Method > language-specific limit (15-20 lines)
 - Class imports from > 5 different packages
 - Methods that call methods from > 3 other classes (Feature Envy)
 
@@ -260,7 +309,7 @@ For the full catalog and usage guidance, see `docs/DESIGN_PATTERNS.md`.
 
 #### **God Class / God Method**
 - [ ] No class > 300 lines
-- [ ] No method > 15 lines
+- [ ] No method > language-specific limit (15-20 lines)
 - [ ] No class with > 10 methods
 - [ ] No class doing > 3 different things
 
@@ -319,7 +368,7 @@ wc -l src/main/kotlin/**/*.kt
 Before committing, ensure:
 
 - [ ] **All tests pass**: run your project's test suite
-- [ ] **New code has tests**: Minimum 80% coverage for new classes
+- [ ] **New code has tests**: Minimum 80% unit test coverage for new classes (unit tests only)
 - [ ] **No tests ignored**: No `@Disabled` or `.skip()` annotations
 - [ ] **Tests are fast**: Unit tests run in < 1 second each
 - [ ] **Tests are isolated**: No shared state between tests
@@ -481,7 +530,7 @@ class CodeHealthOrchestrator(
 
 ### **Run Before Every Commit**
 ```bash
-# 1. Run all tests (use your project's test runner)
+# 1. Run unit tests (use your project's test runner)
 # e.g., ./gradlew test | npm test | pytest | go test ./... | dotnet test
 
 # 2. Check compilation / build
@@ -499,13 +548,28 @@ class CodeHealthOrchestrator(
 # grep "^import" src/**/*.kt | sort | uniq -c | sort -rn | head -20
 ```
 
+### **Run Before Every Push**
+
+Before pushing commits to the remote, run integration tests in addition to unit tests. This catches cross-component issues before they reach the team.
+
+```bash
+# 1. Run unit tests (should already pass from pre-commit)
+# e.g., ./gradlew test | npm test | pytest | go test ./...
+
+# 2. Run integration tests
+# e.g., ./gradlew integrationTest | npm run test:integration
+# pytest tests/integration/ | go test -tags=integration ./...
+
+# If ANY test fails, fix locally before pushing.
+```
+
 ### **Pre-Commit Hook** (Optional but Recommended)
 ```bash
 # .git/hooks/pre-commit
 #!/bin/bash
 echo "Running pre-commit checks..."
 
-# Run tests (replace with your project's test command)
+# Run unit tests (replace with your project's test command)
 # ./gradlew test || exit 1
 # npm test || exit 1
 # pytest || exit 1
@@ -517,6 +581,25 @@ echo "Running pre-commit checks..."
 # fi
 
 echo "✅ Pre-commit checks passed"
+```
+
+### **Pre-Push Hook** (Optional but Recommended)
+```bash
+# .git/hooks/pre-push
+#!/bin/bash
+echo "Running pre-push checks..."
+
+# Run unit tests (should already pass from pre-commit)
+# ./gradlew test || exit 1
+# npm test || exit 1
+# pytest || exit 1
+
+# Run integration tests
+# ./gradlew integrationTest || exit 1
+# npm run test:integration || exit 1
+# pytest tests/integration/ || exit 1
+
+echo "✅ Pre-push checks passed"
 ```
 
 ---
@@ -536,7 +619,7 @@ echo "✅ Pre-commit checks passed"
 ### 🔴 **RED LIGHT - DO NOT COMMIT IF:**
 - Tests are failing
 - Code doesn't compile
-- Method > 15 lines
+- Method > language-specific limit (15-20 lines)
 - Class > 300 lines with multiple responsibilities
 - Direct dependency instantiation without default parameters
 - Copy-pasted code
@@ -546,7 +629,7 @@ echo "✅ Pre-commit checks passed"
 ### 🟢 **GREEN LIGHT - OK TO COMMIT IF:**
 - All tests pass
 - Code compiles
-- All methods ≤ 15 lines
+- All methods ≤ language-specific limit (15-20 lines)
 - Classes ≤ 300 lines OR have single responsibility
 - Dependencies injected via constructor
 - No duplicated code

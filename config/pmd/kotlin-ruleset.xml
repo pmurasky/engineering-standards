@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Engineering Standards - Kotlin PMD 7 Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Kotlin PMD 7.x ruleset aligned with the engineering standards defined
+        in this repository. PMD's Kotlin support is limited to Best Practices
+        and Error Prone categories (2 rules total as of PMD 7.21.0).
+
+        For comprehensive Kotlin static analysis, use detekt as the primary
+        tool (see config/detekt/detekt.yml). PMD serves as a lightweight
+        supplement.
+
+        PMD version: 7.x (tested with 7.21.0)
+        Last updated: 2026-02-19
+    </description>
+
+    <!-- ================================================================== -->
+    <!-- BEST PRACTICES                                                     -->
+    <!-- ================================================================== -->
+
+    <!-- Function names should be at least 3 characters for readability.    -->
+    <!-- Aligns with our naming conventions: descriptive, intention-        -->
+    <!-- revealing names (e.g., calculateScore, not cs).                    -->
+    <rule ref="category/kotlin/bestpractices.xml/FunctionNameTooShort" />
+
+    <!-- ================================================================== -->
+    <!-- ERROR PRONE                                                        -->
+    <!-- ================================================================== -->
+
+    <!-- If you override equals(), you must also override hashCode() and    -->
+    <!-- vice versa. Violating this contract causes subtle bugs with        -->
+    <!-- hash-based collections.                                            -->
+    <!-- Note: data classes generate both automatically -- this rule        -->
+    <!-- catches manual overrides in non-data classes.                      -->
+    <rule ref="category/kotlin/errorprone.xml/OverrideBothEqualsAndHashcode" />
+
+    <!-- ================================================================== -->
+    <!-- NOTE ON KOTLIN COVERAGE                                            -->
+    <!--                                                                    -->
+    <!-- PMD 7.x only supports two Kotlin rule categories:                  -->
+    <!--   - category/kotlin/bestpractices.xml (1 rule)                     -->
+    <!--   - category/kotlin/errorprone.xml    (1 rule)                     -->
+    <!--                                                                    -->
+    <!-- For comprehensive Kotlin static analysis covering complexity,      -->
+    <!-- style, naming, performance, and potential bugs, use detekt:        -->
+    <!--   config/detekt/detekt.yml                                         -->
+    <!--                                                                    -->
+    <!-- See docs/KOTLIN_STANDARDS.md for guidance on when to use each      -->
+    <!-- tool.                                                              -->
+    <!-- ================================================================== -->
+
+</ruleset>

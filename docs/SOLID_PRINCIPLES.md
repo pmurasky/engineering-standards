@@ -974,8 +974,10 @@ base contract            actually works correctly
 - [PRE_COMMIT_CHECKLIST.md](./PRE_COMMIT_CHECKLIST.md) -- SOLID violation checklist with code examples
 - [CODING_PRACTICES.md](./CODING_PRACTICES.md) -- General coding practices and SRP guidelines
 - [DESIGN_PATTERNS.md](./DESIGN_PATTERNS.md) -- Patterns that implement SOLID (Strategy, Factory, etc.)
+- [GO_STANDARDS.md](./GO_STANDARDS.md) -- Go-specific SOLID idioms
 - [JAVA_STANDARDS.md](./JAVA_STANDARDS.md) -- Java-specific SOLID idioms
 - [KOTLIN_STANDARDS.md](./KOTLIN_STANDARDS.md) -- Kotlin-specific SOLID idioms
+- [PYTHON_STANDARDS.md](./PYTHON_STANDARDS.md) -- Python-specific SOLID idioms
 
 ---
 

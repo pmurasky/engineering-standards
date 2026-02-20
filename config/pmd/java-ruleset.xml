@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Engineering Standards - Java PMD 7 Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Opinionated Java PMD 7.x ruleset aligned with the engineering standards
+        defined in this repository. Enforces SOLID principles, code quality limits,
+        and best practices.
+
+        Thresholds match the repo standards:
+          - Method length: 20 lines max (NcssCount)
+          - Parameters: 5 max (ExcessiveParameterList)
+          - Cyclomatic complexity: 10 max
+          - Cognitive complexity: 15 max
+          - Class size: 300 lines max (NcssCount)
+
+        PMD version: 7.x (tested with 7.9.0+)
+        Last updated: 2026-02-19
+    </description>
+
+    <!-- ================================================================== -->
+    <!-- BEST PRACTICES                                                     -->
+    <!-- ================================================================== -->
+
+    <!-- Unused code -->
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod" />
+    <rule ref="category/java/bestpractices.xml/UnusedLocalVariable" />
+    <rule ref="category/java/bestpractices.xml/UnusedPrivateField" />
+    <rule ref="category/java/bestpractices.xml/UnusedFormalParameter" />
+    <rule ref="category/java/bestpractices.xml/UnusedAssignment" />
+
+    <!-- Code quality -->
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters" />
+    <rule ref="category/java/bestpractices.xml/LooseCoupling" />
+    <rule ref="category/java/bestpractices.xml/MissingOverride" />
+    <rule ref="category/java/bestpractices.xml/PreserveStackTrace" />
+    <rule ref="category/java/bestpractices.xml/SystemPrintln" />
+    <rule ref="category/java/bestpractices.xml/AvoidPrintStackTrace" />
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningCatchVariables" />
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningLoopVariables" />
+    <rule ref="category/java/bestpractices.xml/AvoidStringBufferField" />
+    <rule ref="category/java/bestpractices.xml/AvoidUsingHardCodedIP" />
+    <rule ref="category/java/bestpractices.xml/CheckResultSet" />
+    <rule ref="category/java/bestpractices.xml/DefaultLabelNotLastInSwitch" />
+    <rule ref="category/java/bestpractices.xml/DoubleBraceInitialization" />
+    <rule ref="category/java/bestpractices.xml/ForLoopCanBeForeach" />
+    <rule ref="category/java/bestpractices.xml/LiteralsFirstInComparisons" />
+    <rule ref="category/java/bestpractices.xml/MethodReturnsInternalArray" />
+    <rule ref="category/java/bestpractices.xml/OneDeclarationPerLine" />
+    <rule ref="category/java/bestpractices.xml/PrimitiveWrapperInstantiation" />
+    <rule ref="category/java/bestpractices.xml/ReplaceEnumerationWithIterator" />
+    <rule ref="category/java/bestpractices.xml/ReplaceHashtableWithMap" />
+    <rule ref="category/java/bestpractices.xml/ReplaceVectorWithList" />
+    <rule ref="category/java/bestpractices.xml/ArrayIsStoredDirectly" />
+    <rule ref="category/java/bestpractices.xml/UseCollectionIsEmpty" />
+    <rule ref="category/java/bestpractices.xml/UseEnumCollections" />
+    <rule ref="category/java/bestpractices.xml/UseStandardCharsets" />
+    <rule ref="category/java/bestpractices.xml/UseTryWithResources" />
+
+    <!-- Testing best practices -->
+    <rule ref="category/java/bestpractices.xml/JUnit5TestShouldBePackagePrivate" />
+    <rule ref="category/java/bestpractices.xml/SimplifiableTestAssertion" />
+    <rule ref="category/java/bestpractices.xml/UnitTestShouldIncludeAssert" />
+    <rule ref="category/java/bestpractices.xml/UnitTestShouldUseAfterAnnotation" />
+    <rule ref="category/java/bestpractices.xml/UnitTestShouldUseBeforeAnnotation" />
+    <rule ref="category/java/bestpractices.xml/UnitTestShouldUseTestAnnotation" />
+
+    <!-- Guard log statements to avoid unnecessary string concatenation -->
+    <rule ref="category/java/bestpractices.xml/GuardLogStatement" />
+
+    <!-- ================================================================== -->
+    <!-- CODE STYLE                                                         -->
+    <!-- ================================================================== -->
+
+    <!-- Braces and structure -->
+    <rule ref="category/java/codestyle.xml/ControlStatementBraces" />
+    <rule ref="category/java/codestyle.xml/EmptyControlStatement" />
+    <rule ref="category/java/codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass" />
+    <rule ref="category/java/codestyle.xml/ModifierOrder" />
+    <rule ref="category/java/codestyle.xml/NoPackage" />
+    <rule ref="category/java/codestyle.xml/PackageCase" />
+    <rule ref="category/java/codestyle.xml/PrematureDeclaration" />
+
+    <!-- Imports -->
+    <rule ref="category/java/codestyle.xml/UnnecessaryImport" />
+    <rule ref="category/java/codestyle.xml/TooManyStaticImports">
+        <properties>
+            <property name="maximumStaticImports" value="8" />
+        </properties>
+    </rule>
+
+    <!-- Unnecessary constructs -->
+    <rule ref="category/java/codestyle.xml/UnnecessaryModifier" />
+    <rule ref="category/java/codestyle.xml/UnnecessaryConstructor" />
+    <rule ref="category/java/codestyle.xml/UnnecessaryFullyQualifiedName" />
+    <rule ref="category/java/codestyle.xml/UnnecessaryBoxing" />
+    <rule ref="category/java/codestyle.xml/UnnecessaryCast" />
+    <rule ref="category/java/codestyle.xml/UnnecessaryReturn" />
+    <rule ref="category/java/codestyle.xml/UnnecessarySemicolon" />
+    <rule ref="category/java/codestyle.xml/UnnecessaryAnnotationValueElement" />
+    <rule ref="category/java/codestyle.xml/UseDiamondOperator" />
+    <rule ref="category/java/codestyle.xml/UseShortArrayInitializer" />
+    <rule ref="category/java/codestyle.xml/ExtendsObject" />
+
+    <!-- Modern Java style -->
+    <rule ref="category/java/codestyle.xml/LambdaCanBeMethodReference" />
+    <rule ref="category/java/codestyle.xml/IdenticalCatchBranches" />
+    <rule ref="category/java/codestyle.xml/ForLoopShouldBeWhileLoop" />
+
+    <!-- Naming conventions -->
+    <rule ref="category/java/codestyle.xml/LinguisticNaming" />
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions">
+        <properties>
+            <!-- PascalCase: default patterns are fine for most types -->
+            <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+" />
+        </properties>
+    </rule>
+    <rule ref="category/java/codestyle.xml/MethodNamingConventions" />
+    <rule ref="category/java/codestyle.xml/FieldNamingConventions" />
+    <rule ref="category/java/codestyle.xml/FormalParameterNamingConventions" />
+    <rule ref="category/java/codestyle.xml/LocalVariableNamingConventions" />
+    <rule ref="category/java/codestyle.xml/ShortClassName">
+        <properties>
+            <property name="minimum" value="4" />
+        </properties>
+    </rule>
+    <rule ref="category/java/codestyle.xml/ShortMethodName">
+        <properties>
+            <property name="minimum" value="3" />
+        </properties>
+    </rule>
+    <rule ref="category/java/codestyle.xml/ShortVariable">
+        <properties>
+            <!-- Allow common short names: i, j, k, id, e, x, y, sb, db -->
+            <property name="minimum" value="2" />
+        </properties>
+    </rule>
+
+    <!-- ================================================================== -->
+    <!-- EXCLUDED CODE STYLE RULES (intentional)                            -->
+    <!--                                                                    -->
+    <!-- AtLeastOneConstructor       - Too noisy; records/DTOs don't need   -->
+    <!-- OnlyOneReturn               - Multiple returns improve readability -->
+    <!-- LocalVariableCouldBeFinal   - Too noisy; val/var preferred style   -->
+    <!-- MethodArgumentCouldBeFinal  - Too noisy; clutters signatures       -->
+    <!-- CommentDefaultAccessModifier - Conflicts with package-private-     -->
+    <!--                               by-default convention                -->
+    <!-- LongVariable                - Descriptive names are encouraged     -->
+    <!-- UseExplicitTypes            - var is acceptable per Google style   -->
+    <!-- ConfusingTernary            - Too subjective                       -->
+    <!-- ================================================================== -->
+
+    <!-- ================================================================== -->
+    <!-- DESIGN                                                             -->
+    <!-- Aligns with repo standards: 20 lines/method, 5 params, SOLID      -->
+    <!-- ================================================================== -->
+
+    <!-- Complexity (repo standard: cyclomatic <= 10, cognitive <= 15) -->
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <properties>
+            <property name="methodReportLevel" value="10" />
+            <property name="classReportLevel" value="80" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/CognitiveComplexity">
+        <properties>
+            <property name="reportLevel" value="15" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/NPathComplexity">
+        <properties>
+            <property name="reportLevel" value="200" />
+        </properties>
+    </rule>
+
+    <!-- Size limits (repo standard: 20 lines/method, 300 lines/class) -->
+    <rule ref="category/java/design.xml/NcssCount">
+        <properties>
+            <property name="methodReportLevel" value="20" />
+            <property name="classReportLevel" value="300" />
+        </properties>
+    </rule>
+
+    <!-- Parameter count (repo standard: max 5 parameters) -->
+    <rule ref="category/java/design.xml/ExcessiveParameterList">
+        <properties>
+            <property name="minimum" value="6" />
+        </properties>
+    </rule>
+
+    <!-- Class design (SRP, coupling) -->
+    <rule ref="category/java/design.xml/GodClass" />
+    <rule ref="category/java/design.xml/TooManyMethods">
+        <properties>
+            <property name="maxmethods" value="20" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/TooManyFields">
+        <properties>
+            <property name="maxfields" value="15" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/CouplingBetweenObjects">
+        <properties>
+            <property name="threshold" value="20" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/ExcessiveImports">
+        <properties>
+            <property name="minimum" value="30" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/ExcessivePublicCount">
+        <properties>
+            <property name="minimum" value="20" />
+        </properties>
+    </rule>
+
+    <!-- Nesting and structure -->
+    <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts">
+        <properties>
+            <property name="problemDepth" value="3" />
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/CollapsibleIfStatements" />
+
+    <!-- Field/method quality -->
+    <rule ref="category/java/design.xml/SingularField" />
+    <rule ref="category/java/design.xml/ImmutableField" />
+    <rule ref="category/java/design.xml/FinalFieldCouldBeStatic" />
+    <rule ref="category/java/design.xml/MutableStaticState" />
+    <rule ref="category/java/design.xml/UseUtilityClass" />
+    <rule ref="category/java/design.xml/DataClass" />
+    <rule ref="category/java/design.xml/UseObjectForClearerAPI" />
+
+    <!-- Exception design -->
+    <rule ref="category/java/design.xml/AvoidThrowingRawExceptionTypes" />
+    <rule ref="category/java/design.xml/AvoidThrowingNullPointerException" />
+    <rule ref="category/java/design.xml/AvoidRethrowingException" />
+    <rule ref="category/java/design.xml/AvoidThrowingNewInstanceOfSameException" />
+    <rule ref="category/java/design.xml/SignatureDeclareThrowsException" />
+    <rule ref="category/java/design.xml/ExceptionAsFlowControl" />
+    <rule ref="category/java/design.xml/DoNotExtendJavaLangError" />
+
+    <!-- Boolean simplification -->
+    <rule ref="category/java/design.xml/SimplifyBooleanReturns" />
+    <rule ref="category/java/design.xml/SimplifyBooleanExpressions" />
+    <rule ref="category/java/design.xml/SimplifiedTernary" />
+    <rule ref="category/java/design.xml/SimplifyConditional" />
+    <rule ref="category/java/design.xml/LogicInversion" />
+
+    <rule ref="category/java/design.xml/UselessOverridingMethod" />
+    <rule ref="category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal" />
+    <rule ref="category/java/design.xml/SwitchDensity" />
+
+    <!-- ================================================================== -->
+    <!-- EXCLUDED DESIGN RULES (intentional)                                -->
+    <!--                                                                    -->
+    <!-- LawOfDemeter   - Too many false positives with fluent APIs,        -->
+    <!--                  streams, and builder patterns                     -->
+    <!-- ================================================================== -->
+
+    <!-- ================================================================== -->
+    <!-- ERROR PRONE                                                        -->
+    <!-- ================================================================== -->
+
+    <!-- Null and comparison errors -->
+    <rule ref="category/java/errorprone.xml/CompareObjectsWithEquals" />
+    <rule ref="category/java/errorprone.xml/BrokenNullCheck" />
+    <rule ref="category/java/errorprone.xml/MisplacedNullCheck" />
+    <rule ref="category/java/errorprone.xml/ComparisonWithNaN" />
+    <rule ref="category/java/errorprone.xml/CollectionTypeMismatch" />
+
+    <!-- Exception handling -->
+    <rule ref="category/java/errorprone.xml/AvoidCatchingGenericException" />
+    <rule ref="category/java/errorprone.xml/DoNotThrowExceptionInFinally" />
+    <rule ref="category/java/errorprone.xml/DoNotExtendJavaLangThrowable" />
+    <rule ref="category/java/errorprone.xml/AvoidInstanceofChecksInCatchClause" />
+
+    <!-- Resource management -->
+    <rule ref="category/java/errorprone.xml/CloseResource" />
+
+    <!-- Constructor and method issues -->
+    <rule ref="category/java/errorprone.xml/ConstructorCallsOverridableMethod" />
+    <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingMethodName" />
+    <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingTypeName" />
+    <rule ref="category/java/errorprone.xml/DetachedTestCase" />
+
+    <!-- Duplicate code / magic values (DRY principle) -->
+    <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
+        <properties>
+            <property name="maxDuplicateLiterals" value="3" />
+        </properties>
+    </rule>
+    <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition">
+        <properties>
+            <!-- Allow common literals: 0, 1, -1, "", true, false -->
+            <property name="ignoreMagicNumbers" value="-1,0,1" />
+        </properties>
+    </rule>
+
+    <!-- Assignment and operator issues -->
+    <rule ref="category/java/errorprone.xml/AssignmentInOperand" />
+    <rule ref="category/java/errorprone.xml/AssignmentToNonFinalStatic" />
+    <rule ref="category/java/errorprone.xml/AvoidMultipleUnaryOperators" />
+
+    <!-- Miscellaneous error-prone patterns -->
+    <rule ref="category/java/errorprone.xml/AvoidAccessibilityAlteration" />
+    <rule ref="category/java/errorprone.xml/AvoidCallingFinalize" />
+    <rule ref="category/java/errorprone.xml/AvoidDecimalLiteralsInBigDecimalConstructor" />
+    <rule ref="category/java/errorprone.xml/AvoidUsingOctalValues" />
+    <rule ref="category/java/errorprone.xml/CheckSkipResult" />
+    <rule ref="category/java/errorprone.xml/ClassCastExceptionWithToArray" />
+    <rule ref="category/java/errorprone.xml/DoNotCallGarbageCollectionExplicitly" />
+    <rule ref="category/java/errorprone.xml/DoNotTerminateVM" />
+    <rule ref="category/java/errorprone.xml/DontImportSun" />
+    <rule ref="category/java/errorprone.xml/EmptyCatchBlock">
+        <properties>
+            <property name="allowCommentedBlocks" value="true" />
+        </properties>
+    </rule>
+    <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop" />
+    <rule ref="category/java/errorprone.xml/ConfusingArgumentToVarargsMethod" />
+    <rule ref="category/java/errorprone.xml/CloneMethodMustBePublic" />
+    <rule ref="category/java/errorprone.xml/CloneMethodMustImplementCloneable" />
+    <rule ref="category/java/errorprone.xml/CloneMethodReturnTypeMustMatchClassName" />
+
+    <!-- ================================================================== -->
+    <!-- MULTITHREADING                                                     -->
+    <!-- ================================================================== -->
+
+    <rule ref="category/java/multithreading.xml/AvoidSynchronizedAtMethodLevel" />
+    <rule ref="category/java/multithreading.xml/UseConcurrentHashMap" />
+    <rule ref="category/java/multithreading.xml/AvoidThreadGroup" />
+    <rule ref="category/java/multithreading.xml/DontCallThreadRun" />
+    <rule ref="category/java/multithreading.xml/DoubleCheckedLocking" />
+    <rule ref="category/java/multithreading.xml/NonThreadSafeSingleton" />
+    <rule ref="category/java/multithreading.xml/UnsynchronizedStaticFormatter" />
+    <rule ref="category/java/multithreading.xml/UseNotifyAllInsteadOfNotify" />
+
+    <!-- ================================================================== -->
+    <!-- EXCLUDED MULTITHREADING RULES (intentional)                        -->
+    <!--                                                                    -->
+    <!-- DoNotUseThreads - Only relevant for app-server managed code;       -->
+    <!--                   too restrictive for general-purpose projects     -->
+    <!-- ================================================================== -->
+
+    <!-- ================================================================== -->
+    <!-- PERFORMANCE                                                        -->
+    <!-- ================================================================== -->
+
+    <rule ref="category/java/performance.xml/ConsecutiveAppendsShouldReuse" />
+    <rule ref="category/java/performance.xml/InefficientStringBuffering" />
+    <rule ref="category/java/performance.xml/UseStringBufferForStringAppends" />
+    <rule ref="category/java/performance.xml/StringInstantiation" />
+    <rule ref="category/java/performance.xml/StringToString" />
+    <rule ref="category/java/performance.xml/AppendCharacterWithChar" />
+    <rule ref="category/java/performance.xml/ConsecutiveLiteralAppends" />
+    <rule ref="category/java/performance.xml/UseArrayListInsteadOfVector" />
+    <rule ref="category/java/performance.xml/UseArraysAsList" />
+    <rule ref="category/java/performance.xml/UseIndexOfChar" />
+    <rule ref="category/java/performance.xml/UselessStringValueOf" />
+    <rule ref="category/java/performance.xml/AddEmptyString" />
+    <rule ref="category/java/performance.xml/BigIntegerInstantiation" />
+    <rule ref="category/java/performance.xml/TooFewBranchesForSwitch" />
+
+    <!-- ================================================================== -->
+    <!-- EXCLUDED PERFORMANCE RULES (intentional)                           -->
+    <!--                                                                    -->
+    <!-- AvoidInstantiatingObjectsInLoops - Too many false positives;       -->
+    <!--   modern JVMs handle short-lived objects well via escape analysis  -->
+    <!-- AvoidFileStream - Deprecated in PMD 7                              -->
+    <!-- ================================================================== -->
+
+    <!-- ================================================================== -->
+    <!-- SECURITY                                                           -->
+    <!-- ================================================================== -->
+
+    <rule ref="category/java/security.xml/HardCodedCryptoKey" />
+    <rule ref="category/java/security.xml/InsecureCryptoIv" />
+
+    <!-- ================================================================== -->
+    <!-- DOCUMENTATION                                                      -->
+    <!-- ================================================================== -->
+
+    <!-- Require comments for empty constructors and methods (signal intent) -->
+    <rule ref="category/java/documentation.xml/UncommentedEmptyConstructor" />
+    <rule ref="category/java/documentation.xml/UncommentedEmptyMethodBody" />
+
+    <!-- ================================================================== -->
+    <!-- EXCLUDED DOCUMENTATION RULES (intentional)                         -->
+    <!--                                                                    -->
+    <!-- CommentRequired - Handled by Checkstyle Javadoc rules instead       -->
+    <!--                   (see config/checkstyle/checkstyle.xml);          -->
+    <!--                   PMD's version is less configurable               -->
+    <!-- CommentContent  - Political correctness check; not a code quality  -->
+    <!--                   concern for static analysis                      -->
+    <!-- CommentSize     - Let code review handle comment length            -->
+    <!-- ================================================================== -->
+
+</ruleset>
