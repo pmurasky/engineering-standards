@@ -211,6 +211,8 @@ engineering-standards/
 │   ├── GO_STANDARDS.md                # Go-specific conventions
 │   ├── JAVA_STANDARDS.md              # Java-specific conventions
 │   ├── KOTLIN_STANDARDS.md            # Kotlin-specific conventions
+│   ├── LOGGING_STANDARDS.md           # Structured logging, levels, and PII rules
+│   ├── NEXTJS_STANDARDS.md            # Next.js conventions and best practices
 │   ├── PRE_COMMIT_CHECKLIST.md        # Pre-commit quality checklist
 │   ├── PYTHON_STANDARDS.md            # Python-specific conventions
 │   ├── SECURITY_STANDARDS.md          # Security standards (auth, OWASP, API)
@@ -232,7 +234,7 @@ engineering-standards/
 │   └── spotbugs/
 │       └── spotbugs-exclude.xml       # SpotBugs exclusion filters
 │
-├── .opencode/                          # OpenCode agents, commands & skills
+├── .opencode/                          # OpenCode agents and commands
 │   ├── agents/
 │   │   ├── standards-build.md         # Primary: writes code following standards
 │   │   ├── standards-review.md        # Subagent: read-only code review
@@ -246,58 +248,43 @@ engineering-standards/
 │   │   ├── refactor-check.md          # /refactor-check
 │   │   ├── review-solid.md            # /review-solid
 │   │   └── test-coverage.md           # /test-coverage
-│   └── skills/
-│       ├── coding-practices/SKILL.md  # Coding practices skill
-│       ├── design-patterns/SKILL.md   # Design patterns skill
-│       ├── go-standards/SKILL.md      # Go standards skill
-│       ├── java-standards/SKILL.md    # Java standards skill
-│       ├── kotlin-standards/SKILL.md  # Kotlin standards skill
-│       ├── micro-commit-workflow/SKILL.md # Micro-commit workflow skill
-│       ├── pre-commit-checklist/SKILL.md  # Pre-commit checklist skill
-│       ├── python-standards/SKILL.md  # Python standards skill
-│       ├── solid-principles/SKILL.md  # SOLID principles skill
-│       └── typescript-standards/SKILL.md  # TypeScript standards skill
 │
 ├── .claude/rules/                      # Claude Code modular rules
 │   ├── code-review.md
 │   ├── commit-message.md
-│   ├── go.md
 │   ├── java.md
 │   ├── kotlin.md
 │   ├── micro-commit-workflow.md
-│   ├── python.md
+│   ├── nextjs.md
 │   ├── refactoring.md
 │   ├── testing.md
+│   └── typescript.md
+│
+├── .clinerules/                        # Cline rules
+│   ├── engineering-standards.md
+│   ├── nextjs.md
 │   └── typescript.md
 │
 ├── .cursor/rules/                      # Cursor rules
 │   ├── code-review.md
 │   ├── engineering-standards.md
-│   ├── go.md
 │   ├── java.md
 │   ├── kotlin.md
-│   ├── python.md
-│   ├── refactoring.md
+│   ├── nextjs.md
 │   └── typescript.md
 │
-├── .github/                            # GitHub Copilot & issue templates
+├── .github/                            # GitHub Copilot instructions
 │   ├── copilot-instructions.md
 │   ├── instructions/
 │   │   ├── code-quality.instructions.md
-│   │   ├── go.instructions.md
 │   │   ├── java.instructions.md
 │   │   ├── kotlin.instructions.md
 │   │   ├── micro-commit.instructions.md
-│   │   ├── python.instructions.md
+│   │   ├── nextjs.instructions.md
 │   │   └── typescript.instructions.md
-│   └── ISSUE_TEMPLATE/
-│       ├── config.yml
-│       ├── enhancement.yml
-│       ├── inconsistency.yml
-│       ├── new-standard.yml
-│       └── tool-parity.yml
 │
 ├── AGENTS.md                           # OpenCode / Copilot rules
+├── BACKLOG.md                          # Open standards work items
 ├── CLAUDE.md                           # Claude Code rules
 ├── CONTRIBUTING.md                     # Contribution guidelines
 ├── .gitignore                          # Git ignore rules
