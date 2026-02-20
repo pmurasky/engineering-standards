@@ -60,6 +60,9 @@ This document serves as the table of contents for all coding standards and pract
 ### [TYPESCRIPT_STANDARDS.md](./TYPESCRIPT_STANDARDS.md)
 **TypeScript/JavaScript-specific conventions** (read when working with TypeScript or JavaScript)
 
+### [NEXTJS_STANDARDS.md](./NEXTJS_STANDARDS.md)
+**Next.js-specific conventions** (read when working with Next.js applications)
+
 ### [GO_STANDARDS.md](./GO_STANDARDS.md)
 **Go-specific conventions** (read when working with Go)
 
@@ -175,4 +178,4 @@ If anything is unclear or needs discussion:
 ---
 
 **Last Updated**: February 20, 2026
-**Version**: 15.0 (Added CONVERSION_PLAN_TEMPLATE.md to index)
+**Version**: 16.0 (Added NEXTJS_STANDARDS.md to index)
