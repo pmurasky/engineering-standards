@@ -14,7 +14,7 @@ When reviewing or generating code, enforce these quality gates:
 - **DIP**: Direct dependency instantiation without constructor injection
 
 ## Quality Metrics
-- Methods: 15 lines max
+- Methods: language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Classes: 300 lines max
 - Parameters: 5 max per method
 - No duplicated code

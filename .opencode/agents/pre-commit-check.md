@@ -42,7 +42,7 @@ Run these checks against staged changes:
 - [ ] Commit message follows Conventional Commits format
 
 ### SOLID Principles
-- [ ] No method exceeds 15 lines
+- [ ] No method exceeds language-specific limit (typically 15-20 lines; Go: 25 lines)
 - [ ] No class exceeds 300 lines
 - [ ] No method has more than 5 parameters
 - [ ] No direct dependency instantiation without constructor injection
@@ -67,7 +67,7 @@ Run these checks against staged changes:
 | Check                    | Status | Details          |
 |--------------------------|--------|------------------|
 | Single logical change    | PASS   |                  |
-| Method length <= 15      | FAIL   | Foo.kt:45 (22 lines) |
+| Method length limit      | FAIL   | Foo.kt:45 (22 lines; exceeds language limit) |
 | Class length <= 300      | PASS   |                  |
 | ...                      | ...    | ...              |
 

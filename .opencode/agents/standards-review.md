@@ -37,7 +37,7 @@ For every file or change reviewed, check:
   - Flag: Importing concrete classes instead of interfaces
 
 ### Code Quality
-- Methods <= 15 lines (excluding blanks and braces)
+- Methods within language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Classes <= 300 lines
 - Parameters <= 5 per method
 - No duplicated code

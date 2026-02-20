@@ -11,7 +11,7 @@ You MUST follow these standards for ALL code changes.
 For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> COMMIT cycle. See `docs/AI_AGENT_WORKFLOW.md` for the full workflow.
 
 ## Code Quality Gates
-- Methods: 15 lines max (excluding blanks and braces)
+- Methods: language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Classes: 300 lines max
 - Private methods: 0-2 per class
 - Parameters: 5 max per method (use parameter objects)

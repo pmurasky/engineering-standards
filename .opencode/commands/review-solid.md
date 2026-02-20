@@ -16,7 +16,7 @@ Check for all five SOLID principles:
 5. **DIP** - Dependency Inversion: Direct instantiation without injection, concrete class dependencies
 
 Also check code quality metrics:
-- Method length (max 15 lines)
+- Method length (language-specific limit, typically 15-20 lines; Go: 25 lines)
 - Class length (max 300 lines)
 - Parameter count (max 5)
 - Duplicated code

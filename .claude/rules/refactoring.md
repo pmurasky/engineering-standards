@@ -23,7 +23,7 @@ Each refactoring step is its own commit:
 Never bundle multiple refactoring steps into one commit.
 
 ## Safe Refactoring Patterns
-- **Extract Method**: Method > 15 lines or has a comment explaining a block
+- **Extract Method**: Method exceeds language-specific limit (typically 15-20 lines; Go: 25 lines) or has a comment explaining a block
 - **Extract Class**: Class > 300 lines or has > 2 private methods (SRP violation)
 - **Introduce Parameter Object**: Method has > 5 parameters
 - **Replace Conditional with Strategy**: switch/if-else chain on types (OCP violation)

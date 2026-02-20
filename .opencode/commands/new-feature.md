@@ -48,7 +48,7 @@ Move to the next increment until the feature is complete.
 - All tests pass
 - Build succeeds
 - No lint errors
-- Methods <= 15 lines
+- Methods within language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Parameters <= 5
 - SOLID principles followed
 

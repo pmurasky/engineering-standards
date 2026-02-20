@@ -6,7 +6,7 @@ Follow these engineering standards for ALL code changes in this repository.
 For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> COMMIT cycle. See `docs/AI_AGENT_WORKFLOW.md` for the full workflow.
 
 ## Code Quality Rules
-- Maximum method length: 15 lines (excluding blank lines and braces)
+- Maximum method length: language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Maximum class length: 300 lines (consider refactoring if larger)
 - Maximum 0-2 private methods per class (SRP guideline)
 - Maximum 5 parameters per method (use parameter objects)

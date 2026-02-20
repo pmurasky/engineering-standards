@@ -15,7 +15,7 @@ When reviewing or writing code, enforce these standards:
 - **DIP**: No direct instantiation of dependencies. Use constructor injection.
 
 ## Code Quality Gates
-- Methods: 15 lines max (excluding blanks and braces)
+- Methods: language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Classes: 300 lines max
 - Private methods: 0-2 per class (SRP guideline)
 - Parameters: 5 max per method (use parameter objects)

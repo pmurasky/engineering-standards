@@ -15,7 +15,7 @@ When reviewing code, check for:
 - **DIP**: Direct dependency instantiation, concrete class imports instead of interfaces
 
 ## Quality Metrics
-- Methods > 15 lines (excluding blanks/braces)
+- Methods exceeding language-specific limit (typically 15-20 lines; Go: 25 lines)
 - Classes > 300 lines
 - Methods with > 5 parameters
 - Duplicated code blocks

@@ -11,7 +11,7 @@ Target: $ARGUMENTS
 Run a fast scan checking these quality gates:
 
 ### Code Metrics
-- [ ] Methods <= 15 lines (excluding blanks and braces)
+- [ ] Methods within language-specific limit (typically 15-20 lines; Go: 25 lines)
 - [ ] Classes <= 300 lines
 - [ ] Private methods: 0-2 per class (SRP indicator)
 - [ ] Parameters <= 5 per method
