@@ -4,29 +4,15 @@ Tracking document for improvements to the engineering standards project.
 
 ## P1 - Should Fix (Significant improvement)
 
-- [x] **Add TypeScript/JavaScript standards** -- Added `docs/TYPESCRIPT_STANDARDS.md`.
-
-- [x] **Add Next.js standards** -- Added `docs/NEXTJS_STANDARDS.md` for App Router architecture, data fetching, caching, security, and testing guidance.
-
-- [ ] **Add Python standards** -- Globs promise coverage for `*.py` but no standards doc exists. Create `docs/PYTHON_STANDARDS.md`.
-
-- [ ] **Add Go standards** -- Globs promise coverage for `*.go` but no standards doc exists. Create `docs/GO_STANDARDS.md`.
-
-- [ ] **Bring Cline rules to parity with other tools** -- `.clinerules/` has only one file. Add `code-review.md`, `java.md`, `kotlin.md` matching other tools. Cline supports `paths` frontmatter for path-scoped rules.
-
-- [ ] **Fix AGENTS.md OpenCode-specific `TodoWrite` reference** -- Line 84 says "Create a task list using TodoWrite" which is OpenCode-specific. AGENTS.md is also read by GitHub Copilot and Cline. Use tool-agnostic phrasing.
+- [ ] **Bring Cline rules to parity with other tools** -- `.clinerules/` has `engineering-standards.md`, `nextjs.md`, and `typescript.md` but is still missing parity content (for example `code-review.md`, `java.md`, `kotlin.md`) available in other tool configs.
 
 ## P2 - Nice to Have (Valuable additions)
 
 ### Additional Standards Topics
 
-- [ ] **Add security standards** -- OWASP references, auth patterns, secrets management, supply chain security, rate limiting, CORS, CSP. Current coverage in CODING_PRACTICES.md is ~20 lines.
-
 - [ ] **Add API design standards** -- REST, GraphQL, gRPC conventions. Endpoint naming, versioning, pagination, error response formats.
 
 - [ ] **Add error handling patterns doc** -- Cross-language strategies: Result types, error codes vs exceptions, error boundaries, retry patterns.
-
-- [ ] **Add logging standards** -- Structured logging, log levels, correlation IDs, PII handling, log aggregation guidance. Current coverage is ~8 lines.
 
 - [ ] **Add database/SQL standards** -- Query optimization, migrations, ORM patterns, connection pooling, transaction management.
 
@@ -37,8 +23,6 @@ Tracking document for improvements to the engineering standards project.
 - [ ] **Add CI/CD pipeline standards** -- Pipeline-as-code, deployment strategies (blue/green, canary), environment promotion, rollback.
 
 - [ ] **Add git branching strategy** -- Trunk-based development vs GitFlow guidance, branch naming, PR conventions.
-
-- [ ] **Add Architecture Decision Records (ADR) guidance** -- Template, when to write, how to maintain.
 
 - [ ] **Add accessibility standards** -- WCAG compliance, semantic HTML, ARIA, CLI accessibility beyond current 6 lines.
 
@@ -56,4 +40,4 @@ Tracking document for improvements to the engineering standards project.
 
 ---
 
-**Last Updated**: February 16, 2026
+**Last Updated**: February 20, 2026
