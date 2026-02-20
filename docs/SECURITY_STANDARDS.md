@@ -159,6 +159,7 @@ repos:
 
 ### Rules
 
+- **Start with the latest stable version**: when adding a new dependency, always use the latest stable (GA) release — never intentionally pin an older version, as it may carry known CVEs from day one.
 - **Pin dependency versions** in lock files (`package-lock.json`, `go.sum`, `Cargo.lock`, `poetry.lock`, etc.).
 - **Audit dependencies regularly** for known vulnerabilities using automated tools.
 - **Use trusted registries** -- prefer official package registries and verify package provenance when available.
@@ -182,6 +183,7 @@ repos:
 - [ ] Dependency scanning runs in CI (fails on critical/high vulnerabilities)
 - [ ] New dependencies are reviewed for trustworthiness before adoption
 - [ ] Dependency updates are applied regularly (automated PRs via Dependabot/Renovate)
+- [ ] New dependencies were added at their latest stable (GA) version, verified vulnerability-free
 - [ ] SBOM is generated for release artifacts
 
 ## Encryption
