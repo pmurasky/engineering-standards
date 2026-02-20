@@ -284,13 +284,14 @@ engineering-standards/
 │   │   └── typescript.instructions.md
 │
 ├── AGENTS.md                           # OpenCode / Copilot rules
-├── BACKLOG.md                          # Open standards work items
 ├── CLAUDE.md                           # Claude Code rules
 ├── CONTRIBUTING.md                     # Contribution guidelines
 ├── .gitignore                          # Git ignore rules
 ├── opencode.json                       # OpenCode config
 └── README.md                           # This file
 ```
+
+Backlog tracking lives in GitHub Issues (use labels such as `P1: should fix` and `P2: nice to have`).
 
 ## Tool-Specific Features
 
