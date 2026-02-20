@@ -10,7 +10,7 @@ Reusable engineering standards for AI coding agents. Enforces coding practices, 
 
 Paste this prompt into OpenCode to install the standards into your current project:
 
-> Clone https://github.com/pmurasky/pmurasky_engineering_standards.git, copy the `docs/` directory, `AGENTS.md`, `opencode.json`, and the `.opencode/` directory (including agents, commands, and skills) into this project's root.
+> Clone https://github.com/pmurasky/engineering-standards.git, copy the `docs/` directory, `AGENTS.md`, `opencode.json`, and the `.opencode/` directory (including agents, commands, and skills) into this project's root.
 
 ### Option A: Copy files into your project
 
@@ -18,10 +18,10 @@ Copy the `docs/` directory and the config files for your tool:
 
 ```bash
 # 1. Clone this repo
-git clone https://github.com/pmurasky/pmurasky_engineering_standards.git
+git clone https://github.com/pmurasky/engineering-standards.git
 
 # 2. Copy the knowledge base (required for all tools)
-cp -r pmurasky_engineering_standards/docs your-project/
+cp -r engineering-standards/docs your-project/
 
 # 3. Copy the config files for your tool (see table below)
 ```
@@ -38,7 +38,7 @@ cp -r pmurasky_engineering_standards/docs your-project/
 
 ```bash
 cd your-project
-git submodule add https://github.com/pmurasky/pmurasky_engineering_standards.git engineering-standards
+git submodule add https://github.com/pmurasky/engineering-standards.git engineering-standards
 ```
 
 Then create thin wrapper files at your project root that reference the submodule. Examples for each tool:

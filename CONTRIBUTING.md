@@ -86,4 +86,4 @@ When adding a new rule or capability, add it to all supported tools where possib
 
 ## Backlog
 
-Enhancements and known gaps are tracked as [GitHub Issues](https://github.com/ford-personal/pmurasky_engineering_standards/issues). Use the issue templates when filing new requests. If your contribution addresses an open issue, reference it in your PR description (e.g., `Closes #12`).
+Enhancements and known gaps are tracked as [GitHub Issues](https://github.com/pmurasky/engineering-standards/issues). Use the issue templates when filing new requests. If your contribution addresses an open issue, reference it in your PR description (e.g., `Closes #12`).
