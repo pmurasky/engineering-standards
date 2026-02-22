@@ -68,7 +68,7 @@ Before refactoring ANY code, you MUST complete ALL of the following:
 - "I'm just moving code around" -- Even simple moves can break dependencies. Tests required.
 - Batching multiple refactoring steps into one commit -- each step is its own commit.
 
-For the full refactoring workflow, see `docs/AI_AGENT_WORKFLOW.md`.
+For the full refactoring workflow, see `./AI_AGENT_WORKFLOW.md`.
 
 ---
 
@@ -83,7 +83,7 @@ Before running `git commit`, verify:
 - [ ] **Followed TDD micro-commit workflow** (RED → GREEN → COMMIT or REFACTOR → COMMIT)
 - [ ] **No SOLID violations** (see detailed checklist below)
 - [ ] **No design pattern anti-patterns** (see detailed checklist below)
-- [ ] **Methods ≤ language-specific limit (15-20 lines)** (excluding data classes, comments, blank lines)
+- [ ] **Methods ≤ language-specific limit** (see language-specific standards; typically 15-20 lines, excluding data classes, comments, blank lines)
 - [ ] **Classes ≤ 300 lines** (if larger, consider refactoring)
 - [ ] **No duplicated code** (DRY principle)
 - [ ] **Proper KDoc comments** on public APIs
@@ -96,6 +96,7 @@ Before running `git push`, verify:
 - [ ] **All unit tests pass** (should already pass from pre-commit)
 - [ ] **All integration tests pass** (run your project's integration test suite)
 - [ ] **No failures introduced** — if integration tests fail, fix locally before pushing
+- [ ] **CI is the hard gate** (unit + integration + E2E failures on CI must be fixed before merge)
 
 ---
 
@@ -116,7 +117,7 @@ For the full SOLID guide with multi-language examples and real-world analogies, 
 
 **Red flags:**
 - Class > 300 lines
-- Method > language-specific limit (15-20 lines)
+- Method > language-specific limit (see language-specific standards; typically 15-20 lines)
 - Class imports from > 5 different packages
 - Methods that call methods from > 3 other classes (Feature Envy)
 
@@ -301,7 +302,7 @@ class Analyzer(
 - [ ] **Decorator Pattern** - Used when adding responsibilities dynamically?
 - [ ] **Observer Pattern** - Used when one-to-many dependencies?
 
-For the full catalog and usage guidance, see `docs/DESIGN_PATTERNS.md`.
+For the full catalog and usage guidance, see `./DESIGN_PATTERNS.md`.
 
 ### ❌ Avoid Anti-Patterns
 
@@ -309,7 +310,7 @@ For the full catalog and usage guidance, see `docs/DESIGN_PATTERNS.md`.
 
 #### **God Class / God Method**
 - [ ] No class > 300 lines
-- [ ] No method > language-specific limit (15-20 lines)
+- [ ] No method > language-specific limit (see language-specific standards; typically 15-20 lines)
 - [ ] No class with > 10 methods
 - [ ] No class doing > 3 different things
 
@@ -531,10 +532,10 @@ class CodeHealthOrchestrator(
 ### **Run Before Every Commit**
 ```bash
 # 1. Run unit tests (use your project's test runner)
-# e.g., ./gradlew test | npm test | pytest | go test ./... | dotnet test
+# e.g. one of: ./gradlew test, npm test, pytest, go test ./..., dotnet test
 
 # 2. Check compilation / build
-# e.g., ./gradlew build | npm run build | go build ./... | dotnet build
+# e.g. one of: ./gradlew build, npm run build, go build ./..., dotnet build
 
 # 3. Check for long methods (manual review - adapt paths to your project)
 # find src/ -name "*.kt" -exec grep -n "fun " {} + | less
@@ -554,11 +555,11 @@ Before pushing commits to the remote, run integration tests in addition to unit 
 
 ```bash
 # 1. Run unit tests (should already pass from pre-commit)
-# e.g., ./gradlew test | npm test | pytest | go test ./...
+# e.g. one of: ./gradlew test, npm test, pytest, go test ./...
 
 # 2. Run integration tests
-# e.g., ./gradlew integrationTest | npm run test:integration
-# pytest tests/integration/ | go test -tags=integration ./...
+# e.g. one of: ./gradlew integrationTest, npm run test:integration
+# or one of: pytest tests/integration/, go test -tags=integration ./...
 
 # If ANY test fails, fix locally before pushing.
 ```
@@ -619,9 +620,9 @@ echo "✅ Pre-push checks passed"
 ### 🔴 **RED LIGHT - DO NOT COMMIT IF:**
 - Tests are failing
 - Code doesn't compile
-- Method > language-specific limit (15-20 lines)
+- Method > language-specific limit (see language-specific standards; typically 15-20 lines)
 - Class > 300 lines with multiple responsibilities
-- Direct dependency instantiation without default parameters
+- Direct dependency instantiation in production classes (except composition roots/factories)
 - Copy-pasted code
 - Switch/when on types (OCP violation)
 - Missing tests for new functionality
@@ -629,7 +630,7 @@ echo "✅ Pre-push checks passed"
 ### 🟢 **GREEN LIGHT - OK TO COMMIT IF:**
 - All tests pass
 - Code compiles
-- All methods ≤ language-specific limit (15-20 lines)
+- All methods ≤ language-specific limit (see language-specific standards; typically 15-20 lines)
 - Classes ≤ 300 lines OR have single responsibility
 - Dependencies injected via constructor
 - No duplicated code

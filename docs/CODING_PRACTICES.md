@@ -165,8 +165,12 @@ Before committing ANY code, you MUST:
 
 1. **Run all tests locally**:
    ```bash
-   # Run your project's test suite, e.g.:
-   # ./gradlew test | npm test | pytest | go test ./... | dotnet test
+   # Run your project's test suite, e.g. one of:
+   # ./gradlew test
+   # npm test
+   # pytest
+   # go test ./...
+   # dotnet test
    ```
 
 2. **Verify all tests pass**:
@@ -318,7 +322,7 @@ Different test types run at different stages. This balances fast feedback with t
 
 **Rules:**
 - **Unit tests are mandatory before every commit.** No exceptions. If unit tests fail, do not commit.
-- **Integration tests should run before pushing.** Use a pre-push hook or run manually. If integration tests fail, fix locally before pushing.
+- **Unit tests + integration tests are mandatory before pushing.** Use a pre-push hook or run manually. If either fails, fix locally before pushing.
 - **CI is the hard gate.** Even if a developer skips pre-push hooks, CI catches failures before merge. CI failures block the PR.
 - **Never skip tests to "push faster."** If integration tests are too slow to run pre-push, that's a signal to optimize the test suite, not to skip them.
 
@@ -409,8 +413,13 @@ echo "All pre-push checks passed"
 - Committing broken/non-compiling code (every commit must be production-ready)
 
 ### Commit Message Format
+
+Scope is recommended and may be omitted for trivial cross-cutting changes.
+
 ```
 <type>(<scope>): <subject>
+# or
+<type>: <subject>
 
 <body>
 
@@ -588,12 +597,18 @@ Every commit must be **production-ready** (tests pass + builds + lint clean). Ma
 Before touching ANY code, verify unit test coverage:
 
 ```bash
-# Run unit tests to establish baseline, e.g.:
-# ./gradlew test | npm test | pytest | go test ./... | dotnet test
+# Run unit tests to establish baseline, e.g. one of:
+# ./gradlew test
+# npm test
+# pytest
+# go test ./...
+# dotnet test
 
-# Check coverage report (unit tests only), e.g.:
-# ./gradlew test jacocoTestReport | npm run test:coverage
-# pytest --cov | go test -cover ./...
+# Check coverage report (unit tests only), e.g. one of:
+# ./gradlew test jacocoTestReport
+# npm run test:coverage
+# pytest --cov
+# go test -cover ./...
 
 # For critical paths, consider mutation testing (e.g., pitest, stryker)
 ```
@@ -647,9 +662,11 @@ fun calculateScore(classInfo: ClassInfo, violations: List<Violation>): Double {
 
 Run tests - they should **PASS**:
 ```bash
-# Run your project's test suite and build, e.g.:
-# ./gradlew test && ./gradlew build | npm test && npm run build
-# pytest && python -m build | go test ./... && go build ./...
+# Run your project's test suite and build, e.g. one of:
+# ./gradlew test && ./gradlew build
+# npm test && npm run build
+# pytest && python -m build
+# go test ./... && go build ./...
 # All quality gates pass ✅
 ```
 
@@ -923,8 +940,8 @@ Commit 3: fix lint errors (finally production-ready ✓)
 
 **Production-Ready Definition:**
 ```bash
-# ✓ All tests pass (e.g., ./gradlew test | npm test | pytest | go test ./...)
-# ✓ Build succeeds (e.g., ./gradlew build | npm run build | go build ./...)
+# ✓ All tests pass (e.g., ./gradlew test, npm test, pytest, or go test ./...)
+# ✓ Build succeeds (e.g., ./gradlew build, npm run build, or go build ./...)
 # ✓ No lint errors
 # ✓ Ready to deploy to production
 ```

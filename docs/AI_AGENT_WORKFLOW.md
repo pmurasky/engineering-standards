@@ -36,7 +36,8 @@ A commit with failing tests is **never** acceptable. If your change breaks tests
 
 ### Selecting Work
 
-When the user asks what to work on next (or you need to suggest work), consult **GitHub Issues**:
+When the user asks what to work on next (or you need to suggest work), use the project's issue tracker.
+If the repository is on GitHub and `gh` is available, consult **GitHub Issues**:
 
 ```bash
 # List open issues by priority
@@ -47,13 +48,16 @@ gh issue list --label "P2: nice to have" --state open
 gh issue view <number>
 ```
 
+If GitHub is not available, use the equivalent tracker queries for priority labels/status and apply the same prioritization rules.
+
 **Priority order**: P1 issues before P2. Within a priority, prefer issues that unblock other work.
 
 When starting work on an issue, reference it in your commit messages (e.g., `feat(python): add Python standards (closes #2)`).
 
 ### Closing Issues When Complete
 
-**CRITICAL**: After completing work on an issue, you MUST close it. Use the `gh` CLI:
+**CRITICAL**: After completing work on an issue, you MUST close it in the active tracker.
+If using GitHub with `gh`, use:
 
 ```bash
 # Close issue with a summary comment
@@ -69,12 +73,14 @@ Implementation includes:
 All acceptance criteria met."
 ```
 
+If GitHub is not available, close the issue/ticket in your tracker with an equivalent completion summary.
+
 **Complete workflow for issues:**
 1. ✅ Implement the feature/fix
 2. ✅ Write tests and verify coverage
 3. ✅ Commit the changes
 4. ✅ Push to remote (`git push`)
-5. ✅ **Close the GitHub issue with summary (`gh issue close`)**
+5. ✅ **Close the issue/ticket with a completion summary**
 
 **Never forget step 5!** Closing issues keeps the project board clean and provides a clear audit trail of what was completed.
 
@@ -88,7 +94,7 @@ Ensure you are working on the latest code before making any changes. This preven
 
 **Step 1: Read and Acknowledge**
 ```
-AI Agent: I will follow the micro-commit workflow documented in docs/AI_AGENT_WORKFLOW.md
+AI Agent: I will follow the micro-commit workflow documented in ./AI_AGENT_WORKFLOW.md
 ```
 
 **Step 2: Create Task List**
@@ -196,8 +202,12 @@ Step 3: REFACTOR PART 3 → COMMIT
 
 **Use Conventional Commits format:**
 
+Scope is recommended and may be omitted for trivial cross-cutting changes.
+
 ```
 <type>(<scope>): <description>
+# or
+<type>: <description>
 
 [optional body explaining WHY, not WHAT]
 
@@ -217,7 +227,7 @@ Step 3: REFACTOR PART 3 → COMMIT
 
 **Good commits:**
 ```
-refactor: extract timestamp generation into separate method
+refactor(reporting): extract timestamp generation into separate method
 
 - Add generateTimestamp() method to encapsulate timestamp formatting logic
 - Import java.time classes for future timestamp usage
@@ -225,7 +235,7 @@ refactor: extract timestamp generation into separate method
 ```
 
 ```
-feat: add timestamp to report filenames
+feat(reporting): add timestamp to report filenames
 
 - Modify buildReportPath to include timestamp in filename format
 - Report files now named: reportName_YYYYMMDD_HHMMSS.extension
@@ -262,8 +272,8 @@ Commit 1: "feat: add timestamp to reports"
 
 **GOOD:**
 ```
-Commit 1: "refactor: extract timestamp generation method"
-Commit 2: "feat: add timestamp to report filenames"
+Commit 1: "refactor(reporting): extract timestamp generation method"
+Commit 2: "feat(reporting): add timestamp to report filenames"
   (includes updated tests - all tests pass)
 Commit 3: "docs: update documentation for timestamped reports"
 ```
@@ -276,14 +286,18 @@ Commit 3: "docs: update documentation for timestamped reports"
 
 **ALWAYS run tests before committing:**
 ```bash
-# Run your project's test suite, e.g.:
-# ./gradlew test | npm test | pytest | go test ./... | dotnet test
+# Run your project's test suite, e.g. one of:
+# ./gradlew test
+# npm test
+# pytest
+# go test ./...
+# dotnet test
 ```
 
 ### ❌ Mistake 4: Vague Commit Messages
 
 **BAD**: "update code"
-**GOOD**: "refactor: extract validation logic to separate class"
+**GOOD**: "refactor(validation): extract validation logic to separate class"
 
 ---
 
@@ -423,15 +437,19 @@ After committing each task, mark it complete:
    # If any fail → fix before committing
 ```
 
-**Run integration tests before pushing:**
+**Run unit tests + integration tests before pushing:**
 
 ```bash
-# Run integration tests in addition to unit tests before pushing, e.g.:
-# ./gradlew integrationTest | npm run test:integration
-# pytest tests/integration/ | go test -tags=integration ./...
+# Re-run unit tests and run integration tests before pushing, e.g. one of:
+# ./gradlew test integrationTest
+# npm run test:all
+# pytest && pytest tests/integration/
+# go test ./... && go test -tags=integration ./...
 
 # If any fail → fix locally before pushing
 ```
+
+**CI remains the hard gate** and runs the full test suite (unit + integration + E2E) on push/PR.
 
 ---
 
@@ -486,9 +504,11 @@ Before making changes, review:
 **AI Agent Process**:
 ```
 1. Check unit test coverage:
-   # Run your project's test suite with coverage reporting, e.g.:
-   # ./gradlew test jacocoTestReport | npm run test:coverage
-   # pytest --cov | go test -cover ./...
+   # Run your project's test suite with coverage reporting, e.g. one of:
+   # ./gradlew test jacocoTestReport
+   # npm run test:coverage
+   # pytest --cov
+   # go test -cover ./...
    # Verify >80% unit test coverage exists (unit tests only)
 
 2. Create task list:
@@ -536,11 +556,13 @@ Before making changes, review:
    e. Commit with clear message
    f. Mark as "completed"
 3. Update documentation (separate commit)
-4. Before pushing: run integration tests
+4. Before pushing: run unit tests + integration tests
 ```
 
 **Commit message template:**
 ```
+<type>(<scope>): <one-line description>
+# or
 <type>: <one-line description>
 
 - Bullet points explaining what changed
@@ -550,15 +572,20 @@ Before making changes, review:
 
 **Test before commit (unit tests):**
 ```bash
-# Run your project's unit test suite, e.g.:
-# ./gradlew test | npm test | pytest | go test ./... | dotnet test
+# Run your project's unit test suite, e.g. one of:
+# ./gradlew test
+# npm test
+# pytest
+# go test ./...
+# dotnet test
 ```
 
 **Test before push (unit + integration tests):**
 ```bash
-# Run integration tests in addition to unit tests before pushing, e.g.:
-# ./gradlew test integrationTest | npm run test:all
-# pytest | pytest tests/integration/
+# Re-run unit tests and run integration tests before pushing, e.g.:
+# ./gradlew test integrationTest
+# npm run test:all
+# pytest && pytest tests/integration/
 # go test ./... && go test -tags=integration ./...
 ```
 
@@ -574,8 +601,9 @@ If you encounter these situations, STOP and ask the user:
 2. **Breaking change**: "This change will break the public API"
    → Ask: "This is a breaking change. Should we maintain backward compatibility?"
 
-3. **Test failures**: "Tests are failing after my change"
-   → Ask: "Tests are failing. Should I fix the implementation or update the tests?"
+3. **Test failures with unclear expected behavior**: "Tests are failing after my change and the requirement is ambiguous"
+   → First action: diagnose and fix in the same branch (fix code when test is correct; update test when requirement changed)
+   → Ask user only if expected behavior cannot be inferred from existing tests, docs, or acceptance criteria
 
 4. **Conflicting patterns**: "The existing code doesn't follow SOLID"
    → Ask: "Should I refactor the existing code first?"
@@ -590,9 +618,11 @@ If you encounter these situations, STOP and ask the user:
 
 1. **Check Unit Test Coverage**
    ```bash
-   # Run your project's test suite with coverage reporting, e.g.:
-   # ./gradlew test jacocoTestReport | npm run test:coverage
-   # pytest --cov | go test -cover ./...
+   # Run your project's test suite with coverage reporting, e.g. one of:
+   # ./gradlew test jacocoTestReport
+   # npm run test:coverage
+   # pytest --cov
+   # go test -cover ./...
    ```
    
 2. **Requirements (unit tests only -- integration/E2E tests do not count toward these thresholds):**
@@ -668,7 +698,7 @@ NEVER:
 ### Refactoring Commit Message Format
 
 ```
-refactor: <what you refactored>
+refactor(<scope>): <what you refactored>
 
 - Why: <reason for refactoring>
 - Impact: <what improved>
@@ -678,7 +708,7 @@ refactor: <what you refactored>
 **Examples:**
 
 ```
-refactor: extract timestamp generation into separate method
+refactor(reporting): extract timestamp generation into separate method
 
 - Why: Prepare for adding timestamps to report filenames
 - Impact: Single responsibility, easier to test

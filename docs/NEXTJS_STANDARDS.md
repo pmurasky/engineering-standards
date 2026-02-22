@@ -162,8 +162,7 @@ All tests must follow Given-When-Then and pass before commit.
 
 ## Related Standards
 
-- `docs/TYPESCRIPT_STANDARDS.md`
-- `docs/CODING_PRACTICES.md`
-- `docs/PRE_COMMIT_CHECKLIST.md`
-- `docs/SOLID_PRINCIPLES.md`
-
+- `./TYPESCRIPT_STANDARDS.md`
+- `./CODING_PRACTICES.md`
+- `./PRE_COMMIT_CHECKLIST.md`
+- `./SOLID_PRINCIPLES.md`

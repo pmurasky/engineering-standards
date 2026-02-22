@@ -934,16 +934,16 @@ function addTag(tag: string, tags: readonly string[] = []): readonly string[] {
 
 ## SOLID Principles Notes
 
-Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these TypeScript-specific practices:
+Use the guide in `./SOLID_PRINCIPLES.md` and apply these TypeScript-specific practices:
 - **SRP**: Use interfaces and classes for focused responsibilities; extract responsibilities into separate classes with constructor injection.
 - **OCP**: Use interfaces with concrete implementations; use Strategy pattern (interface + implementations) for open extension.
-- **LSP**: Interfaces enforce contracts; avoid throwing `NotImplementedError` in implementations -- redesign the abstraction instead.
+- **LSP**: Interfaces enforce contracts; avoid placeholder throws in implementations by redesigning the abstraction. If a temporary guard is unavoidable, throw `new Error("Not implemented")` with a clear migration note.
 - **ISP**: TypeScript supports interface composition natively; keep interfaces small (1-3 methods) and compose them with `extends`.
 - **DIP**: Use constructor injection with interface types; enable test injection by depending on abstractions, not concrete classes.
 
 ## Design Patterns Notes
 
-Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these TypeScript-specific practices:
+Use the catalog in `./DESIGN_PATTERNS.md` and apply these TypeScript-specific practices:
 - **Strategy**: Use interfaces for strategy contracts; pass implementations via constructor injection.
 - **Factory Method/Abstract Factory**: Use factory functions or static factory methods; avoid complex factory class hierarchies.
 - **Builder**: Use parameter objects with optional properties or the builder pattern for complex construction; leverage TypeScript's type system for compile-time validation.

@@ -1048,7 +1048,7 @@ public class OrderService {
 
 ## SOLID Principles Notes
 
-Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Java-specific practices:
+Use the guide in `./SOLID_PRINCIPLES.md` and apply these Java-specific practices:
 - **SRP**: Use records for focused data carriers; extract services by domain responsibility.
 - **OCP**: Use sealed interfaces + pattern matching (`switch` expressions) for known, closed type hierarchies; use Strategy pattern (interface + implementations) for open extension.
 - **LSP**: Use sealed interfaces to control the type hierarchy; avoid `UnsupportedOperationException` -- redesign the abstraction instead.
@@ -1057,7 +1057,7 @@ Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Java-specific practi
 
 ## Design Patterns Notes
 
-Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these Java-specific practices:
+Use the catalog in `./DESIGN_PATTERNS.md` and apply these Java-specific practices:
 - **Strategy**: Prefer sealed interfaces for strategy families with a small, known set of implementations.
 - **Factory Method/Abstract Factory**: Use static factory methods or factory interfaces; avoid reflection-based factories.
 - **Builder**: Prefer builders for complex construction with optional fields; keep builders immutable.

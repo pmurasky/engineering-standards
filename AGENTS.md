@@ -42,8 +42,13 @@ Every commit MUST be production-ready:
 
 ### 6. Commit Message Format
 Use Conventional Commits:
+
+Scope is recommended and may be omitted for trivial cross-cutting changes.
+
 ```
 <type>(<scope>): <description>
+# or
+<type>: <description>
 
 [body explaining WHY, not WHAT]
 ```
@@ -110,17 +115,17 @@ For conversion/porting plan template (gated phases, behavioral baseline, quality
 
 ## Selecting Work
 
-When asked what to work on next, consult GitHub Issues: `gh issue list --label "P1: should fix" --state open`. Prioritize P1 over P2. Reference issues in commits (e.g., `closes #2`). See `docs/AI_AGENT_WORKFLOW.md` for full details.
+When asked what to work on next, consult the active issue tracker. If the repo is on GitHub and `gh` is available, use: `gh issue list --label "P1: should fix" --state open`. Prioritize P1 over P2. Reference issues in commits (e.g., `closes #2`). See `docs/AI_AGENT_WORKFLOW.md` for full details.
 
 ## Closing Issues
 
-**CRITICAL**: After completing work on an issue, ALWAYS close it:
+**CRITICAL**: After completing work on an issue, ALWAYS close it in the active tracker. If using GitHub + `gh`:
 
 ```bash
 gh issue close <number> --comment "Completed in commit <hash>..."
 ```
 
-Complete workflow: Implement → Test → Commit → Push → **Close Issue**. Never forget the final step!
+Complete workflow: Implement → Test → Commit → Push → **Close Issue/Ticket**. Never forget the final step!
 
 ## Red Flags (Stop and Ask User)
 
@@ -128,7 +133,7 @@ If you encounter these situations, STOP and ask:
 
 1. **Unclear scope**: Change requires modifying 10+ files
 2. **Breaking change**: Change will break a public API
-3. **Test failures**: Tests failing after your change
+3. **Test failures with unclear expected behavior**: Tests are failing after your change and expected behavior cannot be inferred from tests/docs/acceptance criteria
 4. **Conflicting patterns**: Existing code doesn't follow SOLID
 5. **Missing tests**: Code being changed has < 80% unit test coverage
 

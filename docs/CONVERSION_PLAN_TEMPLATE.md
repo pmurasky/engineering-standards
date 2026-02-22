@@ -33,10 +33,10 @@
 
 ### 1.1 Read Engineering Standards
 
-- [ ] Read `docs/CODING_PRACTICES.md` — general practices, SOLID, TDD
-- [ ] Read `docs/AI_AGENT_WORKFLOW.md` — micro-commit workflow
-- [ ] Read `docs/PRE_COMMIT_CHECKLIST.md` — pre-commit quality checklist
-- [ ] Read language-specific standards (e.g., `docs/KOTLIN_STANDARDS.md`)
+- [ ] Read `./CODING_PRACTICES.md` — general practices, SOLID, TDD
+- [ ] Read `./AI_AGENT_WORKFLOW.md` — micro-commit workflow
+- [ ] Read `./PRE_COMMIT_CHECKLIST.md` — pre-commit quality checklist
+- [ ] Read language-specific standards (e.g., `./KOTLIN_STANDARDS.md`)
 - [ ] Acknowledge: "I will follow the micro-commit workflow and all code quality gates"
 
 ### 1.2 Capture Behavioral Baseline from Source Project

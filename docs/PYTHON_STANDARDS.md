@@ -747,7 +747,7 @@ except (ConnectionError, TimeoutError) as e:
 
 ## SOLID Principles Notes
 
-Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Python-specific practices:
+Use the guide in `./SOLID_PRINCIPLES.md` and apply these Python-specific practices:
 - **SRP**: Use dataclasses for focused data carriers; extract responsibilities into separate classes with constructor injection.
 - **OCP**: Use Protocols or ABCs with concrete implementations for known type hierarchies; use Strategy pattern (Protocol + implementations) for open extension.
 - **LSP**: Protocols help enforce contracts structurally; avoid raising `NotImplementedError` in overrides -- redesign the abstraction instead.
@@ -756,7 +756,7 @@ Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Python-specific prac
 
 ## Design Patterns Notes
 
-Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these Python-specific practices:
+Use the catalog in `./DESIGN_PATTERNS.md` and apply these Python-specific practices:
 - **Strategy**: Prefer Protocols for strategy interfaces -- no inheritance required.
 - **Factory Method/Abstract Factory**: Use classmethods or module-level factory functions; avoid complex factory hierarchies.
 - **Builder**: Prefer dataclasses with default values and `**kwargs` before introducing a builder.

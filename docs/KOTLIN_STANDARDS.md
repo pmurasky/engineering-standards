@@ -470,7 +470,7 @@ detekt {
 
 ## SOLID Principles Notes
 
-Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Kotlin-specific practices:
+Use the guide in `./SOLID_PRINCIPLES.md` and apply these Kotlin-specific practices:
 - **SRP**: Use data classes for focused value objects; extract responsibilities into separate classes with constructor injection.
 - **OCP**: Use sealed interfaces with `when` for known type hierarchies (compiler-enforced exhaustiveness); use interfaces + implementations for open extension.
 - **LSP**: Sealed classes/interfaces help control substitution; avoid throwing `UnsupportedOperationException` in overrides -- redesign the hierarchy instead.
@@ -479,7 +479,7 @@ Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Kotlin-specific prac
 
 ## Design Patterns Notes
 
-Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these Kotlin-specific practices:
+Use the catalog in `./DESIGN_PATTERNS.md` and apply these Kotlin-specific practices:
 - **Strategy/State**: Prefer sealed interfaces with `when` for exhaustive handling.
 - **Builder**: Prefer named arguments and default parameters before introducing a builder.
 - **Singleton**: Use `object` declarations; avoid global mutable state.
