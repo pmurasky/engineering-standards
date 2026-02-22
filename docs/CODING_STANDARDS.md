@@ -137,6 +137,15 @@ This document serves as the table of contents for all coding standards and pract
 - SAST/DAST tooling and CI integration
 - Secure error handling and severity classification
 
+### [DEVOPS_STANDARDS.md](./DEVOPS_STANDARDS.md)
+**DevOps standards for CI/CD, delivery safety, and operations**
+- GitHub Actions workflow architecture and reusable workflow guidance
+- Least-privilege token permissions, secrets handling, and OIDC recommendations
+- Supply chain controls (dependency review, scanning, attestations, SBOM)
+- Docker build and image hardening standards
+- Testcontainers CI reliability guidance
+- Pre-merge, pre-deploy, and post-deploy checklists
+
 ### [CONVERSION_PLAN_TEMPLATE.md](./CONVERSION_PLAN_TEMPLATE.md)
 **Reusable plan template for framework conversion/porting projects**
 - Gated phases: Pre-work, Port Behavior, Quality Sweep, Verification, Reports
@@ -177,5 +186,5 @@ If anything is unclear or needs discussion:
 
 ---
 
-**Last Updated**: February 20, 2026
-**Version**: 16.0 (Added NEXTJS_STANDARDS.md to index)
+**Last Updated**: February 21, 2026
+**Version**: 17.0 (Added DEVOPS_STANDARDS.md to index)
