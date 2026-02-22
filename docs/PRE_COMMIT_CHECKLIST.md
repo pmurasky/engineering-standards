@@ -15,7 +15,7 @@ See [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md) for the full workflow.
 
 - [ ] **Coverage verified**: Minimum 80% unit test coverage for code being changed, 100% for critical paths (unit tests only -- integration/E2E tests do not count toward coverage)
 - [ ] **Tests written**: New/updated tests follow Given-When-Then structure with edge cases
-- [ ] **Tests pass**: Run your project's test suite - all tests **PASS**
+- [ ] **Tests pass**: Run your project's unit test suite - all tests **PASS**
 - [ ] **Build succeeds**: Run your project's build - **SUCCEEDS**
 - [ ] **No lint errors**
 - [ ] **Static analysis passes**: No PMD, detekt, or Checkstyle violations (see [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md))

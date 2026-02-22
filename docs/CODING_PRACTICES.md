@@ -148,8 +148,8 @@ See [KOTLIN_STANDARDS.md](./KOTLIN_STANDARDS.md#package-organization-domain-driv
 
 ## Testing Standards
 
-### Critical Rule: Never Commit Failing Tests
-**ALL TESTS MUST PASS BEFORE COMMITTING CODE.**
+### Critical Rule: Never Commit with Failing Required Tests
+**THE REQUIRED PRE-COMMIT TEST TIER MUST PASS BEFORE COMMITTING CODE.**
 
 This is a non-negotiable requirement for maintaining code quality and team productivity.
 
@@ -163,9 +163,9 @@ This is a non-negotiable requirement for maintaining code quality and team produ
 #### Pre-Commit Checklist
 Before committing ANY code, you MUST:
 
-1. **Run all tests locally**:
+1. **Run the pre-commit test tier (unit tests)**:
    ```bash
-   # Run your project's test suite, e.g. one of:
+   # Run your project's unit test suite, e.g. one of:
    # ./gradlew test
    # npm test
    # pytest
@@ -173,8 +173,8 @@ Before committing ANY code, you MUST:
    # dotnet test
    ```
 
-2. **Verify all tests pass**:
-   - Check output for all tests passing with zero failures
+2. **Verify unit tests pass**:
+   - Check output for zero unit test failures
    - No skipped or ignored tests without justification
 
 3. **Fix ALL failures** before committing:
@@ -182,13 +182,17 @@ Before committing ANY code, you MUST:
    - Never commit with "TODO: fix test later"
    - Never skip or @Ignore tests to make the build pass
 
-4. **Run tests again** after fixing:
+4. **Run unit tests again** after fixing:
    - Changes to fix one test might break another
-   - Always verify the ENTIRE test suite passes
+   - Always verify the required pre-commit test tier passes
 
-#### There Are No Acceptable Scenarios for Committing with Failing Tests
+5. **Before pushing, run unit + integration tests**:
+   - Follow the test execution tiers in this document
+   - If either tier fails, fix locally before pushing
 
-**Every commit must be production-ready with all tests passing. No exceptions.**
+#### There Are No Acceptable Scenarios for Committing with Failing Required Tests
+
+**Every commit must be production-ready with required tests passing. No exceptions.**
 
 - **TDD RED phase**: Write failing tests, then implement until GREEN, then commit. Never commit during the RED phase.
 - **Feature branches**: Every commit on every branch must have passing tests. Not just the merge commit.
@@ -567,388 +571,39 @@ a pom.xml file. Now it logs a warning and continues processing.
 
 ### Refactoring
 
-**CRITICAL RULE: Always Follow TDD Before Refactoring**
+**CRITICAL RULE: Always follow TDD before refactoring.**
 
-Before refactoring ANY code, you MUST ensure comprehensive unit test coverage exists. This is a non-negotiable requirement. Coverage thresholds are measured from unit tests only.
+The canonical, detailed workflow lives in [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md). Use that file as the single source of truth for STOP → RED → GREEN → COMMIT → REFACTOR → COMMIT.
 
-#### Why TDD Before Refactoring?
+#### Refactoring Requirements (Summary)
 
-Refactoring without tests is like surgery without anesthesia - dangerous and likely to cause pain. Tests are your safety net that proves refactoring didn't break functionality.
+- Verify unit test coverage before refactoring (minimum 80% for refactored code, 100% for critical paths)
+- Ensure existing tests pass before starting
+- Make one refactoring step at a time (micro-commit)
+- Run required quality gates after each step (tests/build/lint)
+- Commit only production-ready changes
 
-**Without tests:**
-- ❌ No confidence that refactoring preserves behavior
-- ❌ Bugs introduced silently without detection
-- ❌ Fear of making changes leads to code rot
-- ❌ Regression issues discovered in production
+#### When to Stop and Add Tests First
 
-**With tests (TDD approach):**
-- ✅ Immediate feedback if refactoring breaks functionality
-- ✅ Confidence to make bold improvements
-- ✅ Documentation of expected behavior
-- ✅ Regression prevention
+- Coverage is below threshold for the code being changed
+- Behavior is not covered by meaningful unit tests
+- Critical path logic lacks full unit test coverage
 
-#### Mandatory TDD Micro-Commit Workflow
+If any of these apply, add tests first, then continue refactoring.
 
-**The Micro-Commit Principle:**
-Every commit must be **production-ready** (tests pass + builds + lint clean). Make small, frequent commits following the RED-GREEN-REFACTOR cycle.
+#### Exceptions (TDD May Be Skipped)
 
-**Step 1: STOP - Check Test Coverage**
+- Simple renames
+- File/package moves without behavior changes
+- Formatting-only changes
+- Comment or import cleanup
 
-Before touching ANY code, verify unit test coverage:
+Even for these cases, run tests after the change.
 
-```bash
-# Run unit tests to establish baseline, e.g. one of:
-# ./gradlew test
-# npm test
-# pytest
-# go test ./...
-# dotnet test
+#### Related References
 
-# Check coverage report (unit tests only), e.g. one of:
-# ./gradlew test jacocoTestReport
-# npm run test:coverage
-# pytest --cov
-# go test -cover ./...
-
-# For critical paths, consider mutation testing (e.g., pitest, stryker)
-```
-
-**Requirements (unit tests only -- integration/E2E tests do not count toward these thresholds):**
-- **Minimum 80% line coverage** for code being refactored (unit tests only)
-- **100% coverage for critical business logic** (scoring, analysis, report generation) (unit tests only)
-- **All existing tests must pass** before starting
-
-**Step 2: RED - Write Failing Test (DON'T COMMIT YET)**
-
-Write a test that documents the behavior you need:
-
-```kotlin
-@Test
-fun `should calculate correct score for class with violations`() {
-    // Given - Setup test data
-    val classInfo = createTestClass()
-    val violations = listOf(
-        createCheckstyleViolation(severity = "error"),
-        createPmdViolation(priority = 1)
-    )
-
-    // When - Execute code under test
-    val score = scorer.calculateScore(classInfo, violations)
-
-    // Then - Assert expected behavior
-    assertEquals(85.0, score, 0.01)
-}
-```
-
-Run tests - they should **FAIL** (RED phase):
-```bash
-# Run your project's test suite - test fails, this is expected!
-```
-
-**Step 3: GREEN - Write Minimum Code to Pass → COMMIT**
-
-Write the **minimum production code** to make the test pass:
-
-```kotlin
-fun calculateScore(classInfo: ClassInfo, violations: List<Violation>): Double {
-    // Simplest implementation that makes test pass
-    var score = 100.0
-    violations.forEach { violation ->
-        if (violation.severity == "error") score -= 5.0
-    }
-    return score
-}
-```
-
-Run tests - they should **PASS**:
-```bash
-# Run your project's test suite and build, e.g. one of:
-# ./gradlew test && ./gradlew build
-# npm test && npm run build
-# pytest && python -m build
-# go test ./... && go build ./...
-# All quality gates pass ✅
-```
-
-**Commit immediately (production-ready):**
-```bash
-git add src/test/ src/main/
-git commit -m "feat: add basic score calculation for violations
-
-- Calculate score starting at 100
-- Deduct 5 points per error violation
-- Test passes, build succeeds"
-```
-
-**Step 4: REFACTOR - Improve Code → COMMIT**
-
-Look at the code. Can you improve it? Make logical improvements:
-
-```kotlin
-// Refactored: Extract magic numbers, improve readability
-fun calculateScore(classInfo: ClassInfo, violations: List<Violation>): Double {
-    val baseScore = 100.0
-    val errorPenalty = 5.0
-
-    val totalDeductions = violations
-        .filter { it.severity == "error" }
-        .size * errorPenalty
-
-    return baseScore - totalDeductions
-}
-```
-
-Run tests - they should **STILL PASS**:
-```bash
-# Run your project's test suite and build - all quality gates pass ✅
-```
-
-**Commit immediately (production-ready):**
-```bash
-git add src/main/
-git commit -m "refactor: extract scoring constants and improve readability
-
-- Extract baseScore and errorPenalty constants
-- Use functional filter/size for clarity
-- All tests still pass"
-```
-
-**Step 5: REPEAT - Add Next Feature**
-
-Need to support more violation types? Start at Step 2 (RED) again:
-- Write failing test for new behavior
-- Make it pass with minimum code → COMMIT
-- Refactor if needed → COMMIT
-
-**Key Principles:**
-1. **Never commit failing tests** - only commit when GREEN
-2. **Every commit is production-ready** - tests pass, builds succeed, lint clean
-3. **Commit frequently** - after each GREEN and REFACTOR phase
-4. **Small commits** - one logical change per commit
-5. **Run quality gates before every commit** - run your test suite and build
-
-#### Real-World Example: Scorer Refactoring (Commit 5a07ef6)
-
-This is how we successfully refactored Scorer using micro-commits:
-
-**Cycle 1: Add Strategy Interface**
-```bash
-# RED - Write test for ScoringStrategy interface (don't commit)
-@Test fun `should calculate score using strategy`() { ... }
-# Run tests  # FAILS ✗
-
-# GREEN - Create interface and make test pass
-interface ScoringStrategy { fun calculateScore(...): Double }
-# Run tests + build  # PASSES ✓
-git commit -m "feat: add ScoringStrategy interface with test"
-
-# REFACTOR - Improve interface documentation
-// Add KDoc comments
-# Run tests + build  # PASSES ✓
-git commit -m "refactor: add documentation to ScoringStrategy interface"
-```
-
-**Cycle 2: Extract First Strategy**
-```bash
-# RED - Write test for CheckstyleScoringStrategy (don't commit)
-@Test fun `should calculate Checkstyle score`() { ... }
-# Run tests  # FAILS ✗
-
-# GREEN - Create strategy class with minimum code
-class CheckstyleScoringStrategy : ScoringStrategy { ... }
-# Run tests + build  # PASSES ✓
-git commit -m "feat: add CheckstyleScoringStrategy"
-
-# REFACTOR - Extract helper method
-private fun calculateDeduction(...) { ... }
-# Run tests + build  # PASSES ✓
-git commit -m "refactor: extract deduction calculation helper"
-```
-
-**Cycle 3-5: Extract Remaining Strategies**
-```bash
-# Repeat RED-GREEN-REFACTOR for each strategy
-git commit -m "feat: add PmdScoringStrategy"
-git commit -m "feat: add SonarScoringStrategy"
-# ... etc
-```
-
-**Result (8 production-ready commits):**
-- ✅ Fixed 2 CRITICAL violations (OCP + God Class)
-- ✅ 47% code reduction (347 → 185 lines)
-- ✅ 100% test pass rate maintained across ALL commits
-- ✅ Zero regression bugs
-- ✅ Every commit was production-ready and deployable
-
-#### Common Refactoring Scenarios with Micro-Commits
-
-**Scenario 1: Extracting a Method**
-
-```kotlin
-// Cycle 1: RED → GREEN → COMMIT
-@Test
-fun `should validate email format correctly`() {
-    val result = userService.createUser(UserData(email = "invalid"))
-    assertFalse(result.isValid)
-}
-// Write minimum code to pass, then:
-git commit -m "feat: add email validation in createUser"
-
-// Cycle 2: REFACTOR → COMMIT
-class UserService {
-    private fun isValidEmail(email: String): Boolean {
-        return email.contains("@")  // Extracted method
-    }
-}
-git commit -m "refactor: extract isValidEmail method"
-```
-
-**Scenario 2: Extracting a Class**
-
-```kotlin
-// Cycle 1: RED → GREEN → COMMIT
-@Test
-fun `should validate user data correctly`() {
-    val validator = UserValidator()
-    val result = validator.validate(invalidUserData)
-    assertFalse(result.isValid)
-}
-// Create UserValidator class with minimum implementation
-git commit -m "feat: add UserValidator class"
-
-// Cycle 2: REFACTOR → COMMIT
-// Move validation logic from UserService to UserValidator
-git commit -m "refactor: move validation logic to UserValidator"
-
-// Cycle 3: REFACTOR → COMMIT
-// Clean up UserService to use new validator
-git commit -m "refactor: update UserService to use UserValidator"
-```
-
-**Scenario 3: Applying Strategy Pattern**
-
-```kotlin
-// Cycle 1: Create interface
-@Test
-fun `should use scoring strategy`() { ... }
-git commit -m "feat: add ScoringStrategy interface"
-
-// Cycle 2-4: Extract each strategy (one at a time)
-@Test
-fun `should calculate Checkstyle score`() { ... }
-git commit -m "feat: add CheckstyleScoringStrategy"
-
-@Test
-fun `should calculate PMD score`() { ... }
-git commit -m "feat: add PmdScoringStrategy"
-
-// Each strategy gets its own RED-GREEN-REFACTOR cycle
-```
-
-#### Exceptions (When You Can Skip TDD)
-
-**NEVER skip TDD for:**
-- ❌ Business logic changes
-- ❌ Algorithm modifications
-- ❌ Complex refactorings (Strategy Pattern, Extract Class)
-- ❌ Critical paths (scoring, analysis, report generation)
-
-**ONLY skip TDD for:**
-- ✅ Simple renaming (variable, method, class names)
-- ✅ Moving files between packages (IDE refactor)
-- ✅ Formatting changes (whitespace, line breaks)
-- ✅ Comment updates
-- ✅ Import organization
-
-**Even for simple changes, run tests after:**
-```bash
-# Run your project's test suite to verify nothing broke
-```
-
-#### Red Flags: Refactoring Without Tests
-
-**WARNING SIGNS:**
-- 🚨 "I'll add tests later" - NO! Tests first, always.
-- 🚨 "The code is simple, I don't need tests" - Famous last words before production bugs
-- 🚨 "I'm just moving code around" - Even simple moves can break dependencies
-- 🚨 "Tests take too long to write" - Tests take less time than debugging production issues
-
-**CONSEQUENCES:**
-- Production bugs from "safe" refactorings
-- Fear of improving code (leads to technical debt)
-- Long debugging sessions to find regressions
-- Loss of team confidence in codebase
-
-#### Enforcement
-
-**Code Review Requirements:**
-- Pull requests MUST show micro-commits following RED-GREEN-REFACTOR cycle
-- Every commit MUST be production-ready (tests pass + builds + lint clean)
-- Reviewers MUST verify each commit is independently deployable
-- CI/CD MUST enforce quality gates on EVERY commit
-- Failing tests MUST block all commits
-
-**Acceptable PR Pattern (Micro-Commits):**
-```
-Commit 1: feat: add email validation (RED → GREEN)
-  - Test passes ✓
-  - Build succeeds ✓
-  - Production-ready ✓
-
-Commit 2: refactor: extract email validation to helper method
-  - Test still passes ✓
-  - Build succeeds ✓
-  - Production-ready ✓
-
-Commit 3: feat: add password validation (RED → GREEN)
-  - Test passes ✓
-  - Build succeeds ✓
-  - Production-ready ✓
-```
-
-**Unacceptable PR Pattern (Batch Commits):**
-```
-Commit 1: refactor: major changes to Feature X (tests failing ✗)
-Commit 2: fix tests (tests passing now ✓)
-Commit 3: fix lint errors (finally production-ready ✓)
-```
-
-**Why This Matters:**
-- Each commit is a safe rollback point
-- Easy to bisect and find bugs
-- Continuous deployability maintained
-- Clear intent in each commit
-
-#### Summary: The TDD Micro-Commit Mantra
-
-**Remember this workflow:**
-1. **STOP** - Check existing unit test coverage (80% minimum required, unit tests only)
-2. **RED** - Write failing test (don't commit yet)
-3. **GREEN** - Write minimum code to pass → **COMMIT** (production-ready)
-4. **REFACTOR** - Improve code structure → **COMMIT** (production-ready)
-5. **REPEAT** - Start at step 2 for next feature
-
-**Make it a habit:**
-- 🟥 RED (failing test, no commit) → 🟢 GREEN (passing test) → ✅ **COMMIT** → 🔄 REFACTOR → ✅ **COMMIT**
-
-**Critical Rules:**
-- **Never commit failing tests** - only commit when GREEN
-- **Every commit is production-ready** - tests pass, builds succeed, lint clean
-- **Commit after GREEN phase** - don't batch multiple features
-- **Commit after REFACTOR phase** - don't batch multiple refactorings
-- **Small, frequent commits** - one logical change per commit
-
-**Production-Ready Definition:**
-```bash
-# ✓ All tests pass (e.g., ./gradlew test, npm test, pytest, or go test ./...)
-# ✓ Build succeeds (e.g., ./gradlew build, npm run build, or go build ./...)
-# ✓ No lint errors
-# ✓ Ready to deploy to production
-```
-
-**Never commit broken code. Every commit must be deployable. Period.**
-
----
+- Full workflow and examples: [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md)
+- Pre-commit quality gates: [PRE_COMMIT_CHECKLIST.md](./PRE_COMMIT_CHECKLIST.md)
 
 ### Legacy Refactoring Principles
 
