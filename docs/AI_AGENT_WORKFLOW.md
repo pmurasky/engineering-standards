@@ -79,8 +79,8 @@ If GitHub is not available, close the issue/ticket in your tracker with an equiv
 1. ✅ Implement the feature/fix
 2. ✅ Write tests and verify coverage
 3. ✅ Commit the changes
-4. ✅ Push to remote (`git push`)
-5. ✅ **Close the issue/ticket with a completion summary**
+4. ✅ Push to remote (`git push`) when remote write access is available
+5. ✅ **Close the issue/ticket with a completion summary** (or provide closure-ready notes for a maintainer when you cannot close directly)
 
 **Never forget step 5!** Closing issues keeps the project board clean and provides a clear audit trail of what was completed.
 
