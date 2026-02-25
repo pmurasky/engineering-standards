@@ -15,6 +15,7 @@ See [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md) for the full workflow.
 
 - [ ] **Coverage verified**: Minimum 80% unit test coverage for code being changed, 100% for critical paths (unit tests only -- integration/E2E tests do not count toward coverage)
 - [ ] **Tests written**: New/updated tests follow Given-When-Then structure with edge cases
+- [ ] **One test at a time**: In TDD, write exactly one failing test, make it pass, refactor, then add the next test
 - [ ] **Tests pass**: Run your project's unit test suite - all tests **PASS**
 - [ ] **Build succeeds**: Run your project's build - **SUCCEEDS**
 - [ ] **No lint errors**
@@ -369,7 +370,8 @@ wc -l src/main/kotlin/**/*.kt
 Before committing, ensure:
 
 - [ ] **All tests pass**: run your project's test suite
-- [ ] **New code has tests**: Minimum 80% unit test coverage for new classes (unit tests only)
+- [ ] **New behavior has tests**: Minimum 80% unit test coverage for behavior-bearing new code (unit tests only)
+- [ ] **Boilerplate-only types are not over-tested**: Skip direct unit tests for trivial `@Entity`/DTO/data classes, generated code, and config-only wiring unless they contain domain behavior
 - [ ] **No tests ignored**: No `@Disabled` or `.skip()` annotations
 - [ ] **Tests are fast**: Unit tests run in < 1 second each
 - [ ] **Tests are isolated**: No shared state between tests

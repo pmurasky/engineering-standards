@@ -686,6 +686,11 @@ For the overarching static analysis philosophy, zero-tolerance policy, suppressi
 - 80%+ unit test coverage (JaCoCo, unit tests only -- integration/E2E tests do not count toward coverage)
 - No duplicated code
 
+**Java testing scope clarification:**
+- Do not add direct unit tests for boilerplate-only `@Entity`/DTO/record classes that only contain trivial getters/setters.
+- Add direct tests when classes include behavior such as validation, derived fields, lifecycle hooks (`@PrePersist`, `@PreUpdate`), or custom `equals`/`hashCode`/`compareTo` semantics.
+- Prefer testing domain contracts and business rules over framework-generated/accessor boilerplate.
+
 ### Checkstyle Configuration
 
 This repo provides a curated Checkstyle 10.x configuration at `config/checkstyle/checkstyle.xml`. Based on the Google Java Style Guide with thresholds aligned to our engineering standards.

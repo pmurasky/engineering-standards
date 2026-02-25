@@ -195,6 +195,7 @@ Before committing ANY code, you MUST:
 **Every commit must be production-ready with required tests passing. No exceptions.**
 
 - **TDD RED phase**: Write failing tests, then implement until GREEN, then commit. Never commit during the RED phase.
+- **One test at a time**: Add a single failing test, make it pass, refactor, then add the next test.
 - **Feature branches**: Every commit on every branch must have passing tests. Not just the merge commit.
 
 #### What To Do When Tests Fail
@@ -240,6 +241,22 @@ Violations of this rule are considered serious quality issues:
   - Authentication and authorization flows
   - Data transformation and validation pipelines
 - **Branch Coverage**: Minimum 75% (unit tests only)
+
+### When Direct Unit Tests Are Not Required
+
+Do not chase coverage by writing direct unit tests for boilerplate-only types that contain no domain behavior.
+
+- **Usually skip direct tests for**:
+  - `@Entity`/DTO/POJO/data classes with only trivial getters/setters
+  - Auto-generated code (Lombok-generated methods, OpenAPI/protobuf clients, mapper-generated code)
+  - Framework wiring/config-only classes and marker types
+  - Thin pass-through wrappers with no branching or transformation
+- **Write tests when behavior exists**:
+  - Validation, normalization, derived/computed fields, lifecycle hooks
+  - Custom `equals`/`hashCode`/`compareTo` semantics that affect business behavior
+  - Error mapping, retries, caching, security decisions, or any branching logic
+
+Rule of thumb: test code that encodes your domain contract, not code that only proves language/framework boilerplate.
 
 ### Test Types
 

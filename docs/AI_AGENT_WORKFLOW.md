@@ -18,6 +18,14 @@ A "logical change" is:
 
 **NEVER bundle multiple logical changes into one commit.**
 
+## 🧪 Core TDD Rule: One Test at a Time
+
+During TDD, write exactly one failing test, make that test pass with the minimal implementation, refactor safely, and only then add the next test.
+
+- Do not queue multiple failing tests before implementing.
+- Repeat RED → GREEN → REFACTOR as small cycles.
+- Commit only when the suite is green and the current logical change is production-ready.
+
 ### Production-Ready Commits
 
 **Every commit MUST be production-ready. No exceptions.**
@@ -154,12 +162,12 @@ Step 5: DOCUMENT → COMMIT
 
 ```
 Step 1: TEST (Red) - DON'T COMMIT
-├─ Write failing test
+├─ Write one failing test
 ├─ Run tests (should fail)
 └─ Don't commit yet
 
 Step 2: IMPLEMENT (Green) → COMMIT
-├─ Write minimum code to pass test
+├─ Write minimum code to pass that one test
 ├─ Run tests (must pass)
 └─ Commit: "feat: add feature X with test"
    (Include both test and implementation in one commit)
