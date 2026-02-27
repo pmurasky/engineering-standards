@@ -36,40 +36,12 @@ See [AI_AGENT_WORKFLOW.md](./AI_AGENT_WORKFLOW.md) for the full workflow.
 
 ## 🔧 Refactoring Prerequisites (MANDATORY)
 
-**CRITICAL: Never refactor without tests. No exceptions.**
+**CRITICAL: Never refactor without tests. No exceptions.** See `docs/AI_AGENT_WORKFLOW.md` for the full refactoring workflow.
 
-Before refactoring ANY code, you MUST complete ALL of the following:
-
-- [ ] **Check unit test coverage**: Run your project's coverage tool (e.g., `./gradlew test jacocoTestReport`, `npm run test:coverage`, `pytest --cov`, `go test -cover ./...`)
-- [ ] **Minimum 80% unit test line coverage** for the code being refactored (unit tests only -- integration/E2E tests do not count)
-- [ ] **100% unit test coverage for critical paths** (business logic, scoring, analysis, report generation)
+- [ ] **Check unit test coverage**: ≥80% for code being refactored, 100% for critical paths (unit tests only)
 - [ ] **All existing tests pass** before starting any refactoring
-- [ ] **Tests are meaningful**: Not just for coverage numbers -- tests verify actual behavior
-
-### If Unit Test Coverage Is Below 80%
-
-**STOP. Do NOT refactor.** Instead:
-
-1. Write unit tests FIRST to reach 80% coverage (separate commits using TDD cycle)
-2. Verify all new tests pass
-3. Commit the tests: `test(<scope>): add tests for <component> before refactoring`
-4. THEN proceed with refactoring
-
-### After Each Refactoring Step
-
-- [ ] Run ALL tests (not just the ones you think are affected)
-- [ ] Verify build succeeds
-- [ ] Verify no lint errors
-- [ ] Commit immediately: `refactor(<scope>): <what was improved>`
-
-### Refactoring Red Flags
-
-- "I'll add tests later" -- NO. Tests FIRST, always.
-- "The code is simple, I don't need tests" -- Tests are required regardless of perceived simplicity.
-- "I'm just moving code around" -- Even simple moves can break dependencies. Tests required.
-- Batching multiple refactoring steps into one commit -- each step is its own commit.
-
-For the full refactoring workflow, see `./AI_AGENT_WORKFLOW.md`.
+- [ ] **If coverage < 80%**: STOP — write unit tests first (`test(<scope>): add tests for <component> before refactoring`)
+- [ ] **After each step**: Run ALL tests, verify build, verify no lint errors, commit immediately
 
 ---
 
