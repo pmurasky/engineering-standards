@@ -79,187 +79,47 @@ For the full SOLID guide with multi-language examples and real-world analogies, 
 
 ### ✅ Single Responsibility Principle (SRP)
 
-**Question**: Does each class/method have ONE reason to change?
-
-**Check for violations:**
-- [ ] Class name contains "Manager", "Handler", "Utility", "Helper" (often God classes)
-- [ ] Class has > 10 methods (likely doing too much)
-- [ ] Method does multiple unrelated things (e.g., validates AND saves AND sends email)
-- [ ] Class mixes business logic with infrastructure (e.g., database access)
-- [ ] Method name contains "And" (e.g., `validateAndSave()`)
-
-**Red flags:**
-- Class > 300 lines
-- Method > language-specific limit (see language-specific standards; typically 15-20 lines)
-- Class imports from > 5 different packages
-- Methods that call methods from > 3 other classes (Feature Envy)
-
-**Fix examples:**
-```kotlin
-// ❌ BAD - Multiple responsibilities
-class UserManager {
-    fun createUser(data: UserData) {
-        validateUser(data)           // validation
-        val user = User(data)        // domain logic
-        database.save(user)          // persistence
-        emailService.sendWelcome(user) // notification
-        logger.log("User created")   // logging
-    }
-}
-
-// ✅ GOOD - Single responsibility
-class UserCreator {
-    fun create(data: UserData): User {
-        return User(data)
-    }
-}
-class UserValidator { fun validate(data: UserData) }
-class UserRepository { fun save(user: User) }
-class WelcomeEmailSender { fun send(user: User) }
-```
+- [ ] Class name doesn't contain "Manager", "Handler", "Utility", "Helper" (often God classes)
+- [ ] Class has ≤ 10 methods
+- [ ] Method does ONE thing (no `validateAndSave()` style names)
+- [ ] Class doesn't mix business logic with infrastructure
+- [ ] Class ≤ 300 lines, method ≤ language-specific limit (typically 15-20 lines)
 
 ---
 
 ### ✅ Open/Closed Principle (OCP)
 
-**Question**: Can I add new functionality WITHOUT modifying existing code?
-
-**Check for violations:**
-- [ ] Switch/when statements on type checks or enums
-- [ ] If-else chains checking object types
-- [ ] Hard-coded class instantiation (e.g., `val writer = MarkdownWriter()`)
-- [ ] Adding new feature requires changing multiple existing classes
-- [ ] Method contains list of concrete implementations
-
-**Red flags:**
-```kotlin
-// ❌ BAD - Must modify to add new report type
-fun generateReport(type: String) {
-    when (type) {
-        "markdown" -> MarkdownWriter().write()
-        "json" -> JsonWriter().write()
-        "html" -> HtmlWriter().write()
-        // Adding PDF requires modifying this method
-    }
-}
-```
-
-**Fix with Strategy/Polymorphism:**
-```kotlin
-// ✅ GOOD - Can add new report types without modification
-interface ReportWriter {
-    fun write(data: Data)
-}
-
-class ReportGenerator(private val writers: List<ReportWriter>) {
-    fun generateAll(data: Data) {
-        writers.forEach { it.write(data) }
-        // Adding PDF just requires creating PdfWriter, no changes here
-    }
-}
-```
+- [ ] No switch/when statements on type checks or enums
+- [ ] No if-else chains checking object types
+- [ ] No hard-coded class instantiation (e.g., `val writer = MarkdownWriter()`)
+- [ ] Adding new feature doesn't require modifying existing classes
 
 ---
 
 ### ✅ Liskov Substitution Principle (LSP)
 
-**Question**: Can I substitute any subclass for its parent without breaking functionality?
-
-**Check for violations:**
-- [ ] Subclass throws exceptions parent doesn't throw
-- [ ] Subclass has stricter preconditions than parent
-- [ ] Subclass has weaker postconditions than parent
-- [ ] Subclass removes/doesn't implement parent functionality
-- [ ] Type checking before casting (`is` checks)
-
-**Red flags:**
-```kotlin
-// ❌ BAD - Violates LSP
-open class Bird {
-    open fun fly() { /* fly */ }
-}
-class Penguin : Bird() {
-    override fun fly() {
-        throw UnsupportedOperationException("Penguins can't fly!")
-    }
-}
-
-// ✅ GOOD - Proper abstraction
-interface Bird
-interface FlyingBird : Bird {
-    fun fly()
-}
-class Sparrow : FlyingBird
-class Penguin : Bird
-```
+- [ ] Subclass doesn't throw exceptions parent doesn't throw
+- [ ] Subclass doesn't have stricter preconditions than parent
+- [ ] Subclass doesn't remove/stub parent functionality
+- [ ] No type checking before casting (`is` checks)
 
 ---
 
 ### ✅ Interface Segregation Principle (ISP)
 
-**Question**: Are interfaces focused and cohesive, or fat and bloated?
-
-**Check for violations:**
-- [ ] Interface has > 5 methods
-- [ ] Classes implement interface but throw "not implemented" for some methods
-- [ ] Classes implement interface but leave some methods empty
-- [ ] Clients depend on interfaces they don't use
-
-**Red flags:**
-```kotlin
-// ❌ BAD - Fat interface
-interface Worker {
-    fun work()
-    fun eat()
-    fun sleep()
-    fun getPaid()
-    fun takeVacation()
-    fun attendMeeting()
-}
-
-// ✅ GOOD - Segregated interfaces
-interface Workable { fun work() }
-interface Eatable { fun eat() }
-interface Payable { fun getPaid() }
-```
+- [ ] Interface has ≤ 5 methods
+- [ ] No classes implementing interface with empty stubs or "not implemented" throws
+- [ ] Clients don't depend on interface methods they don't use
 
 ---
 
 ### ✅ Dependency Inversion Principle (DIP)
 
-**Question**: Do high-level modules depend on abstractions, not concrete implementations?
+- [ ] No direct instantiation of dependencies inside classes (`val x = ConcreteClass()`)
+- [ ] No `= ClassName()` in property declarations (use constructor injection)
+- [ ] Dependencies are mockable for testing
 
-**Check for violations:**
-- [ ] Direct instantiation of dependencies inside classes (`val parser = CheckstyleParser()`)
-- [ ] Importing concrete classes instead of interfaces
-- [ ] No constructor injection
-- [ ] Using `= ClassName()` in property declarations
-- [ ] Cannot mock dependencies for testing
-
-**Red flags:**
-```kotlin
-// ❌ BAD - Depends on concrete class
-class Analyzer {
-    private val parser = CheckstyleParser()  // Hard-coded dependency
-    private val database = MySQLDatabase()   // Hard-coded dependency
-
-    fun analyze() {
-        val data = parser.parse()
-        database.save(data)
-    }
-}
-
-// ✅ GOOD - Depends on abstractions with injection
-class Analyzer(
-    private val parser: ViolationParser,     // Interface, injected
-    private val database: Database           // Interface, injected
-) {
-    fun analyze() {
-        val data = parser.parse()
-        database.save(data)
-    }
-}
-```
+For violation examples and fixes, see [SOLID_PRINCIPLES.md](./SOLID_PRINCIPLES.md).
 
 ---
 
@@ -443,149 +303,15 @@ If a breaking change is unavoidable:
 
 ---
 
-## ⚠️ Common Violations & Quick Fixes
-
-### **Violation: Hard-coded Dependencies**
-```kotlin
-// ❌ BEFORE
-class Orchestrator {
-    private val parser = CheckstyleParser()
-}
-
-// ✅ AFTER
-class Orchestrator(
-    private val parser: ViolationParser = CheckstyleParser()
-)
-```
-
-### **Violation: Switch on Type**
-```kotlin
-// ❌ BEFORE
-fun process(violation: Violation): Double {
-    return when (violation) {
-        is CheckstyleViolation -> 2.0
-        is PmdViolation -> 3.0
-        is SonarViolation -> 5.0
-    }
-}
-
-// ✅ AFTER
-interface ScoredViolation {
-    fun getPenalty(): Double
-}
-// Each violation type implements getPenalty()
-```
-
-### **Violation: God Class**
-```kotlin
-// ❌ BEFORE
-class CodeHealthOrchestrator {
-    fun analyze() { }
-    fun parseReports() { }
-    fun calculateScores() { }
-    fun generateReports() { }
-    fun findFiles() { }
-    fun detectPackages() { }
-    // ... 10 more methods
-}
-
-// ✅ AFTER
-class CodeHealthOrchestrator(
-    private val reportParser: ReportParser,
-    private val scorer: Scorer,
-    private val reportGenerator: ReportGenerator,
-    private val fileFinder: FileFinder,
-    private val packageDetector: PackageDetector
-)
-```
-
----
-
 ## 🚀 Automated Checks
 
 ### **Run Before Every Commit**
-```bash
-# 1. Run unit tests (use your project's test runner)
-# e.g. one of: ./gradlew test, npm test, pytest, go test ./..., dotnet test
 
-# 2. Check compilation / build
-# e.g. one of: ./gradlew build, npm run build, go build ./..., dotnet build
-
-# 3. Check for long methods (manual review - adapt paths to your project)
-# find src/ -name "*.kt" -exec grep -n "fun " {} + | less
-# grep -rn "function " src/ --include="*.ts" | less
-
-# 4. Check for God classes (> 300 lines - adapt paths to your project)
-# find src/ -name "*.kt" -exec wc -l {} + | awk '$1 > 300'
-# find src/ -name "*.ts" -exec wc -l {} + | awk '$1 > 300'
-
-# 5. Check imports (too many = high coupling)
-# grep "^import" src/**/*.kt | sort | uniq -c | sort -rn | head -20
-```
+Run your project's unit test suite and build (e.g., `./gradlew test`, `npm test`, `pytest`, `go test ./...`). See `docs/CODING_PRACTICES.md` for pre-commit hook examples.
 
 ### **Run Before Every Push**
 
-Before pushing commits to the remote, run integration tests in addition to unit tests. This catches cross-component issues before they reach the team.
-
-```bash
-# 1. Run unit tests (should already pass from pre-commit)
-# e.g. one of: ./gradlew test, npm test, pytest, go test ./...
-
-# 2. Run integration tests
-# e.g. one of: ./gradlew integrationTest, npm run test:integration
-# or one of: pytest tests/integration/, go test -tags=integration ./...
-
-# If ANY test fails, fix locally before pushing.
-```
-
-### **Pre-Commit Hook** (Optional but Recommended)
-```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-echo "Running pre-commit checks..."
-
-# Run unit tests (replace with your project's test command)
-# ./gradlew test || exit 1
-# npm test || exit 1
-# pytest || exit 1
-
-# Check for long methods (adapt to your language/project structure)
-# LONG_METHODS=$(find src/ -name "*.kt" | xargs grep -A 20 "fun " | grep -c "^--$")
-# if [ $LONG_METHODS -gt 50 ]; then
-#     echo "⚠️  Warning: Many potentially long methods detected"
-# fi
-
-echo "✅ Pre-commit checks passed"
-```
-
-### **Pre-Push Hook** (Optional but Recommended)
-```bash
-# .git/hooks/pre-push
-#!/bin/bash
-echo "Running pre-push checks..."
-
-# Run unit tests (should already pass from pre-commit)
-# ./gradlew test || exit 1
-# npm test || exit 1
-# pytest || exit 1
-
-# Run integration tests
-# ./gradlew integrationTest || exit 1
-# npm run test:integration || exit 1
-# pytest tests/integration/ || exit 1
-
-echo "✅ Pre-push checks passed"
-```
-
----
-
-## 📚 Resources
-
-- **SOLID Principles**: https://en.wikipedia.org/wiki/SOLID
-- **Design Patterns**: Gang of Four patterns
-- **Clean Code**: Robert C. Martin
-- **Refactoring**: Martin Fowler
-- **Kotlin Best Practices**: https://kotlinlang.org/docs/coding-conventions.html
+Run unit tests + integration tests before pushing. See `docs/CODING_PRACTICES.md` for pre-push hook examples.
 
 ---
 
