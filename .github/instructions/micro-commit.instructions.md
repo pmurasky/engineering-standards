@@ -19,13 +19,7 @@ For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> C
 
 ## Commit Message Format
 
-```
-<type>(<scope>): <description>
-
-[body explaining WHY, not WHAT]
-```
-
-Types: `feat`, `fix`, `refactor`, `test`, `docs`, `perf`, `chore`
+Use Conventional Commits: `<type>(<scope>): <description>` — see `docs/AI_AGENT_WORKFLOW.md` for format, types, and examples.
 
 ## Production-Ready Commits
 
