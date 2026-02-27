@@ -6,29 +6,15 @@ Follow these engineering standards for ALL code changes in this repository.
 For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> COMMIT cycle. See `docs/AI_AGENT_WORKFLOW.md` for the full workflow.
 
 ## Code Quality Rules
-- Maximum method length: language-specific limit (typically 15-20 lines; Go: 25 lines)
-- Maximum class length: 300 lines (consider refactoring if larger)
-- Maximum 0-2 private methods per class (SRP guideline)
-- Maximum 5 parameters per method (use parameter objects)
-- No duplicated code (DRY principle)
-
-## SOLID Principles
-- **SRP**: Each class has ONE reason to change
-- **OCP**: Open for extension, closed for modification (use Strategy Pattern)
-- **LSP**: Subtypes must be substitutable for base types
-- **ISP**: Prefer focused interfaces over fat interfaces
-- **DIP**: Depend on abstractions, not concrete classes (use dependency injection)
+Apply rules from `docs/CODING_PRACTICES.md`: methods ≤20 lines, classes ≤300 lines, ≤2 private methods, ≤5 params, DRY. Follow SOLID principles — see `docs/SOLID_PRINCIPLES.md` for the full guide with examples.
 
 ## Commit Standards
 - One logical change per commit
-- Conventional Commits: `<type>(<scope>): <description>`
-- Types: feat, fix, refactor, test, docs, perf, chore
+- Conventional Commits: `<type>(<scope>): <description>` — see `docs/AI_AGENT_WORKFLOW.md` for format and examples
 - Every commit must be production-ready
 
 ## Testing Standards
-- 80% minimum test coverage, 100% for critical paths
-- Given-When-Then structure
-- Descriptive test names (e.g., `shouldSelectLatestVersionWhenAvailable`)
+80% minimum coverage, 100% for critical paths. Given-When-Then structure. Descriptive test names. See `docs/CODING_PRACTICES.md` for full testing standards.
 
 ## Detailed References
 See `docs/` directory for comprehensive standards:

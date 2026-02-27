@@ -11,22 +11,11 @@ You MUST follow these standards for ALL code changes.
 For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> COMMIT cycle. See `docs/AI_AGENT_WORKFLOW.md` for the full workflow.
 
 ## Code Quality Gates
-- Methods: language-specific limit (typically 15-20 lines; Go: 25 lines)
-- Classes: 300 lines max
-- Private methods: 0-2 per class
-- Parameters: 5 max per method (use parameter objects)
-- No duplicated code (DRY)
-
-## SOLID Principles
-- **SRP**: Each class has ONE reason to change
-- **OCP**: Open for extension, closed for modification (Strategy Pattern)
-- **LSP**: Subtypes substitutable for base types
-- **ISP**: Focused interfaces (< 5 methods)
-- **DIP**: Depend on abstractions, use constructor injection
+Apply rules from `docs/CODING_PRACTICES.md`: methods ≤20 lines, classes ≤300 lines, ≤2 private methods, ≤5 params, DRY. Follow SOLID principles — see `docs/SOLID_PRINCIPLES.md` for the full guide with examples.
 
 ## Commits
 - One logical change per commit
-- Conventional Commits: `<type>(<scope>): <description>`
+- Conventional Commits: `<type>(<scope>): <description>` — see `docs/AI_AGENT_WORKFLOW.md` for format
 - Every commit production-ready (tests pass, builds, no lint errors)
 
 ## Red Flags - STOP and Ask

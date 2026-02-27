@@ -7,32 +7,17 @@ For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> C
 
 ## Code Quality Gates
 
-- Methods: language-specific limit (typically 15-20 lines; Go: 25 lines)
-- Classes: 300 lines max
-- Private methods: 0-2 per class (SRP guideline)
-- Parameters: 5 max per method (use parameter objects)
-- No duplicated code (DRY)
-
-## SOLID Principles
-
-- **SRP**: Each class has ONE reason to change
-- **OCP**: Open for extension, closed for modification (use Strategy Pattern)
-- **LSP**: Subtypes must be substitutable for base types
-- **ISP**: Prefer focused interfaces over fat interfaces
-- **DIP**: Depend on abstractions, not concrete classes (use dependency injection)
+Apply rules from `docs/CODING_PRACTICES.md`: methods ≤20 lines, classes ≤300 lines, ≤2 private methods, ≤5 params, DRY. Follow SOLID principles — see `docs/SOLID_PRINCIPLES.md` for the full guide with examples.
 
 ## Commit Standards
 
 - One logical change per commit
-- Conventional Commits: `<type>(<scope>): <description>`
-- Types: feat, fix, refactor, test, docs, perf, chore
+- Conventional Commits: `<type>(<scope>): <description>` — see `docs/AI_AGENT_WORKFLOW.md` for format
 - Every commit must be production-ready (tests pass, builds, no lint errors)
 
 ## Testing
 
-- 80% minimum coverage, 100% for critical paths
-- Given-When-Then structure
-- Descriptive test names
+- 80% minimum coverage, 100% for critical paths — see `docs/CODING_PRACTICES.md` for full testing standards
 
 ## Red Flags - STOP and Ask
 
