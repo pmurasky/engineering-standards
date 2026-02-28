@@ -4,6 +4,13 @@ You MUST follow these engineering standards for ALL code changes. No exceptions.
 
 The full standards are defined in `AGENTS.md`. All principles apply equally to Claude Code.
 
+## Context Hygiene
+
+- Keep this file concise and broadly applicable across repositories.
+- Move specialized, task-specific instructions into on-demand skills.
+- Prefer scoped reads/searches and targeted verification over broad sweeps.
+- Use fresh sessions between unrelated tasks to reduce stale context noise.
+
 ## Detailed Standards References
 
 Load these on a need-to-know basis, not all at once.
