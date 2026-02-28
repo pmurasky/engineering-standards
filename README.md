@@ -95,7 +95,7 @@ Read these files for detailed guidance:
 - engineering-standards/docs/PRE_COMMIT_CHECKLIST.md
 ```
 
-Copy (or symlink) `.claude/rules/` from the submodule since Claude Code expects rules at `.claude/rules/` in the project root.
+Copy (or symlink) `.claude/` from the submodule (rules, agents, skills, hooks/settings) since Claude Code expects this directory at the project root.
 
 </details>
 
@@ -204,6 +204,7 @@ engineering-standards/
 │   ├── AI_AGENT_WORKFLOW.md           # Micro-commit workflow for AI agents
 │   ├── ARCHUNIT_STANDARDS.md          # Architecture testing with ArchUnit
 │   ├── CHECKSTYLE_STANDARDS.md        # Checkstyle style enforcement (Java)
+│   ├── CLAUDE_MEMORY_STRATEGY.md      # Claude memory hierarchy and token hygiene
 │   ├── CODING_PRACTICES.md            # Language-agnostic practices, SOLID & TDD
 │   ├── CODING_STANDARDS.md            # Standards index (table of contents)
 │   ├── CONVERSION_PLAN_TEMPLATE.md    # Conversion/porting plan template
@@ -249,16 +250,30 @@ engineering-standards/
 │   │   ├── review-solid.md            # /review-solid
 │   │   └── test-coverage.md           # /test-coverage
 │
-├── .claude/rules/                      # Claude Code modular rules
-│   ├── code-review.md
-│   ├── commit-message.md
-│   ├── java.md
-│   ├── kotlin.md
-│   ├── micro-commit-workflow.md
-│   ├── nextjs.md
-│   ├── refactoring.md
-│   ├── testing.md
-│   └── typescript.md
+├── .claude/                            # Claude Code config
+│   ├── agents/
+│   │   ├── standards-build.md         # Implementation-focused subagent
+│   │   ├── standards-review.md        # Review-focused subagent
+│   │   └── pre-commit-check.md        # Commit readiness subagent
+│   ├── hooks/
+│   │   └── block-destructive-rm.sh    # Conservative Bash safety hook
+│   ├── rules/
+│   │   ├── code-review.md
+│   │   ├── commit-message.md
+│   │   ├── java.md
+│   │   ├── kotlin.md
+│   │   ├── micro-commit-workflow.md
+│   │   ├── nextjs.md
+│   │   ├── refactoring.md
+│   │   ├── testing.md
+│   │   └── typescript.md
+│   ├── skills/
+│   │   ├── code-quality/SKILL.md
+│   │   ├── commit-review/SKILL.md
+│   │   ├── micro-commit/SKILL.md
+│   │   ├── pre-commit/SKILL.md
+│   │   └── test-coverage/SKILL.md
+│   └── settings.json                   # Claude Code hook configuration
 │
 ├── .clinerules/                        # Cline rules
 │   ├── engineering-standards.md
@@ -325,7 +340,14 @@ OpenCode gets the richest experience with specialized agents and custom commands
 - `python-standards` - Python-specific conventions
 
 ### Claude Code
-Uses `CLAUDE.md` for project-wide rules and `.claude/rules/` for modular, path-scoped rules that activate based on file globs.
+Uses a layered model:
+- `CLAUDE.md` for concise project-wide policy
+- `.claude/rules/` for modular, path-scoped constraints
+- `.claude/skills/` for on-demand workflows (slash-command compatible)
+- `.claude/agents/` for specialized subagent execution
+- `.claude/settings.json` + `.claude/hooks/` for conservative safety automation
+
+See `docs/CLAUDE_MEMORY_STRATEGY.md` for memory hierarchy and token hygiene guidance.
 
 ### Cursor
 Uses `.cursor/rules/` with `alwaysApply` and `globs` frontmatter for conditional rule activation. Also reads `AGENTS.md`.
@@ -377,8 +399,8 @@ To add project-specific standards on top of the shared ones:
 |---------|----------|-------------|--------|---------|
 | Project rules | AGENTS.md | CLAUDE.md | .cursor/rules/ | .github/copilot-instructions.md |
 | Path-scoped rules | - | .claude/rules/ | globs frontmatter | applyTo frontmatter |
-| Custom agents | .opencode/agents/ | - | - | - |
-| Custom commands | .opencode/commands/ | - | - | - |
-| Skills | .opencode/skills/ | - | - | - |
+| Custom agents | .opencode/agents/ | .claude/agents/ | - | - |
+| Custom commands | .opencode/commands/ | via .claude/skills/ | - | - |
+| Skills | .opencode/skills/ | .claude/skills/ | - | - |
 | Reads AGENTS.md | Native | - | - | Yes |
 | Reads CLAUDE.md | Fallback | Native | - | Yes |
