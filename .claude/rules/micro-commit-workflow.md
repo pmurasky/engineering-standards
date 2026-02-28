@@ -9,6 +9,8 @@ For ALL code changes, follow the STOP -> RED -> GREEN -> COMMIT -> REFACTOR -> C
 Key rules:
 - One logical change per commit (never bundle multiple changes)
 - Every commit MUST be production-ready (tests pass, builds, no lint errors)
-- Conventional Commits: `<type>(<scope>): <description>`
 
-For the full workflow, read `docs/AI_AGENT_WORKFLOW.md`.
+Commit format and full workflow reference:
+- `docs/AI_AGENT_WORKFLOW.md`
+
+Use this rule for quick enforcement only; keep details in the canonical workflow doc.
