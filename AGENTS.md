@@ -106,12 +106,10 @@ For conversion/porting plan template (gated phases, behavioral baseline, quality
 ## Before Making ANY Code Changes
 
 1. Pull latest changes: `git pull`
-2. Read and acknowledge: "I will follow the micro-commit workflow"
-3. Create a task list to break down the work into micro-commits
-4. Execute one task at a time, committing after each one
-5. Run unit tests before every commit
-6. Run unit tests + integration tests before pushing
-7. Follow the pre-commit checklist
+2. Break work into micro-commits and execute one task at a time, committing after each logical change
+3. Run unit tests before every commit
+4. Run unit tests + integration tests before pushing
+5. Follow the pre-commit checklist
 
 ## Selecting Work
 
@@ -119,13 +117,9 @@ When asked what to work on next, consult the active issue tracker. If the repo i
 
 ## Closing Issues
 
-**CRITICAL**: After completing work on an issue, ALWAYS close it in the active tracker. If using GitHub + `gh`:
+**CRITICAL**: After completing work on an issue, ALWAYS close it in the active tracker.
 
-```bash
-gh issue close <number> --comment "Completed in commit <hash>..."
-```
-
-Complete workflow: Implement → Test → Commit → Push → **Close Issue/Ticket**. Never forget the final step!
+Complete workflow: Implement → Test → Commit → Push → **Close Issue/Ticket**. See `docs/AI_AGENT_WORKFLOW.md` for tracker-specific commands.
 
 ## Red Flags (Stop and Ask User)
 
@@ -136,7 +130,3 @@ If you encounter these situations, STOP and ask:
 3. **Test failures with unclear expected behavior**: Tests are failing after your change and expected behavior cannot be inferred from tests/docs/acceptance criteria
 4. **Conflicting patterns**: Existing code doesn't follow SOLID
 5. **Missing tests**: Code being changed has < 80% unit test coverage
-
-## Agent Pledge
-
-"I will follow the engineering standards for every code change, no exceptions. Every commit will be production-ready."
