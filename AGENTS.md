@@ -83,24 +83,34 @@ Do NOT preemptively load all references. Use lazy loading based on actual need.
 
 ## Detailed Standards References
 
+### All projects
+
 For the micro-commit workflow and AI agent instructions: @docs/AI_AGENT_WORKFLOW.md
 For language-agnostic coding practices, SOLID examples, testing, and TDD: @docs/CODING_PRACTICES.md
 For the standards index (table of contents): @docs/CODING_STANDARDS.md
+For the pre-commit quality checklist: @docs/PRE_COMMIT_CHECKLIST.md
+For design patterns guidance: @docs/DESIGN_PATTERNS.md
+For Architecture Decision Records (ADR) guidance: @docs/ADR_STANDARDS.md
+For security standards (auth, secrets, OWASP, API security): @docs/SECURITY_STANDARDS.md
+For logging standards (structured logging, log levels, correlation IDs, PII): @docs/LOGGING_STANDARDS.md
+
+### TypeScript / Next.js projects
+
+For TypeScript/JavaScript conventions (when working with TypeScript or JavaScript): @docs/TYPESCRIPT_STANDARDS.md
+For Next.js App Router conventions: @docs/NEXTJS_STANDARDS.md
+For DevOps standards (CI/CD, deployment, release workflows): @docs/DEVOPS_STANDARDS.md
+
+### Other languages (skip for TypeScript/Next.js)
+
 For Go-specific conventions (when working with Go): @docs/GO_STANDARDS.md
 For Java-specific conventions (when working with Java): @docs/JAVA_STANDARDS.md
 For Kotlin-specific conventions (when working with Kotlin): @docs/KOTLIN_STANDARDS.md
 For Python-specific conventions (when working with Python): @docs/PYTHON_STANDARDS.md
-For TypeScript/JavaScript conventions (when working with TypeScript or JavaScript): @docs/TYPESCRIPT_STANDARDS.md
-For the pre-commit quality checklist: @docs/PRE_COMMIT_CHECKLIST.md
-For design patterns guidance: @docs/DESIGN_PATTERNS.md
 For SOLID principles with multi-language examples: @docs/SOLID_PRINCIPLES.md
 For static analysis standards (PMD, detekt, Checkstyle, CPD): @docs/STATIC_ANALYSIS_STANDARDS.md
 For Checkstyle style enforcement (Java only): @docs/CHECKSTYLE_STANDARDS.md
 For architecture testing with ArchUnit (Java/Kotlin): @docs/ARCHUNIT_STANDARDS.md
 For SpotBugs bytecode bug detection (Java only): @docs/SPOTBUGS_STANDARDS.md
-For Architecture Decision Records (ADR) guidance: @docs/ADR_STANDARDS.md
-For security standards (auth, secrets, OWASP, API security): @docs/SECURITY_STANDARDS.md
-For logging standards (structured logging, log levels, correlation IDs, PII): @docs/LOGGING_STANDARDS.md
 For conversion/porting plan template (gated phases, behavioral baseline, quality gates): @docs/CONVERSION_PLAN_TEMPLATE.md
 
 ## Before Making ANY Code Changes
