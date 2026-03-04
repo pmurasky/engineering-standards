@@ -26,3 +26,19 @@ Load these on a need-to-know basis, not all at once.
 - `docs/SECURITY_STANDARDS.md` - Security standards (auth, secrets, OWASP, API security)
 - `docs/LOGGING_STANDARDS.md` - Logging standards (structured logging, log levels, correlation IDs, PII)
 - `docs/CONVERSION_PLAN_TEMPLATE.md` - Conversion/porting plan template (gated phases, behavioral baseline, quality gates)
+
+## Not Applicable to TypeScript/Next.js Projects
+
+Do NOT load these files when working on a TypeScript or Next.js codebase:
+
+- `docs/GO_STANDARDS.md`
+- `docs/JAVA_STANDARDS.md`
+- `docs/KOTLIN_STANDARDS.md`
+- `docs/PYTHON_STANDARDS.md`
+- `docs/ARCHUNIT_STANDARDS.md`
+- `docs/CHECKSTYLE_STANDARDS.md`
+- `docs/SPOTBUGS_STANDARDS.md`
+- `docs/STATIC_ANALYSIS_STANDARDS.md`
+- `docs/SOLID_PRINCIPLES.md` (SOLID summary is in `CODING_PRACTICES.md`)
+- `docs/CONVERSION_PLAN_TEMPLATE.md` (only for language-porting tasks)
+- `config/` (Java/Kotlin static analysis tool configs — not applicable)
