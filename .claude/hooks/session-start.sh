@@ -24,13 +24,7 @@ else
 fi
 
 escape_json() {
-  python3 - <<'PY'
-import json
-import sys
-
-data = sys.stdin.read()
-print(json.dumps(data), end="")
-PY
+  python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()), end="")'
 }
 
 escaped_context="$(printf '%s' "$context" | escape_json)"

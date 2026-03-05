@@ -317,7 +317,19 @@ engineering-standards/
 ├── .gitignore                          # Git ignore rules
 ├── opencode.json                       # OpenCode config
 ├── scripts/
-│   └── render-diagrams.sh              # Optional DOT -> SVG rendering helper
+│   ├── render-diagrams.sh              # Optional DOT -> SVG rendering helper
+│   └── report-token-usage.py           # Skill token-budget report script
+│
+├── tests/
+│   ├── enforcement_integration/
+│   │   ├── README.md                   # How to run enforcement integration tests
+│   │   ├── helpers.py                  # Test helpers for hook/skill validation
+│   │   ├── test_bootstrap_hook.py      # Bootstrap hook integration tests
+│   │   ├── test_enforcement_gates.py   # Pre-commit/TDD/refactor gate tests
+│   │   └── test_token_usage_report.py  # Token usage script integration tests
+│   └── fixtures/
+│       ├── claude-project-with-bootstrap/
+│       └── invalid-skills/
 └── README.md                           # This file
 ```
 
