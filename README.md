@@ -283,6 +283,7 @@ engineering-standards/
 │   │   ├── pre-commit/SKILL.md
 │   │   ├── refactoring-gate/SKILL.md
 │   │   ├── spec-compliance/SKILL.md
+│   │   ├── static-analysis-gate/SKILL.md
 │   │   ├── tdd-enforcement/SKILL.md
 │   │   └── test-coverage/SKILL.md
 │   └── settings.json                   # Claude Code hook configuration
