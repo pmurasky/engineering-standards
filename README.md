@@ -248,6 +248,7 @@ engineering-standards/
 │   │   ├── pre-commit.md              # /pre-commit
 │   │   ├── refactor-check.md          # /refactor-check
 │   │   ├── review-solid.md            # /review-solid
+│   │   ├── tdd-enforcement.md         # /tdd-enforcement
 │   │   └── test-coverage.md           # /test-coverage
 │
 ├── .claude/                            # Claude Code config
@@ -272,6 +273,7 @@ engineering-standards/
 │   │   ├── commit-review/SKILL.md
 │   │   ├── micro-commit/SKILL.md
 │   │   ├── pre-commit/SKILL.md
+│   │   ├── tdd-enforcement/SKILL.md
 │   │   └── test-coverage/SKILL.md
 │   └── settings.json                   # Claude Code hook configuration
 │
@@ -326,6 +328,7 @@ OpenCode gets the richest experience with specialized agents and custom commands
 - `/pre-commit` - Run pre-commit quality checklist
 - `/refactor-check` - Verify test coverage before refactoring
 - `/review-solid` - Check for SOLID violations
+- `/tdd-enforcement` - Enforce strict test-first RED -> GREEN -> REFACTOR hard gates
 - `/test-coverage` - Analyze test coverage and identify gaps
 
 **Skills** (load on-demand with `skill` tool):
