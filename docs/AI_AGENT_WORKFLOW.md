@@ -26,6 +26,12 @@ During TDD, write exactly one failing test, make that test pass with the minimal
 - Repeat RED → GREEN → REFACTOR as small cycles.
 - Commit only when the suite is green and the current logical change is production-ready.
 
+### TDD Flowchart (GraphViz)
+
+Source: `docs/diagrams/tdd-workflow.dot`
+
+![TDD workflow flowchart](./diagrams/tdd-workflow.svg)
+
 ### Rationalization Defense Table (TDD Excuses -> Required Action)
 
 Use this table as a hard gate. If any excuse appears, stop and apply the required action immediately.

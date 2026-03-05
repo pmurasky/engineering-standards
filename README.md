@@ -220,7 +220,12 @@ engineering-standards/
 │   ├── SOLID_PRINCIPLES.md            # SOLID principles deep-dive (multi-language)
 │   ├── SPOTBUGS_STANDARDS.md          # SpotBugs bytecode bug detection (Java)
 │   ├── STATIC_ANALYSIS_STANDARDS.md   # Static analysis (PMD, detekt, CPD)
-│   └── TYPESCRIPT_STANDARDS.md        # TypeScript/JavaScript conventions
+│   ├── TYPESCRIPT_STANDARDS.md        # TypeScript/JavaScript conventions
+│   └── diagrams/                      # GraphViz workflow diagrams
+│       ├── pre-commit-workflow.dot
+│       ├── pre-commit-workflow.svg
+│       ├── tdd-workflow.dot
+│       └── tdd-workflow.svg
 │
 ├── config/                             # Static analysis configuration files
 │   ├── archunit/
@@ -310,6 +315,8 @@ engineering-standards/
 ├── CONTRIBUTING.md                     # Contribution guidelines
 ├── .gitignore                          # Git ignore rules
 ├── opencode.json                       # OpenCode config
+├── scripts/
+│   └── render-diagrams.sh              # Optional DOT -> SVG rendering helper
 └── README.md                           # This file
 ```
 

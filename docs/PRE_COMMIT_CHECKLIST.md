@@ -4,6 +4,12 @@
 
 **CRITICAL**: Follow the TDD Micro-Commit workflow (see below).
 
+### Pre-Commit Flowchart (GraphViz)
+
+Source: `docs/diagrams/pre-commit-workflow.dot`
+
+![Pre-commit workflow flowchart](./diagrams/pre-commit-workflow.svg)
+
 ---
 
 ## TDD Micro-Commit Checklist (MANDATORY)
