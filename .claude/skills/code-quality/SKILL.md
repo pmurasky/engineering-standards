@@ -6,6 +6,12 @@ argument-hint: "[path-or-scope]"
 
 Perform a focused code quality review.
 
+<HARD-GATE>
+This is stage 2 of review.
+Run `spec-compliance` first and proceed only when stage 1 is PASS.
+If stage 1 is FAIL or not run, output BLOCKED.
+</HARD-GATE>
+
 Review targets:
 - SOLID compliance and SRP boundaries
 - Method/class size limits and parameter count limits

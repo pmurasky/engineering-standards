@@ -1,5 +1,5 @@
 ---
-description: Quick code quality scan against engineering standards
+description: Stage 2 code quality scan against engineering standards
 agent: standards-review
 subtask: true
 ---
@@ -7,6 +7,12 @@ subtask: true
 Perform a quick code quality scan on the specified target.
 
 Target: $ARGUMENTS
+
+<HARD-GATE>
+This command is stage 2 only.
+Run spec-compliance review first and proceed only if stage 1 is PASS.
+If stage 1 is FAIL or not run, return BLOCKED.
+</HARD-GATE>
 
 Run a fast scan checking these quality gates:
 

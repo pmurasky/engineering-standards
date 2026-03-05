@@ -237,8 +237,9 @@ engineering-standards/
 │
 ├── .opencode/                          # OpenCode agents and commands
 │   ├── agents/
+│   │   ├── spec-compliance-review.md   # Subagent: stage-1 requirement compliance
 │   │   ├── standards-build.md         # Primary: writes code following standards
-│   │   ├── standards-review.md        # Subagent: read-only code review
+│   │   ├── standards-review.md        # Subagent: stage-2 code-quality review
 │   │   └── pre-commit-check.md        # Subagent: pre-commit validation
 │   ├── commands/
 │   │   ├── code-quality.md            # /code-quality
@@ -249,12 +250,14 @@ engineering-standards/
 │   │   ├── refactor-check.md          # /refactor-check
 │   │   ├── review-solid.md            # /review-solid
 │   │   ├── tdd-enforcement.md         # /tdd-enforcement
-│   │   └── test-coverage.md           # /test-coverage
+│   │   ├── test-coverage.md           # /test-coverage
+│   │   └── two-stage-review.md        # /two-stage-review
 │
 ├── .claude/                            # Claude Code config
 │   ├── agents/
+│   │   ├── spec-compliance-review.md   # Stage-1 requirement compliance
 │   │   ├── standards-build.md         # Implementation-focused subagent
-│   │   ├── standards-review.md        # Review-focused subagent
+│   │   ├── standards-review.md        # Stage-2 code-quality subagent
 │   │   └── pre-commit-check.md        # Commit readiness subagent
 │   ├── hooks/
 │   │   └── block-destructive-rm.sh    # Conservative Bash safety hook
@@ -273,6 +276,7 @@ engineering-standards/
 │   │   ├── commit-review/SKILL.md
 │   │   ├── micro-commit/SKILL.md
 │   │   ├── pre-commit/SKILL.md
+│   │   ├── spec-compliance/SKILL.md
 │   │   ├── tdd-enforcement/SKILL.md
 │   │   └── test-coverage/SKILL.md
 │   └── settings.json                   # Claude Code hook configuration
@@ -317,7 +321,8 @@ OpenCode gets the richest experience with specialized agents and custom commands
 
 **Agents** (switch with Tab or @mention):
 - `standards-build` - Primary coding agent enforcing all standards
-- `standards-review` - Read-only code review against standards
+- `spec-compliance-review` - Stage 1 review for requirement and acceptance-criteria compliance
+- `standards-review` - Stage 2 read-only code quality review against standards
 - `pre-commit-check` - Validates staged changes
 
 **Commands**:
@@ -330,6 +335,7 @@ OpenCode gets the richest experience with specialized agents and custom commands
 - `/review-solid` - Check for SOLID violations
 - `/tdd-enforcement` - Enforce strict test-first RED -> GREEN -> REFACTOR hard gates
 - `/test-coverage` - Analyze test coverage and identify gaps
+- `/two-stage-review` - Run stage 1 spec compliance, then stage 2 code quality
 
 **Skills** (load on-demand with `skill` tool):
 - `coding-practices` - Language-agnostic coding practices and TDD
