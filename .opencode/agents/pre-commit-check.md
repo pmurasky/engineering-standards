@@ -25,7 +25,18 @@ When invoked, you MUST:
 1. Check what files are staged for commit using `git diff --cached`
 2. Analyze each changed file against the checklist
 3. Report a pass/fail status for each checklist item
-4. Block the commit recommendation if any critical items fail
+4. Return NOT READY if any required quality gate fails
+
+<HARD-GATE>
+Do NOT return READY when any required quality gate fails.
+
+Required quality gates:
+- Unit tests pass (when a project test command exists)
+- Build succeeds (when a project build command exists)
+- Lint passes (when a project lint command exists)
+
+If a command is unavailable, report NOT CONFIGURED explicitly.
+</HARD-GATE>
 
 ## Pre-Commit Checklist
 
@@ -61,7 +72,7 @@ Run these checks against staged changes:
 ```
 ## Pre-Commit Check Results
 
-### Status: PASS / FAIL
+### Status: READY / NOT READY
 
 ### Results
 | Check                    | Status | Details          |
