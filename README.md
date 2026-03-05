@@ -276,6 +276,7 @@ engineering-standards/
 │   │   ├── commit-review/SKILL.md
 │   │   ├── micro-commit/SKILL.md
 │   │   ├── pre-commit/SKILL.md
+│   │   ├── refactoring-gate/SKILL.md
 │   │   ├── spec-compliance/SKILL.md
 │   │   ├── tdd-enforcement/SKILL.md
 │   │   └── test-coverage/SKILL.md
