@@ -48,6 +48,8 @@ Rationalization defense (reject these patterns):
 - "The test failed due to setup, but that is close enough." -> Rejected. Failure must verify intended behavior gap.
 - "I fixed unrelated code while I was here." -> Rejected. Keep scope to current RED->GREEN cycle.
 
+Use `docs/AI_AGENT_WORKFLOW.md` section "Rationalization Defense Table (TDD Excuses -> Required Action)" as the canonical countermeasure matrix.
+
 Output format:
 1. Status: READY FOR GREEN, READY FOR REFACTOR, READY FOR NEXT RED, or BLOCKED
 2. Evidence:

@@ -50,6 +50,8 @@ Repeat this micro-cycle:
 
 If any appear, stop and return BLOCKED with corrective next steps.
 
+Use `docs/AI_AGENT_WORKFLOW.md` section "Rationalization Defense Table (TDD Excuses -> Required Action)" as the canonical countermeasure matrix.
+
 Reference:
 - `docs/AI_AGENT_WORKFLOW.md`
 - `docs/PRE_COMMIT_CHECKLIST.md`

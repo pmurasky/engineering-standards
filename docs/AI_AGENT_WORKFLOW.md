@@ -26,6 +26,35 @@ During TDD, write exactly one failing test, make that test pass with the minimal
 - Repeat RED → GREEN → REFACTOR as small cycles.
 - Commit only when the suite is green and the current logical change is production-ready.
 
+### Rationalization Defense Table (TDD Excuses -> Required Action)
+
+Use this table as a hard gate. If any excuse appears, stop and apply the required action immediately.
+
+| Excuse | Why invalid | Required action |
+|---|---|---|
+| "I know the test will fail, so I skipped running it." | Assumption is not evidence. You must prove RED with observed output. | Run the targeted test now and capture the failure line before writing/changing production code. |
+| "I implemented first to move faster, then wrote tests." | This reverses TDD and hides requirement misunderstandings. | Revert or isolate implementation-first changes, write one failing test first, then re-implement minimally. |
+| "I added two failing tests because they are related." | Multiple RED tests hide which behavior drove the implementation. | Keep one failing test only. Split the second behavior into the next RED cycle. |
+| "The test failed because of setup/compile issues, close enough." | Unrelated failure does not prove missing behavior. | Fix setup/compile issues until the failure is about the intended assertion, then continue. |
+| "I fixed a few unrelated things while I was here." | Scope drift breaks micro-commit traceability and review clarity. | Remove unrelated edits from this cycle and place them in separate follow-up commits. |
+| "I will clean up tests after this commit." | Non-green commits violate production-ready rules. | Finish GREEN now: make tests pass before commit. Never defer failing tests. |
+
+### RED-Phase Red Flags (Stop Immediately)
+
+Stop and correct course when any answer is "yes":
+
+- Did I change production code before capturing a real RED failure?
+- Did I add more than one new failing test in this cycle?
+- Did the failure come from setup, compile, imports, or environment instead of the target behavior?
+- Did I implement behavior that the current failing test does not require?
+- Did I include unrelated fixes in the same RED -> GREEN cycle?
+
+If any red flag is present:
+1. Stop coding.
+2. Remove out-of-scope changes.
+3. Re-establish one failing test with valid RED evidence.
+4. Resume with minimal GREEN implementation.
+
 ### Production-Ready Commits
 
 **Every commit MUST be production-ready. No exceptions.**
