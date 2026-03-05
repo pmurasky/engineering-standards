@@ -345,7 +345,7 @@ Uses a layered model:
 - `.claude/rules/` for modular, path-scoped constraints
 - `.claude/skills/` for on-demand workflows (slash-command compatible)
 - `.claude/agents/` for specialized subagent execution
-- `.claude/settings.json` + `.claude/hooks/` for conservative safety automation
+- `.claude/settings.json` + `.claude/hooks/` for conservative safety automation and session bootstrap context loading
 
 See `docs/CLAUDE_MEMORY_STRATEGY.md` for memory hierarchy and token hygiene guidance.
 
