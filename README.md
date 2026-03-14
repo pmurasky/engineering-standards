@@ -430,7 +430,42 @@ To add project-specific standards on top of the shared ones:
 | Project rules | AGENTS.md | CLAUDE.md | .cursor/rules/ | .github/copilot-instructions.md |
 | Path-scoped rules | - | .claude/rules/ | globs frontmatter | applyTo frontmatter |
 | Custom agents | .opencode/agents/ | .claude/agents/ | - | - |
-| Custom commands | .opencode/commands/ | via .claude/skills/ | - | - |
-| Skills | .opencode/skills/ | .claude/skills/ | - | - |
-| Reads AGENTS.md | Native | - | - | Yes |
-| Reads CLAUDE.md | Fallback | Native | - | Yes |
+| Custom commands | .opencode/commands/ | .claude/skills/ | - | - |
+| Skills | - | .claude/skills/ | - | - |
+| Reads AGENTS.md | Native | - | Fallback | Fallback |
+| Reads CLAUDE.md | Fallback | Native | - | - |
+
+## Workflow Parity Matrix
+
+This matrix shows how canonical workflow contracts (Skills 2.0) map to tool adapters and enforcement tests. Each row represents a workflow with its canonical contract in `docs/workflows/` and the corresponding adapters for each tool.
+
+| Workflow | Canonical Contract | Claude Skill | OpenCode Command | Enforcement Test | Status |
+|----------|-------------------|--------------|------------------|------------------|---------|
+| **Pre-commit** | [`docs/workflows/pre-commit.md`](docs/workflows/pre-commit.md) | [`.claude/skills/pre-commit/SKILL.md`](.claude/skills/pre-commit/SKILL.md) | [`.opencode/commands/pre-commit.md`](.opencode/commands/pre-commit.md) | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | ✅ **Complete** |
+| **Micro-commit** | *Planned* | [`.claude/skills/micro-commit/SKILL.md`](.claude/skills/micro-commit/SKILL.md) | [`.opencode/commands/micro-commit.md`](.opencode/commands/micro-commit.md) | *Planned* | 🔄 **Adapters exist** |
+| **Code Quality** | *Planned* | [`.claude/skills/code-quality/SKILL.md`](.claude/skills/code-quality/SKILL.md) | [`.opencode/commands/code-quality.md`](.opencode/commands/code-quality.md) | *Planned* | 🔄 **Adapters exist** |
+| **TDD Enforcement** | *Planned* | [`.claude/skills/tdd-enforcement/SKILL.md`](.claude/skills/tdd-enforcement/SKILL.md) | [`.opencode/commands/tdd-enforcement.md`](.opencode/commands/tdd-enforcement.md) | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | 🔄 **Adapters exist** |
+| **Test Coverage** | *Planned* | [`.claude/skills/test-coverage/SKILL.md`](.claude/skills/test-coverage/SKILL.md) | [`.opencode/commands/test-coverage.md`](.opencode/commands/test-coverage.md) | *Planned* | 🔄 **Adapters exist** |
+| **Commit Review** | *Planned* | [`.claude/skills/commit-review/SKILL.md`](.claude/skills/commit-review/SKILL.md) | [`.opencode/commands/commit-review.md`](.opencode/commands/commit-review.md) | *Planned* | 🔄 **Adapters exist** |
+| **Static Analysis Gate** | *Planned* | [`.claude/skills/static-analysis-gate/SKILL.md`](.claude/skills/static-analysis-gate/SKILL.md) | *No command* | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | 🔄 **Claude only** |
+| **Refactoring Gate** | *Planned* | [`.claude/skills/refactoring-gate/SKILL.md`](.claude/skills/refactoring-gate/SKILL.md) | [`.opencode/commands/refactor-check.md`](.opencode/commands/refactor-check.md) | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | 🔄 **Adapters exist** |
+| **Spec Compliance** | *Planned* | [`.claude/skills/spec-compliance/SKILL.md`](.claude/skills/spec-compliance/SKILL.md) | *No command* | *Planned* | 🔄 **Claude only** |
+
+### Status Legend
+- ✅ **Complete**: Canonical contract exists and adapters are aligned
+- 🔄 **Adapters exist**: Tool adapters implemented, canonical contract needed
+- 📝 **Planned**: Workflow identified for future implementation
+- ⚠️ **Partial**: Gaps in adapter coverage or contract alignment
+
+### OpenCode-Specific Commands
+These OpenCode commands don't map directly to workflows but provide composite functionality:
+- `/review-solid` - SOLID principles check (combines multiple workflows)
+- `/new-feature` - Guided TDD workflow (combines TDD enforcement + micro-commit)
+- `/two-stage-review` - Spec compliance + code quality (combines multiple workflows)
+
+### Cursor & Copilot Integration
+Cursor and Copilot read the canonical workflow contracts via:
+- Cursor: `.cursor/rules/` references `docs/workflows/` contracts
+- Copilot: `.github/instructions/` references `docs/workflows/` contracts
+
+Both tools inherit workflow definitions from the canonical contracts without needing separate adapters.
