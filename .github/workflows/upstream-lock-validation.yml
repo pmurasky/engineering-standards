@@ -1,0 +1,46 @@
+name: Upstream Lock Validation
+
+on:
+  pull_request:
+    paths:
+      - "upstream/superpowers.lock.json"
+      - "schemas/upstream-superpowers-lock.schema.json"
+      - "scripts/validate_upstream_lock.py"
+      - "scripts/sync_superpowers_lock.py"
+      - "upstream/superpowers/**"
+      - ".github/workflows/upstream-lock-validation.yml"
+  push:
+    paths:
+      - "upstream/superpowers.lock.json"
+      - "schemas/upstream-superpowers-lock.schema.json"
+      - "scripts/validate_upstream_lock.py"
+      - "scripts/sync_superpowers_lock.py"
+      - "upstream/superpowers/**"
+      - ".github/workflows/upstream-lock-validation.yml"
+  workflow_dispatch:
+
+# Deny all permissions at workflow level — grant per job
+permissions: {}
+
+jobs:
+  validate-upstream-lock:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Required for checkout
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          persist-credentials: false  # Don't persist token to disk
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependency
+        run: python3 -m pip install --disable-pip-version-check jsonschema
+
+      - name: Validate upstream lockfile
+        run: python3 scripts/validate_upstream_lock.py

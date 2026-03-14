@@ -1,0 +1,34 @@
+# CODEOWNERS - Defines ownership and auto-requests reviews
+# Required Reviewer Rules in GitHub Rulesets provide hard gates on top of this
+
+# CI/CD workflows — security-critical, require security team approval
+.github/workflows/                    @pmurasky
+.github/dependabot.yml               @pmurasky
+
+# Lockfiles — supply chain critical
+upstream/superpowers.lock.json       @pmurasky
+schemas/upstream-superpowers-lock.schema.json  @pmurasky
+
+# Sync and validation scripts — governance critical
+scripts/sync_superpowers_lock.py     @pmurasky
+scripts/validate_upstream_lock.py    @pmurasky
+
+# Enforcement integration tests — quality gates
+tests/enforcement_integration/        @pmurasky
+
+# Security configuration
+.github/CODEOWNERS                   @pmurasky
+SECURITY.md                          @pmurasky
+
+# Core documentation standards
+docs/CODING_PRACTICES.md             @pmurasky
+docs/AI_AGENT_WORKFLOW.md            @pmurasky
+docs/PRE_COMMIT_CHECKLIST.md         @pmurasky
+
+# Canonical workflow contracts
+docs/workflows/                      @pmurasky
+
+# Tool configuration files
+AGENTS.md                            @pmurasky
+CLAUDE.md                            @pmurasky
+opencode.json                        @pmurasky
