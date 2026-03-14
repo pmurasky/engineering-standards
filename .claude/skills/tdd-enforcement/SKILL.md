@@ -11,7 +11,8 @@ Scope: $ARGUMENTS
 
 <HARD-GATE>
 Follow TDD sequencing defined in canonical contract: RED → VERIFY RED → GREEN → VERIFY GREEN → REFACTOR → VERIFY REFACTOR.
-Never allow production code before failing test evidence.
+Never allow production code changes before a failing test is written and observed.
+If no failing test evidence is shown, output BLOCKED.
 If TDD violations detected → output BLOCKED and reference canonical contract.
 Do not recommend commit readiness from this skill.
 </HARD-GATE>

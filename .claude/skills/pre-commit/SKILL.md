@@ -9,6 +9,10 @@ disable-model-invocation: true
 
 <HARD-GATE>
 Execute all quality gates defined in the canonical contract.
+Unit tests MUST pass (when project test command exists).
+Build MUST succeed (when project build command exists).
+Lint MUST pass (when project lint command exists).
+Static analysis MUST pass (when PMD/detekt/Checkstyle configured).
 If any required gate fails → output NOT READY with blockers listed first.
 If commands unavailable → report NOT CONFIGURED explicitly.
 Never create commits during validation.
