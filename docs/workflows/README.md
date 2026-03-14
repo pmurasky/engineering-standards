@@ -41,6 +41,8 @@ Each canonical contract maps to multiple tool adapters:
 | Workflow | Canonical Contract | Claude Adapter | OpenCode Adapter | Cursor Rule | Copilot Instruction |
 |----------|-------------------|----------------|------------------|-------------|-------------------|
 | pre-commit | `docs/workflows/pre-commit.md` | `.claude/skills/pre-commit/SKILL.md` | `.opencode/commands/pre-commit.md` | `.cursor/rules/engineering-standards.md` | `.github/instructions/micro-commit.instructions.md` |
+| micro-commit | `docs/workflows/micro-commit.md` | `.claude/skills/micro-commit/SKILL.md` | `.opencode/commands/micro-commit.md` | `.cursor/rules/engineering-standards.md` | `.github/instructions/micro-commit.instructions.md` |
+| tdd-enforcement | `docs/workflows/tdd-enforcement.md` | `.claude/skills/tdd-enforcement/SKILL.md` | `.opencode/commands/tdd-enforcement.md` | `.cursor/rules/engineering-standards.md` | `.github/instructions/micro-commit.instructions.md` |
 
 ## Design Principles
 
