@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-03-14T01:10:04.598721",
+  "version": "Skills 2.0 token governance",
+  "categories": {
+    "always-on": {
+      "files": {
+        ".claude/rules/code-review.md": 158,
+        ".claude/rules/micro-commit-workflow.md": 129,
+        ".claude/rules/refactoring.md": 471,
+        ".claude/rules/testing.md": 153,
+        "CLAUDE.md": 542
+      },
+      "total": 1453,
+      "threshold": 2000
+    },
+    "claude-skills": {
+      "files": {
+        ".claude/skills/code-quality/SKILL.md": 183,
+        ".claude/skills/commit-review/SKILL.md": 158,
+        ".claude/skills/micro-commit/SKILL.md": 164,
+        ".claude/skills/pre-commit/SKILL.md": 386,
+        ".claude/skills/refactoring-gate/SKILL.md": 521,
+        ".claude/skills/spec-compliance/SKILL.md": 248,
+        ".claude/skills/static-analysis-gate/SKILL.md": 653,
+        ".claude/skills/tdd-enforcement/SKILL.md": 682,
+        ".claude/skills/test-coverage/SKILL.md": 160
+      },
+      "total": 3155,
+      "threshold": 1000
+    },
+    "opencode-commands": {
+      "files": {
+        ".opencode/commands/code-quality.md": 467,
+        ".opencode/commands/commit-review.md": 437,
+        ".opencode/commands/micro-commit.md": 240,
+        ".opencode/commands/new-feature.md": 429,
+        ".opencode/commands/pre-commit.md": 348,
+        ".opencode/commands/refactor-check.md": 256,
+        ".opencode/commands/review-solid.md": 286,
+        ".opencode/commands/tdd-enforcement.md": 455,
+        ".opencode/commands/test-coverage.md": 411,
+        ".opencode/commands/two-stage-review.md": 359
+      },
+      "total": 3688,
+      "threshold": 800
+    },
+    "canonical-contracts": {
+      "files": {
+        "docs/workflows/README.md": 573,
+        "docs/workflows/pre-commit.md": 881
+      },
+      "total": 1454,
+      "threshold": 1200
+    }
+  }
+}

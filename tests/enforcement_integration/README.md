@@ -52,9 +52,32 @@ python3 -m unittest tests.enforcement_integration.test_enforcement_gates.Contrac
 python3 -m unittest tests.enforcement_integration.test_enforcement_gates.ContractParityIntegrationTests.test_claude_pre_commit_references_canonical_contract
 ```
 
-### Run token usage report
+### Run token usage reports
+
+#### Legacy Claude skills report (backward compatibility)
 ```bash
 python3 scripts/report-token-usage.py --max-tokens 1000 --fail-on-exceed
+```
+
+#### Skills 2.0 multi-category report
+```bash
+# Human-readable format with default thresholds
+python3 scripts/report-token-usage.py --always-on-threshold 2000 --skills-threshold 1000 --commands-threshold 800 --contracts-threshold 1200
+
+# JSON output for machine processing  
+python3 scripts/report-token-usage.py --json-output
+
+# CI-ready with threshold enforcement
+python3 scripts/report-token-usage.py --always-on-threshold 2000 --skills-threshold 1000 --commands-threshold 800 --contracts-threshold 1200 --fail-on-exceed
+```
+
+#### Baseline capture and comparison
+```bash
+# Capture current state as baseline
+python3 scripts/report-token-usage.py --capture-baseline scripts/baseline.json
+
+# Compare current state against baseline
+python3 scripts/report-token-usage.py --compare-baseline scripts/baseline.json --fail-on-exceed
 ```
 
 ## CI Integration
@@ -86,6 +109,23 @@ The contract parity tests validate:
 3. **Status Vocabulary** - Adapters use canonical status terms (`READY`, `NOT READY`, `NOT CONFIGURED`)
 4. **Cross-Surface Parity** - Claude skills and OpenCode commands implement same workflow logic
 5. **Drift Detection** - Changes that break contract compliance are caught by tests
+
+## Skills 2.0 Token Governance
+
+The multi-category token reporting validates:
+
+1. **Always-on Budget** - CLAUDE.md and key rules stay within always-on context limits
+2. **Adapter Efficiency** - Skills and commands remain concise with canonical contract references
+3. **Category Thresholds** - Each category (always-on, skills, commands, contracts) has appropriate limits
+4. **Token Efficiency** - Canonical contracts reduce duplication vs duplicated adapter content
+5. **Baseline Tracking** - Token usage changes are tracked and compared over time
+
+**Current baseline (Skills 2.0 implementation):**
+- **Total**: 9,750 tokens across all surfaces
+- **Always-on**: 1,453/2,000 tokens (72.7%) - CLAUDE.md + key rules
+- **Claude skills**: 3,155 tokens (avg 351 per skill) - On-demand adapters
+- **OpenCode commands**: 3,688 tokens (avg 369 per command) - Cross-surface parity
+- **Canonical contracts**: 1,454 tokens (avg 727 per contract) - Single source of truth
 
 ## Adding New Contract Validation
 
