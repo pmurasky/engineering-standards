@@ -7,35 +7,33 @@ disable-model-invocation: true
 
 Run a pre-commit readiness pass for the current changes.
 
+**Canonical Contract**: This skill implements the workflow defined in `docs/workflows/pre-commit.md`.
+
 <HARD-GATE>
-Do NOT recommend commit readiness when any required quality gate fails.
+Follow the hard gates defined in the canonical contract:
+- Unit tests MUST pass (when project test command exists)
+- Build MUST succeed (when project build command exists)
+- Lint MUST pass (when project lint command exists)
+- Static analysis MUST pass (when PMD/detekt/Checkstyle configured)
 
-Required quality gates:
-1. Unit tests pass (when a project test command exists)
-2. Build succeeds (when a project build command exists)
-3. Lint passes (when a project lint command exists)
-4. Static analysis passes (when PMD/detekt/Checkstyle is configured)
-
-If a required gate fails, output NOT READY and list blockers first.
+If any required gate fails, output NOT READY and list blockers first.
 If a command is not available/configured, report NOT CONFIGURED explicitly.
-Do not create commits in this skill.
+Never create commits in this skill.
 </HARD-GATE>
 
-Checklist:
-1. Review diffs and staged files.
-2. Validate quality gates against `docs/PRE_COMMIT_CHECKLIST.md`.
-3. Run and verify test/build/lint commands where available.
-4. Run static-analysis gate checks using `.claude/skills/static-analysis-gate/SKILL.md` when analyzers are configured.
-5. Output using this order:
-   - Status: READY or NOT READY
-   - Blocking items (first, if any)
-   - Evidence (commands run and summarized outcomes)
-   - Next actions
-6. If any required gate fails, output NOT READY.
+**Implementation**:
+1. Review staging area: `git diff --cached --stat`
+2. Execute quality gates as defined in canonical contract
+3. Run static-analysis checks using `.claude/skills/static-analysis-gate/SKILL.md` when configured
+4. Output using required status vocabulary and ordering from canonical contract
 
-Required references:
-- `docs/PRE_COMMIT_CHECKLIST.md`
-- `docs/AI_AGENT_WORKFLOW.md`
-- `docs/STATIC_ANALYSIS_STANDARDS.md`
+**Required Output Format**:
+1. Status: `READY` or `NOT READY`
+2. Blocking items (if any, most critical first)
+3. Evidence (commands run and summarized outcomes)
+4. Next actions (specific recommendations)
 
-Report readiness only. Never create commits in this skill.
+**Required References**:
+- `docs/workflows/pre-commit.md` (canonical contract)
+- `docs/PRE_COMMIT_CHECKLIST.md` (detailed checklist)
+- `docs/AI_AGENT_WORKFLOW.md` (micro-commit workflow)
