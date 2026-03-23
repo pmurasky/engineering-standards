@@ -76,6 +76,10 @@ Examples:
 
 When adding a new rule or capability, add it to all supported tools where possible. Check the compatibility matrix in `README.md` to understand what each tool supports.
 
+## Agent Skills
+
+For adding or updating Agent Skills (agentskills.io compliant), see the dedicated guide: [docs/CONTRIBUTING-SKILLS.md](docs/CONTRIBUTING-SKILLS.md). It covers skill structure, frontmatter requirements, the references/ folder pattern, and testing.
+
 ## What Makes a Good Standards Document
 
 - **Actionable**: Rules should be concrete and verifiable, not vague aspirations.

@@ -318,7 +318,9 @@ engineering-standards/
 ├── opencode.json                       # OpenCode config
 ├── scripts/
 │   ├── render-diagrams.sh              # Optional DOT -> SVG rendering helper
-│   └── report-token-usage.py           # Skill token-budget report script
+│   ├── report-token-usage.py           # Skill token-budget report script
+│   ├── sync_superpowers_lock.py        # Update upstream lock commit + checksums
+│   └── validate_upstream_lock.py       # Validate lockfile against JSON schema
 │
 ├── tests/
 │   ├── enforcement_integration/
@@ -334,6 +336,25 @@ engineering-standards/
 ```
 
 Backlog tracking lives in GitHub Issues (use labels such as `P1: should fix` and `P2: nice to have`).
+
+## Upstream Sync Governance
+
+Use the lock tooling to keep upstream Superpowers ingestion explicit and reviewable:
+
+```bash
+# Make targets (preferred)
+make validate-lock
+make sync-lock
+
+# Direct script entrypoints
+# Validate lockfile structure and checksum paths
+python3 scripts/validate_upstream_lock.py
+
+# Refresh lockfile with latest upstream commit and mirror checksums
+python3 scripts/sync_superpowers_lock.py
+```
+
+The lockfile is `upstream/superpowers.lock.json` and schema is `schemas/upstream-superpowers-lock.schema.json`.
 
 ## Tool-Specific Features
 
@@ -435,37 +456,46 @@ To add project-specific standards on top of the shared ones:
 | Reads AGENTS.md | Native | - | Fallback | Fallback |
 | Reads CLAUDE.md | Fallback | Native | - | - |
 
-## Workflow Parity Matrix
+## Agent Skills Matrix
 
-This matrix shows how canonical workflow contracts (Skills 2.0) map to tool adapters and enforcement tests. Each row represents a workflow with its canonical contract in `docs/workflows/` and the corresponding adapters for each tool.
+This matrix shows the Agent Skills (agentskills.io compliant) available in this repository. All skills follow the Agent Skills specification with `name` and `description` in frontmatter, inline instructions, and optional `references/` folders for detailed documentation.
 
-| Workflow | Canonical Contract | Claude Skill | OpenCode Command | Enforcement Test | Status |
-|----------|-------------------|--------------|------------------|------------------|---------|
-| **Pre-commit** | [`docs/workflows/pre-commit.md`](docs/workflows/pre-commit.md) | [`.claude/skills/pre-commit/SKILL.md`](.claude/skills/pre-commit/SKILL.md) | [`.opencode/commands/pre-commit.md`](.opencode/commands/pre-commit.md) | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | ✅ **Complete** |
-| **Micro-commit** | [`docs/workflows/micro-commit.md`](docs/workflows/micro-commit.md) | [`.claude/skills/micro-commit/SKILL.md`](.claude/skills/micro-commit/SKILL.md) | [`.opencode/commands/micro-commit.md`](.opencode/commands/micro-commit.md) | *Planned* | ✅ **Complete** |
-| **Code Quality** | *Planned* | [`.claude/skills/code-quality/SKILL.md`](.claude/skills/code-quality/SKILL.md) | [`.opencode/commands/code-quality.md`](.opencode/commands/code-quality.md) | *Planned* | 🔄 **Adapters exist** |
-| **TDD Enforcement** | [`docs/workflows/tdd-enforcement.md`](docs/workflows/tdd-enforcement.md) | [`.claude/skills/tdd-enforcement/SKILL.md`](.claude/skills/tdd-enforcement/SKILL.md) | [`.opencode/commands/tdd-enforcement.md`](.opencode/commands/tdd-enforcement.md) | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | ✅ **Complete** |
-| **Test Coverage** | *Planned* | [`.claude/skills/test-coverage/SKILL.md`](.claude/skills/test-coverage/SKILL.md) | [`.opencode/commands/test-coverage.md`](.opencode/commands/test-coverage.md) | *Planned* | 🔄 **Adapters exist** |
-| **Commit Review** | *Planned* | [`.claude/skills/commit-review/SKILL.md`](.claude/skills/commit-review/SKILL.md) | [`.opencode/commands/commit-review.md`](.opencode/commands/commit-review.md) | *Planned* | 🔄 **Adapters exist** |
-| **Static Analysis Gate** | *Planned* | [`.claude/skills/static-analysis-gate/SKILL.md`](.claude/skills/static-analysis-gate/SKILL.md) | *No command* | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | 🔄 **Claude only** |
-| **Refactoring Gate** | *Planned* | [`.claude/skills/refactoring-gate/SKILL.md`](.claude/skills/refactoring-gate/SKILL.md) | [`.opencode/commands/refactor-check.md`](.opencode/commands/refactor-check.md) | [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py) | 🔄 **Adapters exist** |
-| **Spec Compliance** | *Planned* | [`.claude/skills/spec-compliance/SKILL.md`](.claude/skills/spec-compliance/SKILL.md) | *No command* | *Planned* | 🔄 **Claude only** |
+| Skill | Location | References | Lines | Status |
+|-------|----------|------------|-------|--------|
+| **pre-commit** | [`.claude/skills/pre-commit/`](.claude/skills/pre-commit/) | `references/workflow.md` | 64 | ✅ **Complete** |
+| **micro-commit** | [`.claude/skills/micro-commit/`](.claude/skills/micro-commit/) | `references/workflow.md` | 76 | ✅ **Complete** |
+| **tdd-enforcement** | [`.claude/skills/tdd-enforcement/`](.claude/skills/tdd-enforcement/) | `references/workflow.md` | 88 | ✅ **Complete** |
+| **code-quality** | [`.claude/skills/code-quality/`](.claude/skills/code-quality/) | Inline | 49 | ✅ **Complete** |
+| **commit-review** | [`.claude/skills/commit-review/`](.claude/skills/commit-review/) | Inline | 54 | ✅ **Complete** |
+| **refactoring-gate** | [`.claude/skills/refactoring-gate/`](.claude/skills/refactoring-gate/) | Inline | 59 | ✅ **Complete** |
+| **spec-compliance** | [`.claude/skills/spec-compliance/`](.claude/skills/spec-compliance/) | Inline | 53 | ✅ **Complete** |
+| **static-analysis-gate** | [`.claude/skills/static-analysis-gate/`](.claude/skills/static-analysis-gate/) | Inline | 65 | ✅ **Complete** |
+| **test-coverage** | [`.claude/skills/test-coverage/`](.claude/skills/test-coverage/) | Inline | 58 | ✅ **Complete** |
 
-### Status Legend
-- ✅ **Complete**: Canonical contract exists and adapters are aligned
-- 🔄 **Adapters exist**: Tool adapters implemented, canonical contract needed
-- 📝 **Planned**: Workflow identified for future implementation
-- ⚠️ **Partial**: Gaps in adapter coverage or contract alignment
+### Agent Skills Specification
 
-### OpenCode-Specific Commands
-These OpenCode commands don't map directly to workflows but provide composite functionality:
-- `/review-solid` - SOLID principles check (combines multiple workflows)
-- `/new-feature` - Guided TDD workflow (combines TDD enforcement + micro-commit)
-- `/two-stage-review` - Spec compliance + code quality (combines multiple workflows)
+All skills comply with [agentskills.io](https://agentskills.io):
+- Frontmatter contains only `name` and `description`
+- Description includes trigger phrases for invocation
+- Maximum 500 lines (all skills are under 100 lines)
+- Self-contained with inline instructions
+- Optional `references/` folder for detailed documentation
+- Hard Gates and Status Vocabulary sections
 
-### Cursor & Copilot Integration
-Cursor and Copilot read the canonical workflow contracts via:
-- Cursor: `.cursor/rules/` references `docs/workflows/` contracts
-- Copilot: `.github/instructions/` references `docs/workflows/` contracts
+### Legacy Canonical Contracts
 
-Both tools inherit workflow definitions from the canonical contracts without needing separate adapters.
+The `docs/workflows/` directory retains canonical contract documentation for reference:
+- `docs/workflows/pre-commit.md`
+- `docs/workflows/micro-commit.md`
+- `docs/workflows/tdd-enforcement.md`
+
+These are now referenced from skill `references/` folders where applicable.
+
+### Enforcement Tests
+
+All skills are validated by [`tests/enforcement_integration/test_enforcement_gates.py`](tests/enforcement_integration/test_enforcement_gates.py):
+- Frontmatter compliance (name + description only)
+- Line count under 500
+- Hard Gates section present
+- Status Vocabulary section present
+- References folder exists (when applicable)
