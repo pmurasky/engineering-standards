@@ -1,20 +1,76 @@
 ---
 name: micro-commit
-description: Create one production-ready micro-commit following repository standards.
-argument-hint: "[scope-or-issue]"
-disable-model-invocation: true
+description: Create one production-ready micro-commit following repository standards. Use when user asks "commit my changes", "micro-commit", "help me commit", "ready to commit", or "create commit".
 ---
 
-Create exactly one logical commit for the current change set.
+# Micro-Commit Workflow
 
-Workflow:
-1. Inspect staged and unstaged changes.
-2. Confirm this commit contains one coherent logical change.
-3. Run applicable unit tests if a test command exists.
-4. Use Conventional Commits format and explain WHY in the body.
+Guide creation of production-ready commits containing exactly one logical change.
 
-Required references:
-- `docs/AI_AGENT_WORKFLOW.md`
-- `docs/PRE_COMMIT_CHECKLIST.md`
+## Hard Gates
 
-If no unit test command is configured in this repository, state that explicitly in your report.
+**Single Logical Change Rule:**
+- One logical change per commit (never bundle multiple changes)
+- Each commit must represent exactly one of: refactor step, feature implementation, test update, or documentation update
+- If multiple logical changes detected → output `SPLIT REQUIRED` with specific breakdown
+
+**Production-Ready Requirements:**
+1. All unit tests MUST pass (when project test command exists)
+2. Build MUST succeed (when project build command exists)
+3. No lint errors (when project lint command exists)
+4. Conventional Commits format required for all commit messages
+
+**Blocking rules:**
+- If any quality gate fails → output `NOT READY` and list blockers
+- If multiple logical changes detected → output `SPLIT REQUIRED` with commit breakdown
+- If commit message doesn't follow Conventional Commits → output `MESSAGE INVALID`
+- Never create commits during analysis phase
+- Never bypass failing tests or build
+
+## Workflow
+
+1. **Change Analysis**: Review staged (`git diff --cached --stat`) and unstaged changes (`git diff --stat`)
+2. **Change Classification**: Determine if changes represent one or multiple logical changes
+3. **Commit Ordering** (when multiple commits needed):
+   - Refactor commits first (structure improvements)
+   - Feature commits second (new functionality)
+   - Test commits third
+   - Documentation commits last
+4. **Message Crafting**: Use Conventional Commits format `<type>(<scope>): <description>`
+5. **Quality Gate Verification**: Run unit tests, build, and lint
+
+## Status Vocabulary
+
+**Required output format:**
+1. **Status**: `READY`, `NOT READY`, `SPLIT REQUIRED`, or `MESSAGE INVALID`
+2. **Change summary**: What logical changes were detected
+3. **Commit plan**: Specific commits to create (if split needed)
+4. **Quality gates**: Results of test/build/lint execution
+5. **Next actions**: Specific steps to proceed
+
+**Status indicators:**
+- `READY`: Single logical change, all quality gates pass, proper message format
+- `NOT READY`: Quality gates failed, must fix before committing
+- `SPLIT REQUIRED`: Multiple logical changes detected, must separate
+- `MESSAGE INVALID`: Commit message doesn't follow Conventional Commits format
+
+## Fail/Fix/Rerun Loop
+
+When quality gates fail:
+1. Stop immediately - do not proceed to commit
+2. Fix blockers: Address test failures, build errors, or lint issues
+3. Rerun verification: Execute quality gates again after fixes
+4. Repeat until all gates pass
+
+When split required:
+1. Stage selectively using `git add -p` or file-by-file
+2. Create first commit with one logical change
+3. Stage next change and repeat
+
+## References
+
+- [Full workflow details](references/workflow.md)
+- `docs/AI_AGENT_WORKFLOW.md` - Micro-commit philosophy
+- `docs/PRE_COMMIT_CHECKLIST.md` - Quality gates checklist
+- `docs/CODING_PRACTICES.md` - Production-ready requirements
+- `docs/CODING_STANDARDS.md` - Conventional Commits format
