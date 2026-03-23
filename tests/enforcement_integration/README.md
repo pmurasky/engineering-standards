@@ -7,6 +7,7 @@ This suite validates enforcement behavior for Skills 2.0 canonical workflow cont
 - **Contract parity validation** (Skills 2.0 canonical contracts vs tool adapters)
 - **Contract drift detection** (pressure tests with invalid adapters)
 - **Token-budget reporting** for skill invocation context size
+- **Upstream lock tooling** validation and sync behavior
 
 ## Test Categories
 
@@ -18,6 +19,15 @@ This suite validates enforcement behavior for Skills 2.0 canonical workflow cont
 - `ContractParityIntegrationTests` - Validates adapter alignment with canonical contracts
 - Tests contract references, hard-gate semantics, and status vocabulary consistency
 - Validates cross-surface parity between Claude skills and OpenCode commands
+
+### Contract Structure Validation Tests
+- `ContractStructureValidationTests` - Validates that all discovered contracts have required sections
+- Uses `discover_contracts()` to auto-detect all `docs/workflows/*.md` files
+- Checks for H1 title and all eight required H2 sections from the contract template
+
+### Contract Structure Pressure Tests
+- `ContractStructurePressureTests` - Negative tests verifying `validate_contract_structure` catches malformed contracts
+- Uses contract fixtures: missing-sections, empty-contract, nonexistent file
 
 ### Contract Drift Pressure Tests
 - `ContractDriftPressureTests` - Negative tests that verify validation functions catch drift
@@ -80,6 +90,19 @@ python3 scripts/report-token-usage.py --capture-baseline scripts/baseline.json
 python3 scripts/report-token-usage.py --compare-baseline scripts/baseline.json --fail-on-exceed
 ```
 
+### Run upstream lock tooling checks
+
+```bash
+# Validate lockfile against schema and checksum paths
+python3 scripts/validate_upstream_lock.py
+
+# Refresh lockfile metadata from upstream and local mirror
+python3 scripts/sync_superpowers_lock.py
+
+# Integration tests for lock scripts
+python3 -m unittest tests.enforcement_integration.test_upstream_lock_tools
+```
+
 ## CI Integration
 
 Contract parity tests are designed to be CI-ready and should be included in build pipelines:
@@ -99,6 +122,8 @@ python3 -m unittest tests.enforcement_integration.test_enforcement_gates.Contrac
 - `tests/fixtures/invalid-skills/missing-contract-reference/` - No canonical contract reference
 - `tests/fixtures/invalid-skills/wrong-status-vocabulary/` - Uses incorrect status terms
 - `tests/fixtures/invalid-skills/incomplete-hard-gates/` - Missing required hard-gate semantics
+- `tests/fixtures/invalid-contracts/missing-sections/` - Contract missing most required sections
+- `tests/fixtures/invalid-contracts/empty-contract/` - Empty contract file
 
 ## Skills 2.0 Contract Validation
 
