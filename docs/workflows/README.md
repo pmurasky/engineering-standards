@@ -52,9 +52,15 @@ Each canonical contract maps to multiple tool adapters:
 4. **Testable**: Define clear success/failure criteria
 5. **Stable**: Changes should be rare and well-communicated
 
+## Contract Discovery
+
+Contracts are discovered by convention: any `*.md` file in this directory is treated as a canonical contract, excluding `README.md` and `TEMPLATE.md`. Automated validation tests in `tests/enforcement_integration/` use this convention to verify that every contract has the required sections listed in the template above.
+
 ## Contributing
 
-When updating a canonical contract:
+See [CONTRIBUTING-SKILLS.md](./CONTRIBUTING-SKILLS.md) for detailed contributor guidelines covering contract creation, adapter mapping, enforcement testing, and the end-to-end checklist.
+
+**Quick reference — when updating a canonical contract:**
 
 1. Update the canonical contract first
 2. Update all tool adapters to reference the canonical contract
@@ -62,9 +68,10 @@ When updating a canonical contract:
 4. Test across all supported tools
 5. Update the workflow mapping table above
 
-For new workflows:
+**When adding a new workflow:**
 
-1. Follow the contract template format
+1. Follow the contract template format (all eight required sections)
 2. Start with one tool adapter to prove the pattern
 3. Expand to other tools incrementally
-4. Add to the mapping table above
+4. Add enforcement tests and pressure fixtures
+5. Add to the mapping table above
