@@ -39,3 +39,13 @@
 ## Phase 8: Execute - Update Documentation
 **Goal:** Update CONTRIBUTING-SKILLS.md and README  
 **Status:** Pending
+
+## Phase 9: Standards Distribution & OpenCode Alignment
+**Goal:** Plan and deliver a first-class install/update workflow plus accurate OpenCode-native packaging for downstream consumers  
+**Status:** In Progress  
+**Canonical refs:**
+- `README.md` - Current install/update guidance and OpenCode copy prompt
+- `opencode.json` - Current OpenCode instructions/plugins model
+- `docs/CONTRIBUTING-SKILLS.md` - Portable skill structure guidance
+- `docs/adr/0001-superpowers-upstream-sync-model.md` - Upstream sync constraints and local composition model
+- `.planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md` - Execution plan for this phase
