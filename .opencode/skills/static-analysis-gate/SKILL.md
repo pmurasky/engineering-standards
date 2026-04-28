@@ -1,6 +1,8 @@
 ---
 name: static-analysis-gate
 description: Run PMD, detekt, and Checkstyle as a hard gate before commit readiness. Use when the repo has static-analysis tooling configured.
+version: 1.0.0
+category: quality-gate
 ---
 
 # Static Analysis Gate

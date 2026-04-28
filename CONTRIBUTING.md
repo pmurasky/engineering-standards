@@ -90,6 +90,17 @@ When adding a new rule or capability, add it to all supported tools where possib
 
 For adding or updating Agent Skills (agentskills.io compliant), see the dedicated guide: [docs/CONTRIBUTING-SKILLS.md](docs/CONTRIBUTING-SKILLS.md). It covers skill structure, frontmatter requirements, the references/ folder pattern, surface mirroring between Claude and OpenCode, and testing.
 
+### Metadata Governance
+
+All skills and adapters MUST follow the metadata governance spec in [docs/SKILL_METADATA_GOVERNANCE.md](docs/SKILL_METADATA_GOVERNANCE.md). Required fields:
+
+- `name` — kebab-case identifier
+- `description` — clear description with trigger phrases
+- `version` — SemVer (e.g., `1.0.0`)
+- `category` — one of: `quality-gate`, `workflow`, `review`, `testing`, `utility`
+
+Optional fields: `dependencies`, `budget`
+
 ## What Makes a Good Standards Document
 
 - **Actionable**: Rules should be concrete and verifiable, not vague aspirations.

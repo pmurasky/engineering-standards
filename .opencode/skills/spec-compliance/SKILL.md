@@ -1,6 +1,8 @@
 ---
 name: spec-compliance
 description: Verify requirement and acceptance-criteria compliance before code quality review. Use as the first review stage for feature or bug-fix work.
+version: 1.0.0
+category: review
 ---
 
 # Specification Compliance Review

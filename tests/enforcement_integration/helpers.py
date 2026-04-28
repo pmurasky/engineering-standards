@@ -284,3 +284,111 @@ def validate_workflow_parity(workflow_name: str) -> list[str]:
             problems.append(f"OpenCode status vocabulary: {problem}")
 
     return problems
+
+
+VALID_CATEGORIES: list[str] = [
+    "quality-gate",
+    "workflow",
+    "review",
+    "testing",
+    "utility",
+]
+
+VALID_BUDGET_FREQUENCIES: list[str] = [
+    "per-commit",
+    "per-session",
+    "on-demand",
+]
+
+
+def parse_frontmatter(skill_path: Path) -> dict[str, object]:
+    content = read_text(skill_path)
+    frontmatter_match = re.search(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
+    if not frontmatter_match:
+        return {}
+
+    import yaml
+
+    try:
+        return yaml.safe_load(frontmatter_match.group(1)) or {}
+    except Exception:
+        return {}
+
+
+def validate_skill_metadata(skill_path: Path) -> list[str]:
+    problems: list[str] = []
+    metadata = parse_frontmatter(skill_path)
+
+    if not metadata:
+        problems.append("missing or malformed frontmatter")
+        return problems
+
+    required_fields = ["name", "description", "version", "category"]
+    for field in required_fields:
+        if field not in metadata:
+            problems.append(f"missing required metadata field: {field}")
+
+    version = metadata.get("version")
+    if version and not re.match(r"^\d+\.\d+\.\d+$", str(version)):
+        problems.append(f"invalid version format '{version}': expected SemVer (x.y.z)")
+
+    category = metadata.get("category")
+    if category and category not in VALID_CATEGORIES:
+        problems.append(
+            f"invalid category '{category}': must be one of {', '.join(VALID_CATEGORIES)}"
+        )
+
+    return problems
+
+
+def validate_metadata_dependencies(
+    skill_path: Path, all_skill_names: set[str]
+) -> list[str]:
+    problems: list[str] = []
+    metadata = parse_frontmatter(skill_path)
+
+    dependencies = metadata.get("dependencies", [])
+    if not dependencies:
+        return problems
+
+    if not isinstance(dependencies, list):
+        problems.append("dependencies must be a list")
+        return problems
+
+    for dep in dependencies:
+        if dep not in all_skill_names:
+            problems.append(f"dependency '{dep}' does not exist")
+
+    return problems
+
+
+def validate_metadata_budget(skill_path: Path) -> list[str]:
+    problems: list[str] = []
+    metadata = parse_frontmatter(skill_path)
+
+    budget = metadata.get("budget")
+    if not budget:
+        return problems
+
+    if not isinstance(budget, dict):
+        problems.append("budget must be an object")
+        return problems
+
+    tokens = budget.get("tokens")
+    if tokens is not None and (not isinstance(tokens, int) or tokens <= 0):
+        problems.append("budget.tokens must be a positive integer")
+
+    frequency = budget.get("frequency")
+    if frequency is not None and frequency not in VALID_BUDGET_FREQUENCIES:
+        problems.append(
+            f"budget.frequency '{frequency}' must be one of {', '.join(VALID_BUDGET_FREQUENCIES)}"
+        )
+
+    return problems
+
+
+def discover_skills(surface: str) -> list[Path]:
+    skills_dir = REPO_ROOT / f".{surface}" / "skills"
+    if not skills_dir.is_dir():
+        return []
+    return sorted(p for p in skills_dir.rglob("SKILL.md"))

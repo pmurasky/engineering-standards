@@ -1,6 +1,8 @@
 ---
 name: refactoring-gate
 description: Block refactoring when test coverage or test-health prerequisites are not met. Use before starting non-trivial refactoring work.
+version: 1.0.0
+category: testing
 ---
 
 # Refactoring Gate

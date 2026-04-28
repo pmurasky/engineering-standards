@@ -28,15 +28,20 @@ Claude and OpenCode should expose the same skill catalog unless there is a docum
 ---
 name: skill-name
 description: Clear description of what this skill does and when to use it.
+version: 1.0.0
+category: quality-gate
 ---
 ```
 
 **Requirements:**
-- Only `name` and `description` fields in frontmatter
+- Required fields: `name`, `description`, `version`, `category`
+- Optional fields: `dependencies`, `budget`
 - No Claude-specific fields (no `argument-hint`, `disable-model-invocation`, etc.)
 - Description should include trigger phrases (e.g., "Use when user asks...")
 - Maximum 500 lines total
 - Self-contained with inline instructions
+
+**Metadata governance:** See [SKILL_METADATA_GOVERNANCE.md](./SKILL_METADATA_GOVERNANCE.md) for full spec.
 
 ### Content Structure
 
@@ -151,17 +156,24 @@ Tests validate:
 
 ## Versioning
 
-Use git tags for releases. When updating a skill:
+Skills use [Semantic Versioning](https://semver.org/) in the `version` frontmatter field:
+
+- **MAJOR**: Breaking changes to hard gates, status vocabulary, or workflow steps
+- **MINOR**: New features, additional references, non-breaking enhancements
+- **PATCH**: Bug fixes, documentation updates, clarifications
+
+When updating a skill:
 
 1. Update SKILL.md with new behavior
-2. Update references/ if applicable
-3. Run tests to ensure compliance
-4. Commit with conventional commit message
-5. Update documentation if behavior changes
+2. Bump `version` according to SemVer rules
+3. Update references/ if applicable
+4. Run tests to ensure compliance
+5. Commit with conventional commit message
+6. Update documentation if behavior changes
 
 ## Quick Checklist
 
-- [ ] Skill has `name` and `description` in frontmatter only
+- [ ] Skill has required frontmatter: `name`, `description`, `version`, `category`
 - [ ] Description includes trigger phrases
 - [ ] Skill is under 500 lines
 - [ ] Has `## Hard Gates` section

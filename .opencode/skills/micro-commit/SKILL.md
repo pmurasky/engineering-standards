@@ -1,6 +1,8 @@
 ---
 name: micro-commit
 description: Create one production-ready micro-commit following repository standards. Use when user asks to commit current work in one logical, test-verified step.
+version: 1.0.0
+category: workflow
 ---
 
 # Micro-Commit Workflow

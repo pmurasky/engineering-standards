@@ -1,6 +1,8 @@
 ---
 name: pre-commit
 description: Run pre-commit readiness checks and summarize blockers before committing. Use when user asks whether changes are ready to commit or wants a pre-commit validation pass.
+version: 1.0.0
+category: quality-gate
 ---
 
 # Pre-Commit Validation

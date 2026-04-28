@@ -1,6 +1,8 @@
 ---
 name: code-quality
 description: Review code changes for SOLID, maintainability, and repository quality gates. Use when user asks for code quality review after requirement compliance is already satisfied.
+version: 1.0.0
+category: quality-gate
 ---
 
 # Code Quality Review

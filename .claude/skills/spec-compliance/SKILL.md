@@ -1,6 +1,8 @@
 ---
 name: spec-compliance
 description: Stage 1 review that verifies requirement and acceptance-criteria compliance before code quality checks. Run this before code-quality review.
+version: 1.0.0
+category: review
 ---
 
 # Spec Compliance Review

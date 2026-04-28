@@ -1,6 +1,8 @@
 ---
 name: tdd-enforcement
 description: Enforce strict test-first sequencing with hard gates for RED → GREEN → REFACTOR. Use when the user wants TDD enforced rather than treated as a suggestion.
+version: 1.0.0
+category: workflow
 ---
 
 # TDD Enforcement

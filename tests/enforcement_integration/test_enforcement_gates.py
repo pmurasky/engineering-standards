@@ -12,6 +12,10 @@ from helpers import (
     validate_status_vocabulary,
     validate_workflow_parity,
     discover_contracts,
+    validate_skill_metadata,
+    validate_metadata_dependencies,
+    validate_metadata_budget,
+    discover_skills,
 )
 
 
@@ -113,6 +117,84 @@ class AgentSkillsComplianceTests(unittest.TestCase):
                         content,
                         f"{skill_dir.name} missing 'description' in frontmatter",
                     )
+
+
+class SkillMetadataValidationTests(unittest.TestCase):
+
+    def test_all_claude_skills_have_required_metadata(self) -> None:
+        for skill_path in discover_skills("claude"):
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_skill_metadata(skill_path)
+                self.assertEqual(
+                    problems,
+                    [],
+                    f"{skill_path.parent.name} metadata issues: {problems}",
+                )
+
+    def test_all_opencode_skills_have_required_metadata(self) -> None:
+        for skill_path in discover_skills("opencode"):
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_skill_metadata(skill_path)
+                self.assertEqual(
+                    problems,
+                    [],
+                    f"{skill_path.parent.name} metadata issues: {problems}",
+                )
+
+    def test_skill_metadata_validates_version_format(self) -> None:
+        fixture_skill = (
+            REPO_ROOT
+            / "tests"
+            / "fixtures"
+            / "invalid-skills"
+            / "bad-version"
+            / "SKILL.md"
+        )
+        if fixture_skill.exists():
+            problems = validate_skill_metadata(fixture_skill)
+            self.assertTrue(
+                any("invalid version format" in p for p in problems),
+                f"Expected version format error in {problems}",
+            )
+
+    def test_skill_metadata_validates_category(self) -> None:
+        fixture_skill = (
+            REPO_ROOT
+            / "tests"
+            / "fixtures"
+            / "invalid-skills"
+            / "bad-category"
+            / "SKILL.md"
+        )
+        if fixture_skill.exists():
+            problems = validate_skill_metadata(fixture_skill)
+            self.assertTrue(
+                any("invalid category" in p for p in problems),
+                f"Expected category error in {problems}",
+            )
+
+    def test_skill_dependencies_are_valid(self) -> None:
+        claude_skills = discover_skills("claude")
+        all_skill_names = {p.parent.name for p in claude_skills}
+
+        for skill_path in claude_skills:
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_metadata_dependencies(skill_path, all_skill_names)
+                self.assertEqual(
+                    problems,
+                    [],
+                    f"{skill_path.parent.name} dependency issues: {problems}",
+                )
+
+    def test_skill_budget_format_is_valid(self) -> None:
+        for skill_path in discover_skills("claude"):
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_metadata_budget(skill_path)
+                self.assertEqual(
+                    problems,
+                    [],
+                    f"{skill_path.parent.name} budget issues: {problems}",
+                )
 
 
 class ContractDriftPressureTests(unittest.TestCase):

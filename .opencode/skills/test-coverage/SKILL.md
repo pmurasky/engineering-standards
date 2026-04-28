@@ -1,6 +1,8 @@
 ---
 name: test-coverage
 description: Assess test completeness and identify missing unit-test coverage for changed behavior. Use when you need coverage-focused review rather than a full quality audit.
+version: 1.0.0
+category: testing
 ---
 
 # Test Coverage Review
