@@ -1,0 +1,4 @@
+{"id":"74e2b697-68e1-4269-a74d-0bce18fd264c","ts":"2026-04-28T22:59:43.482Z","severity":"info","message":"Claude Code MCP prepared at /media/peter/Linux_AppData/AIProjects/engineering-standards/.mcp.json","source":"notify","read":false}
+{"id":"23a930c1-b215-46a6-95ca-055ce5fb1eb5","ts":"2026-04-28T22:59:43.483Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
+{"id":"4941610e-d6c9-4790-a79a-f72b331ab19f","ts":"2026-04-28T23:01:59.911Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
+{"id":"2aba00ce-2daa-4e62-85fd-a295e68535ca","ts":"2026-04-28T23:01:59.994Z","severity":"warning","message":"Unknown: /gsd progress. Run /gsd help for available commands.","source":"notify","read":false}

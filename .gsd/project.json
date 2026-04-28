@@ -1,0 +1,45 @@
+{
+  "version": "2.0",
+  "project": {
+    "name": "Engineering Standards Skills Refactoring",
+    "description": "Refactor the Skills 2.0 architecture to achieve strict compliance with the Agent Skills open standard (agentskills.io)",
+    "vision": "Make skills self-contained, portable, and tool-agnostic",
+    "created_at": "2026-03-22",
+    "migrated_from": "gsd-v1"
+  },
+  "milestones": [
+    {
+      "id": "m1",
+      "name": "Agent Skills Compliance",
+      "description": "Research and plan Agent Skills compliance refactoring",
+      "status": "in_progress",
+      "phases": ["discuss", "research", "plan"]
+    },
+    {
+      "id": "m2",
+      "name": "Skills Restructuring",
+      "description": "Restructure directories and update SKILL.md files",
+      "status": "pending",
+      "phases": ["execute-restructure", "execute-update-skills", "execute-migrate-contracts"]
+    },
+    {
+      "id": "m3",
+      "name": "Testing and Documentation",
+      "description": "Update tests and documentation",
+      "status": "pending",
+      "phases": ["execute-update-tests", "execute-update-docs"]
+    },
+    {
+      "id": "m9",
+      "name": "Standards Distribution & OpenCode Alignment",
+      "description": "Plan and deliver install/update workflow and OpenCode packaging",
+      "status": "in_progress",
+      "phases": ["plan-distribution"]
+    }
+  ],
+  "current_milestone": "m1",
+  "preferences": {
+    "auto_advance": false,
+    "context_mode": true
+  }
+}

@@ -20,3 +20,11 @@ __pycache__/
 .env
 .env.local
 .env.*.local
+
+# GSD runtime files
+.gsd/activity/
+.gsd/runtime/
+.gsd/auto.lock
+.gsd/gsd.db*
+.gsd/completed-units*.json
+.gsd/event-log.jsonl

@@ -1,0 +1,54 @@
+{
+  "version": "2.0",
+  "migrated_at": "2026-04-28T18:58:25Z",
+  "source": ".planning",
+  "backup": ".planning.backup.20260428_185825",
+  "phases_mapped": {
+    "01-agent-skills-discuss": {
+      "slice": "01-discuss",
+      "milestone": "m1",
+      "status": "in_progress"
+    },
+    "02-agent-skills-research": {
+      "slice": "02-research",
+      "milestone": "m1",
+      "status": "pending"
+    },
+    "03-agent-skills-plan": {
+      "slice": "03-plan",
+      "milestone": "m1",
+      "status": "pending"
+    },
+    "09-standards-distribution-opencode-alignment": {
+      "slice": "09-distribution-plan",
+      "milestone": "m9",
+      "status": "in_progress"
+    }
+  },
+  "milestones": [
+    {
+      "id": "m1",
+      "name": "Agent Skills Compliance",
+      "slices": ["01-discuss", "02-research", "03-plan"],
+      "status": "in_progress"
+    },
+    {
+      "id": "m2",
+      "name": "Skills Restructuring",
+      "slices": ["04-restructure", "05-update-skills", "06-migrate-contracts"],
+      "status": "pending"
+    },
+    {
+      "id": "m3",
+      "name": "Testing and Documentation",
+      "slices": ["07-update-tests", "08-update-docs"],
+      "status": "pending"
+    },
+    {
+      "id": "m9",
+      "name": "Standards Distribution & OpenCode Alignment",
+      "slices": ["09-distribution-plan"],
+      "status": "in_progress"
+    }
+  ]
+}
