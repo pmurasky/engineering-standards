@@ -8,23 +8,73 @@ Reusable engineering standards for AI coding agents. Enforces coding practices, 
 
 ### OpenCode One-Line Install
 
-Paste this prompt into OpenCode to install the standards into your current project:
+Paste this prompt into OpenCode to install the recommended OpenCode profile into the current project:
 
-> Clone https://github.com/pmurasky/engineering-standards.git, copy the `docs/` directory, `AGENTS.md`, `opencode.json`, and the `.opencode/` directory (including agents, commands, and skills) into this project's root.
+> Clone https://github.com/pmurasky/engineering-standards.git and run `python3 engineering-standards/scripts/install_standards.py --target .` from this project's root. The default install should bring in the shared `docs/` knowledge base plus the OpenCode files (`AGENTS.md`, `opencode.json`, `.opencode/agents`, `.opencode/commands`, `.opencode/skills`, and the local OpenCode package files).
 
-### Option A: Copy files into your project
+### Recommended: managed install/update workflow
 
-Copy the `docs/` directory and the config files for your tool:
+The supported downstream flow is a **file-based standards pack committed into your repo**. The installer writes a manifest to `.engineering-standards/manifest.json`, so updates can detect local edits and stay reviewable.
+
+#### Install the default OpenCode profile
 
 ```bash
-# 1. Clone this repo
 git clone https://github.com/pmurasky/engineering-standards.git
-
-# 2. Copy the knowledge base (required for all tools)
-cp -r engineering-standards/docs your-project/
-
-# 3. Copy the config files for your tool (see table below)
+python3 engineering-standards/scripts/install_standards.py --target your-project
 ```
+
+This installs the default profiles:
+
+- `core` - shared `docs/` knowledge base
+- `opencode` - `AGENTS.md`, `opencode.json`, `.opencode/agents/`, `.opencode/commands/`, `.opencode/skills/`, and `.opencode` package files
+
+#### Install other tool profiles
+
+```bash
+# Claude Code + shared docs
+python3 engineering-standards/scripts/install_standards.py --target your-project --profile claude
+
+# Cursor + shared docs
+python3 engineering-standards/scripts/install_standards.py --target your-project --profile cursor
+
+# GitHub Copilot + shared docs
+python3 engineering-standards/scripts/install_standards.py --target your-project --profile copilot
+```
+
+Profiles are additive. For example, `--profile claude --profile copilot` installs `core` plus both tool surfaces.
+
+#### Update an installed project
+
+```bash
+python3 engineering-standards/scripts/update_standards.py --target your-project
+```
+
+The updater:
+
+- preserves the installed profile set by default
+- refreshes managed files from the current standards checkout
+- refuses to overwrite locally modified managed files unless you pass `--force`
+- removes stale managed files that are no longer part of the selected profiles
+
+Use `--dry-run` on either script to preview changes before writing them.
+
+#### Pinning a version before install or update
+
+```bash
+git -C engineering-standards fetch --tags
+git -C engineering-standards checkout v1.0.0
+python3 engineering-standards/scripts/update_standards.py --target your-project
+```
+
+That keeps downstream updates reviewable without turning the repo into a plugin-only distribution model.
+
+### Advanced/manual options
+
+If you do not want the managed manifest workflow, you can still copy files manually or vendor the repo as a submodule. Those paths remain supported, but they are now considered advanced options because they are more manual to update safely.
+
+#### Manual copy
+
+Copy the `docs/` directory and the config files for your tool:
 
 | Tool | Files to Copy |
 |------|--------------|
@@ -33,142 +83,23 @@ cp -r engineering-standards/docs your-project/
 | **Cursor** | `.cursor/rules/` (also reads `AGENTS.md`) |
 | **GitHub Copilot** | `.github/copilot-instructions.md`, `.github/instructions/` (also reads `AGENTS.md`) |
 
-
-### Option B: Git submodule
+#### Git submodule
 
 ```bash
 cd your-project
 git submodule add https://github.com/pmurasky/engineering-standards.git engineering-standards
 ```
 
-Then create thin wrapper files at your project root that reference the submodule. Examples for each tool:
+Then create thin wrapper files at your project root that reference the submodule, or copy/symlink the relevant tool directories into your project root.
 
-<details>
-<summary><strong>OpenCode</strong> -- AGENTS.md + opencode.json</summary>
+Symlinks keep configs in sync automatically but require that all contributors have the submodule initialized. If you use this path, document it in your project setup instructions.
 
-Create `AGENTS.md` at your project root:
-
-```markdown
-# Engineering Standards
-
-See engineering-standards/AGENTS.md for the full standards.
-
-Read these files for detailed guidance:
-- engineering-standards/docs/AI_AGENT_WORKFLOW.md
-- engineering-standards/docs/CODING_PRACTICES.md
-- engineering-standards/docs/CODING_STANDARDS.md
-- engineering-standards/docs/PRE_COMMIT_CHECKLIST.md
-```
-
-Create `opencode.json` at your project root:
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    "engineering-standards/docs/CODING_PRACTICES.md",
-    "engineering-standards/docs/CODING_STANDARDS.md",
-    "engineering-standards/docs/AI_AGENT_WORKFLOW.md",
-    "engineering-standards/docs/PRE_COMMIT_CHECKLIST.md"
-  ]
-}
-```
-
-For agents and commands, copy (or symlink) the `.opencode/` directory since agents reference docs by relative path.
-
-</details>
-
-<details>
-<summary><strong>Claude Code</strong> -- CLAUDE.md</summary>
-
-Create `CLAUDE.md` at your project root:
-
-```markdown
-# Engineering Standards
-
-See engineering-standards/CLAUDE.md for the full standards.
-
-Read these files for detailed guidance:
-- engineering-standards/docs/AI_AGENT_WORKFLOW.md
-- engineering-standards/docs/CODING_PRACTICES.md
-- engineering-standards/docs/CODING_STANDARDS.md
-- engineering-standards/docs/PRE_COMMIT_CHECKLIST.md
-```
-
-Copy (or symlink) `.claude/` from the submodule (rules, agents, skills, hooks/settings) since Claude Code expects this directory at the project root.
-
-</details>
-
-<details>
-<summary><strong>Cursor</strong> -- .cursor/rules/</summary>
-
-Copy (or symlink) `.cursor/rules/` from the submodule. Cursor expects rule files at `.cursor/rules/` in the project root. Update any `docs/` references inside the copied rules to point to `engineering-standards/docs/`.
-
-Alternatively, create a single `.cursor/rules/engineering-standards.md` wrapper:
-
-```markdown
----
-description: Engineering standards
-alwaysApply: true
----
-
-Follow the engineering standards in engineering-standards/docs/.
-Read engineering-standards/docs/CODING_PRACTICES.md for detailed guidance.
-```
-
-</details>
-
-<details>
-<summary><strong>GitHub Copilot</strong> -- .github/</summary>
-
-Create `.github/copilot-instructions.md`:
-
-```markdown
-Follow the engineering standards in engineering-standards/docs/.
-Read engineering-standards/docs/CODING_PRACTICES.md for coding practices.
-Read engineering-standards/docs/AI_AGENT_WORKFLOW.md for the micro-commit workflow.
-```
-
-Copy (or symlink) `.github/instructions/` from the submodule and update `docs/` references to `engineering-standards/docs/`.
-
-</details>
-
-#### Symlink alternative
-
-Instead of copying tool config directories, you can symlink them:
+To update the submodule:
 
 ```bash
-# Example: symlink Claude Code rules
-ln -s engineering-standards/.claude .claude
-
-# Example: symlink Cursor rules
-ln -s engineering-standards/.cursor .cursor
-```
-
-Symlinks keep configs in sync automatically but require that all contributors have the submodule initialized. Add a note to your project's setup instructions if using symlinks.
-
-#### Updating the submodule
-
-To pull the latest standards into your project:
-
-```bash
-# Update to the latest commit on the default branch
 git submodule update --remote engineering-standards
-
-# Review changes, then commit the updated submodule reference
 git add engineering-standards
 git commit -m "chore: update engineering standards submodule"
-```
-
-To pin a specific version, check out a tag or commit inside the submodule directory and commit the reference.
-
-For new contributors cloning your project:
-
-```bash
-git clone --recurse-submodules <your-project-url>
-
-# Or if already cloned without submodules:
-git submodule update --init --recursive
 ```
 
 ## What Gets Enforced
@@ -240,23 +171,37 @@ engineering-standards/
 │   └── spotbugs/
 │       └── spotbugs-exclude.xml       # SpotBugs exclusion filters
 │
-├── .opencode/                          # OpenCode agents and commands
-│   ├── agents/
-│   │   ├── spec-compliance-review.md   # Subagent: stage-1 requirement compliance
-│   │   ├── standards-build.md         # Primary: writes code following standards
-│   │   ├── standards-review.md        # Subagent: stage-2 code-quality review
-│   │   └── pre-commit-check.md        # Subagent: pre-commit validation
-│   ├── commands/
-│   │   ├── code-quality.md            # /code-quality
+├── .opencode/                          # OpenCode package, agents, commands, skills
+│   ├── .gitignore                      # Keeps local node_modules untracked
+ │   ├── agents/
+ │   │   ├── spec-compliance-review.md   # Subagent: stage-1 requirement compliance
+ │   │   ├── standards-build.md         # Primary: writes code following standards
+ │   │   ├── standards-review.md        # Subagent: stage-2 code-quality review
+ │   │   └── pre-commit-check.md        # Subagent: pre-commit validation
+│   ├── bun.lock                        # Optional Bun lockfile for OpenCode package deps
+ │   ├── commands/
+ │   │   ├── code-quality.md            # /code-quality
 │   │   ├── commit-review.md           # /commit-review
 │   │   ├── micro-commit.md            # /micro-commit
 │   │   ├── new-feature.md             # /new-feature
 │   │   ├── pre-commit.md              # /pre-commit
 │   │   ├── refactor-check.md          # /refactor-check
-│   │   ├── review-solid.md            # /review-solid
-│   │   ├── tdd-enforcement.md         # /tdd-enforcement
-│   │   ├── test-coverage.md           # /test-coverage
-│   │   └── two-stage-review.md        # /two-stage-review
+ │   │   ├── review-solid.md            # /review-solid
+ │   │   ├── tdd-enforcement.md         # /tdd-enforcement
+ │   │   ├── test-coverage.md           # /test-coverage
+ │   │   └── two-stage-review.md        # /two-stage-review
+│   ├── package-lock.json               # npm lockfile for reproducible plugin installs
+│   ├── package.json                    # OpenCode local package manifest
+│   └── skills/
+│       ├── code-quality/SKILL.md
+│       ├── commit-review/SKILL.md
+│       ├── micro-commit/SKILL.md
+│       ├── pre-commit/SKILL.md
+│       ├── refactoring-gate/SKILL.md
+│       ├── spec-compliance/SKILL.md
+│       ├── static-analysis-gate/SKILL.md
+│       ├── tdd-enforcement/SKILL.md
+│       └── test-coverage/SKILL.md
 │
 ├── .claude/                            # Claude Code config
 │   ├── agents/
@@ -314,13 +259,18 @@ engineering-standards/
 ├── AGENTS.md                           # OpenCode / Copilot rules
 ├── CLAUDE.md                           # Claude Code rules
 ├── CONTRIBUTING.md                     # Contribution guidelines
+├── distribution/
+│   └── standards-package.json          # Install/update packaging manifest
 ├── .gitignore                          # Git ignore rules
 ├── opencode.json                       # OpenCode config
 ├── scripts/
+│   ├── install_standards.py            # Managed downstream install entrypoint
 │   ├── render-diagrams.sh              # Optional DOT -> SVG rendering helper
 │   ├── report-token-usage.py           # Skill token-budget report script
-│   ├── sync_superpowers_lock.py        # Update upstream lock commit + checksums
-│   └── validate_upstream_lock.py       # Validate lockfile against JSON schema
+│   ├── standards_distribution.py       # Shared install/update distribution logic
+ │   ├── sync_superpowers_lock.py        # Update upstream lock commit + checksums
+│   ├── update_standards.py             # Managed downstream update entrypoint
+ │   └── validate_upstream_lock.py       # Validate lockfile against JSON schema
 │
 ├── tests/
 │   ├── enforcement_integration/
@@ -380,15 +330,15 @@ OpenCode gets the richest experience with specialized agents and custom commands
 - `/two-stage-review` - Run stage 1 spec compliance, then stage 2 code quality
 
 **Skills** (load on-demand with `skill` tool):
-- `coding-practices` - Language-agnostic coding practices and TDD
-- `solid-principles` - SOLID principles with multi-language examples
-- `design-patterns` - GoF design patterns catalog
-- `pre-commit-checklist` - Pre-commit quality checklist
-- `micro-commit-workflow` - TDD micro-commit workflow for AI agents
-- `go-standards` - Go-specific conventions
-- `java-standards` - Java-specific conventions
-- `kotlin-standards` - Kotlin-specific conventions
-- `python-standards` - Python-specific conventions
+- `code-quality` - Stage-2 code quality review against repository standards
+- `commit-review` - Review staged changes and draft a commit message
+- `micro-commit` - Guide one logical, production-ready micro-commit
+- `pre-commit` - Run pre-commit readiness checks
+- `refactoring-gate` - Block unsafe refactoring when coverage/test prerequisites are missing
+- `spec-compliance` - Stage-1 requirement and acceptance-criteria review
+- `static-analysis-gate` - Enforce PMD/detekt/Checkstyle when configured
+- `tdd-enforcement` - Enforce RED -> GREEN -> REFACTOR sequencing
+- `test-coverage` - Review changed-behavior coverage and identify gaps
 
 ### Claude Code
 Uses a layered model:
@@ -452,25 +402,25 @@ To add project-specific standards on top of the shared ones:
 | Path-scoped rules | - | .claude/rules/ | globs frontmatter | applyTo frontmatter |
 | Custom agents | .opencode/agents/ | .claude/agents/ | - | - |
 | Custom commands | .opencode/commands/ | .claude/skills/ | - | - |
-| Skills | - | .claude/skills/ | - | - |
+| Skills | .opencode/skills/ | .claude/skills/ | - | - |
 | Reads AGENTS.md | Native | - | Fallback | Fallback |
 | Reads CLAUDE.md | Fallback | Native | - | - |
 
 ## Agent Skills Matrix
 
-This matrix shows the Agent Skills (agentskills.io compliant) available in this repository. All skills follow the Agent Skills specification with `name` and `description` in frontmatter, inline instructions, and optional `references/` folders for detailed documentation.
+This matrix shows the Agent Skills (agentskills.io compliant) available in this repository. The skill catalog is mirrored for Claude Code and OpenCode so both tools can load the same workflow-oriented capability set while `docs/` remains the canonical knowledge base.
 
-| Skill | Location | References | Lines | Status |
-|-------|----------|------------|-------|--------|
-| **pre-commit** | [`.claude/skills/pre-commit/`](.claude/skills/pre-commit/) | `references/workflow.md` | 64 | ✅ **Complete** |
-| **micro-commit** | [`.claude/skills/micro-commit/`](.claude/skills/micro-commit/) | `references/workflow.md` | 76 | ✅ **Complete** |
-| **tdd-enforcement** | [`.claude/skills/tdd-enforcement/`](.claude/skills/tdd-enforcement/) | `references/workflow.md` | 88 | ✅ **Complete** |
-| **code-quality** | [`.claude/skills/code-quality/`](.claude/skills/code-quality/) | Inline | 49 | ✅ **Complete** |
-| **commit-review** | [`.claude/skills/commit-review/`](.claude/skills/commit-review/) | Inline | 54 | ✅ **Complete** |
-| **refactoring-gate** | [`.claude/skills/refactoring-gate/`](.claude/skills/refactoring-gate/) | Inline | 59 | ✅ **Complete** |
-| **spec-compliance** | [`.claude/skills/spec-compliance/`](.claude/skills/spec-compliance/) | Inline | 53 | ✅ **Complete** |
-| **static-analysis-gate** | [`.claude/skills/static-analysis-gate/`](.claude/skills/static-analysis-gate/) | Inline | 65 | ✅ **Complete** |
-| **test-coverage** | [`.claude/skills/test-coverage/`](.claude/skills/test-coverage/) | Inline | 58 | ✅ **Complete** |
+| Skill | Claude | OpenCode | References |
+|-------|--------|----------|------------|
+| **pre-commit** | [`.claude/skills/pre-commit/`](.claude/skills/pre-commit/) | [`.opencode/skills/pre-commit/`](.opencode/skills/pre-commit/) | `references/workflow.md` on Claude, canonical docs on both |
+| **micro-commit** | [`.claude/skills/micro-commit/`](.claude/skills/micro-commit/) | [`.opencode/skills/micro-commit/`](.opencode/skills/micro-commit/) | `references/workflow.md` on Claude, canonical docs on both |
+| **tdd-enforcement** | [`.claude/skills/tdd-enforcement/`](.claude/skills/tdd-enforcement/) | [`.opencode/skills/tdd-enforcement/`](.opencode/skills/tdd-enforcement/) | `references/workflow.md` on Claude, canonical docs on both |
+| **code-quality** | [`.claude/skills/code-quality/`](.claude/skills/code-quality/) | [`.opencode/skills/code-quality/`](.opencode/skills/code-quality/) | Canonical docs |
+| **commit-review** | [`.claude/skills/commit-review/`](.claude/skills/commit-review/) | [`.opencode/skills/commit-review/`](.opencode/skills/commit-review/) | Canonical docs |
+| **refactoring-gate** | [`.claude/skills/refactoring-gate/`](.claude/skills/refactoring-gate/) | [`.opencode/skills/refactoring-gate/`](.opencode/skills/refactoring-gate/) | Canonical docs |
+| **spec-compliance** | [`.claude/skills/spec-compliance/`](.claude/skills/spec-compliance/) | [`.opencode/skills/spec-compliance/`](.opencode/skills/spec-compliance/) | Canonical docs |
+| **static-analysis-gate** | [`.claude/skills/static-analysis-gate/`](.claude/skills/static-analysis-gate/) | [`.opencode/skills/static-analysis-gate/`](.opencode/skills/static-analysis-gate/) | Canonical docs |
+| **test-coverage** | [`.claude/skills/test-coverage/`](.claude/skills/test-coverage/) | [`.opencode/skills/test-coverage/`](.opencode/skills/test-coverage/) | Canonical docs |
 
 ### Agent Skills Specification
 

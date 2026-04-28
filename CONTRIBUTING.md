@@ -4,7 +4,7 @@ Thank you for your interest in improving these engineering standards. This docum
 
 ## Project Overview
 
-This project provides reusable engineering standards for AI coding agents. The `docs/` directory is the single source of truth -- tool-specific config files (`.claude/rules/`, `.cursor/rules/`, `.github/instructions/`, `.opencode/`) reference docs but do not duplicate their content.
+This project provides reusable engineering standards for AI coding agents. The `docs/` directory is the single source of truth -- tool-specific config files (`.claude/rules/`, `.cursor/rules/`, `.github/instructions/`, `.opencode/`) and managed install surfaces reference docs rather than replacing them.
 
 ## How to Contribute
 
@@ -23,6 +23,13 @@ Open a GitHub issue describing:
 3. **Test**: Verify that all tool configs still reference valid files and that markdown renders correctly.
 4. **Submit a PR**: Describe what you changed and why.
 
+If you change downstream distribution behavior, also smoke-test the managed install/update entrypoints:
+
+```bash
+python3 scripts/install_standards.py --target /tmp/engineering-standards-smoke --dry-run
+python3 scripts/update_standards.py --target /tmp/engineering-standards-smoke --dry-run
+```
+
 ## Conventions
 
 ### Directory Structure
@@ -34,8 +41,11 @@ Open a GitHub issue describing:
 - `.github/copilot-instructions.md` -- GitHub Copilot repo-wide instructions.
 - `.opencode/agents/` -- OpenCode agent definitions.
 - `.opencode/commands/` -- OpenCode slash commands.
+- `.opencode/skills/` -- OpenCode agent skills.
 - `AGENTS.md` -- Read by OpenCode and GitHub Copilot.
 - `CLAUDE.md` -- Read by Claude Code (and Copilot as fallback).
+- `distribution/standards-package.json` -- Profile manifest for managed downstream install/update.
+- `scripts/install_standards.py` / `scripts/update_standards.py` -- Managed downstream distribution entrypoints.
 
 ### Adding a New Standards Document
 
@@ -78,7 +88,7 @@ When adding a new rule or capability, add it to all supported tools where possib
 
 ## Agent Skills
 
-For adding or updating Agent Skills (agentskills.io compliant), see the dedicated guide: [docs/CONTRIBUTING-SKILLS.md](docs/CONTRIBUTING-SKILLS.md). It covers skill structure, frontmatter requirements, the references/ folder pattern, and testing.
+For adding or updating Agent Skills (agentskills.io compliant), see the dedicated guide: [docs/CONTRIBUTING-SKILLS.md](docs/CONTRIBUTING-SKILLS.md). It covers skill structure, frontmatter requirements, the references/ folder pattern, surface mirroring between Claude and OpenCode, and testing.
 
 ## What Makes a Good Standards Document
 

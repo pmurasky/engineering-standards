@@ -84,10 +84,10 @@ python3 scripts/report-token-usage.py --always-on-threshold 2000 --skills-thresh
 #### Baseline capture and comparison
 ```bash
 # Capture current state as baseline
-python3 scripts/report-token-usage.py --capture-baseline scripts/baseline.json
+python3 scripts/report-token-usage.py --capture-baseline baseline.json
 
 # Compare current state against baseline
-python3 scripts/report-token-usage.py --compare-baseline scripts/baseline.json --fail-on-exceed
+python3 scripts/report-token-usage.py --compare-baseline baseline.json --fail-on-exceed
 ```
 
 ### Run upstream lock tooling checks
