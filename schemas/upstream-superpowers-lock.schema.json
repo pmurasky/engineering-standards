@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pmurasky/engineering-standards/schemas/upstream-superpowers-lock.schema.json",
+  "title": "Superpowers Upstream Lock",
+  "description": "Schema for pull-only upstream Superpowers mirror metadata and local workflow mapping governance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "upstream",
+    "source_paths",
+    "workflows",
+    "checksums",
+    "policy"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "upstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo",
+        "branch",
+        "pinned_commit"
+      ],
+      "properties": {
+        "repo": {
+          "type": "string",
+          "pattern": "^https://github\\.com/[^/]+/[^/]+$"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pinned_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "source_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workflow",
+          "upstream_path",
+          "local_contract",
+          "divergence",
+          "owner",
+          "adapters"
+        ],
+        "properties": {
+          "workflow": {
+            "type": "string",
+            "minLength": 1
+          },
+          "upstream_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "local_contract": {
+            "type": "string",
+            "pattern": "^docs/workflows/.+\\.md$"
+          },
+          "divergence": {
+            "type": "string",
+            "enum": [
+              "adopt",
+              "extend",
+              "override",
+              "local-only"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "adapters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "claude_skill",
+              "opencode_command",
+              "cursor_rule",
+              "copilot_instruction"
+            ],
+            "properties": {
+              "claude_skill": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "opencode_command": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "cursor_rule": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "copilot_instruction": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "checksums": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mirror_read_only",
+        "require_divergence_tag",
+        "consumer_paths_stable"
+      ],
+      "properties": {
+        "mirror_read_only": {
+          "type": "boolean"
+        },
+        "require_divergence_tag": {
+          "type": "boolean"
+        },
+        "consumer_paths_stable": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
