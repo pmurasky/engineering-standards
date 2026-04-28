@@ -14,7 +14,12 @@ All skills must comply with the Agent Skills spec:
 ├── SKILL.md              # Main skill file (required)
 └── references/           # Additional reference materials (optional)
     └── workflow.md       # Detailed workflow documentation
+
+.opencode/skills/{skill-name}/
+└── SKILL.md              # OpenCode mirror of the same skill contract
 ```
+
+Claude and OpenCode should expose the same skill catalog unless there is a documented tool-specific reason not to. Keep naming aligned across both surfaces.
 
 ### SKILL.md Format
 
@@ -142,6 +147,7 @@ Tests validate:
 - Hard Gates section exists
 - Status Vocabulary section exists
 - References/ folder exists (when applicable)
+- OpenCode and Claude skill names stay in sync when mirrored
 
 ## Versioning
 
@@ -162,4 +168,5 @@ Use git tags for releases. When updating a skill:
 - [ ] Has `## Status Vocabulary` section
 - [ ] Has `## References` section
 - [ ] Uses relative paths for references
+- [ ] Mirrored skill names stay aligned across `.claude/skills/` and `.opencode/skills/`
 - [ ] All tests pass

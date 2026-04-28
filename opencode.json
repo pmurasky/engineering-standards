@@ -7,5 +7,18 @@
     "docs/CODING_STANDARDS.md",
     "docs/AI_AGENT_WORKFLOW.md",
     "docs/PRE_COMMIT_CHECKLIST.md"
+  ],
+  "mcp": {
+    "context-mode": {
+      "type": "local",
+      "command": [
+        "context-mode"
+      ]
+    }
+  },
+  "plugin": [
+    "context-mode",
+    "@tarquinen/opencode-dcp@latest",
+    "opentmux"
   ]
 }
