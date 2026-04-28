@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "default_profiles": [
+    "core",
+    "opencode"
+  ],
+  "profiles": {
+    "core": [
+      "docs"
+    ],
+    "opencode": [
+      "AGENTS.md",
+      "opencode.json",
+      ".opencode/.gitignore",
+      ".opencode/agents",
+      ".opencode/bun.lock",
+      ".opencode/commands",
+      ".opencode/package.json",
+      ".opencode/package-lock.json",
+      ".opencode/skills"
+    ],
+    "claude": [
+      "CLAUDE.md",
+      ".claude/agents",
+      ".claude/hooks",
+      ".claude/rules",
+      ".claude/settings.json",
+      ".claude/skills"
+    ],
+    "cursor": [
+      "AGENTS.md",
+      ".cursor/rules"
+    ],
+    "copilot": [
+      "AGENTS.md",
+      ".github/copilot-instructions.md",
+      ".github/instructions"
+    ]
+  }
+}
