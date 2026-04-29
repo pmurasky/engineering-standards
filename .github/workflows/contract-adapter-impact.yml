@@ -1,0 +1,39 @@
+name: Contract Adapter Impact
+
+on:
+  pull_request:
+    paths:
+      - "docs/workflows/*.md"
+      - "scripts/report_contract_adapter_impact.py"
+      - ".github/workflows/contract-adapter-impact.yml"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  report-impact:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Detect impacted adapters from canonical contract changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 scripts/report_contract_adapter_impact.py \
+            --base "$BASE_SHA" \
+            --head "$HEAD_SHA"
