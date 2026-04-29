@@ -1,8 +1,6 @@
 ---
 name: static-analysis-gate
 description: Run PMD, detekt, and Checkstyle as a hard gate before commit readiness. Zero-tolerance for violations - all must pass.
-version: 1.0.0
-category: quality-gate
 ---
 
 # Static Analysis Gate

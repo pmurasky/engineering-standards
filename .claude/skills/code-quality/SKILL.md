@@ -1,8 +1,6 @@
 ---
 name: code-quality
 description: Review code changes for SOLID, maintainability, and repository quality gates. This is stage 2 of review - run spec-compliance first and proceed only when stage 1 is PASS.
-version: 1.0.0
-category: quality-gate
 ---
 
 # Code Quality Review

@@ -1,8 +1,6 @@
 ---
 name: test-coverage
 description: Assess test completeness and identify missing unit-test coverage for changed behavior. Verify minimum 80% coverage for changed code.
-version: 1.0.0
-category: testing
 ---
 
 # Test Coverage Assessment

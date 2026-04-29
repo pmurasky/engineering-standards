@@ -1,8 +1,6 @@
 ---
 name: micro-commit
-description: Create one production-ready micro-commit following repository standards. Use when user asks "commit my changes", "micro-commit", "help me commit", "ready to commit", or "create commit".
-version: 1.0.0
-category: workflow
+description: Create one production-ready micro-commit following repository standards. Use when the user asks "commit my changes", "micro-commit", "help me commit", "ready to commit", or "create commit".
 ---
 
 # Micro-Commit Workflow

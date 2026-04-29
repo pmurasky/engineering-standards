@@ -1,8 +1,6 @@
 ---
 name: tdd-enforcement
-description: Enforce strict test-first TDD sequencing with hard gates for RED -> GREEN -> REFACTOR. Use when user requests "TDD enforcement", "test-first", "RED GREEN REFACTOR", or "enforce TDD cycle".
-version: 1.0.0
-category: workflow
+description: Enforce strict test-first TDD sequencing with hard gates for RED -> GREEN -> REFACTOR. Use when the user asks for "TDD enforcement", "test-first", "RED GREEN REFACTOR", or "enforce TDD cycle".
 ---
 
 # TDD Enforcement
