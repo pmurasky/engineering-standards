@@ -408,19 +408,19 @@ To add project-specific standards on top of the shared ones:
 
 ## Agent Skills Matrix
 
-This matrix shows the Agent Skills (agentskills.io compliant) available in this repository. The skill catalog is mirrored for Claude Code and OpenCode so both tools can load the same workflow-oriented capability set while `docs/` remains the canonical knowledge base.
+This matrix shows the Agent Skills (agentskills.io compliant) available in this repository. The skill catalog is mirrored for Claude Code and OpenCode so both tools can load the same workflow-oriented capability set.
 
 | Skill | Claude | OpenCode | References |
 |-------|--------|----------|------------|
-| **pre-commit** | [`.claude/skills/pre-commit/`](.claude/skills/pre-commit/) | [`.opencode/skills/pre-commit/`](.opencode/skills/pre-commit/) | `references/workflow.md` on Claude, canonical docs on both |
-| **micro-commit** | [`.claude/skills/micro-commit/`](.claude/skills/micro-commit/) | [`.opencode/skills/micro-commit/`](.opencode/skills/micro-commit/) | `references/workflow.md` on Claude, canonical docs on both |
-| **tdd-enforcement** | [`.claude/skills/tdd-enforcement/`](.claude/skills/tdd-enforcement/) | [`.opencode/skills/tdd-enforcement/`](.opencode/skills/tdd-enforcement/) | `references/workflow.md` on Claude, canonical docs on both |
-| **code-quality** | [`.claude/skills/code-quality/`](.claude/skills/code-quality/) | [`.opencode/skills/code-quality/`](.opencode/skills/code-quality/) | Canonical docs |
-| **commit-review** | [`.claude/skills/commit-review/`](.claude/skills/commit-review/) | [`.opencode/skills/commit-review/`](.opencode/skills/commit-review/) | Canonical docs |
-| **refactoring-gate** | [`.claude/skills/refactoring-gate/`](.claude/skills/refactoring-gate/) | [`.opencode/skills/refactoring-gate/`](.opencode/skills/refactoring-gate/) | Canonical docs |
-| **spec-compliance** | [`.claude/skills/spec-compliance/`](.claude/skills/spec-compliance/) | [`.opencode/skills/spec-compliance/`](.opencode/skills/spec-compliance/) | Canonical docs |
-| **static-analysis-gate** | [`.claude/skills/static-analysis-gate/`](.claude/skills/static-analysis-gate/) | [`.opencode/skills/static-analysis-gate/`](.opencode/skills/static-analysis-gate/) | Canonical docs |
-| **test-coverage** | [`.claude/skills/test-coverage/`](.claude/skills/test-coverage/) | [`.opencode/skills/test-coverage/`](.opencode/skills/test-coverage/) | Canonical docs |
+| **pre-commit** | [`.claude/skills/pre-commit/`](.claude/skills/pre-commit/) | [`.opencode/skills/pre-commit/`](.opencode/skills/pre-commit/) | Local `references/` + skill inline instructions |
+| **micro-commit** | [`.claude/skills/micro-commit/`](.claude/skills/micro-commit/) | [`.opencode/skills/micro-commit/`](.opencode/skills/micro-commit/) | Local `references/` + skill inline instructions |
+| **tdd-enforcement** | [`.claude/skills/tdd-enforcement/`](.claude/skills/tdd-enforcement/) | [`.opencode/skills/tdd-enforcement/`](.opencode/skills/tdd-enforcement/) | Local `references/` + skill inline instructions |
+| **code-quality** | [`.claude/skills/code-quality/`](.claude/skills/code-quality/) | [`.opencode/skills/code-quality/`](.opencode/skills/code-quality/) | Skill-local instructions |
+| **commit-review** | [`.claude/skills/commit-review/`](.claude/skills/commit-review/) | [`.opencode/skills/commit-review/`](.opencode/skills/commit-review/) | Skill-local instructions |
+| **refactoring-gate** | [`.claude/skills/refactoring-gate/`](.claude/skills/refactoring-gate/) | [`.opencode/skills/refactoring-gate/`](.opencode/skills/refactoring-gate/) | Skill-local instructions |
+| **spec-compliance** | [`.claude/skills/spec-compliance/`](.claude/skills/spec-compliance/) | [`.opencode/skills/spec-compliance/`](.opencode/skills/spec-compliance/) | Skill-local instructions |
+| **static-analysis-gate** | [`.claude/skills/static-analysis-gate/`](.claude/skills/static-analysis-gate/) | [`.opencode/skills/static-analysis-gate/`](.opencode/skills/static-analysis-gate/) | Skill-local instructions |
+| **test-coverage** | [`.claude/skills/test-coverage/`](.claude/skills/test-coverage/) | [`.opencode/skills/test-coverage/`](.opencode/skills/test-coverage/) | Skill-local instructions |
 
 ### Agent Skills Specification
 
@@ -432,14 +432,9 @@ All skills comply with [agentskills.io](https://agentskills.io):
 - Optional `references/` folder for detailed documentation
 - Hard Gates and Status Vocabulary sections
 
-### Legacy Canonical Contracts
+### Legacy Workflow Archive
 
-The `docs/workflows/` directory retains canonical contract documentation for reference:
-- `docs/workflows/pre-commit.md`
-- `docs/workflows/micro-commit.md`
-- `docs/workflows/tdd-enforcement.md`
-
-These are now referenced from skill `references/` folders where applicable.
+`docs/workflows/` is now a historical archive from the pre-migration hybrid architecture. It is retained for learning and change-history context only, not as an active source of truth.
 
 ### Enforcement Tests
 

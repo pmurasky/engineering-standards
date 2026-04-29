@@ -28,13 +28,11 @@ Claude and OpenCode should expose the same skill catalog unless there is a docum
 ---
 name: skill-name
 description: Clear description of what this skill does and when to use it.
-version: 1.0.0
-category: quality-gate
 ---
 ```
 
 **Requirements:**
-- Required fields: `name`, `description`, `version`, `category`
+- Required fields: `name`, `description`
 - Optional fields: `dependencies`, `budget`
 - No Claude-specific fields (no `argument-hint`, `disable-model-invocation`, etc.)
 - Description should include trigger phrases (e.g., "Use when user asks...")
@@ -108,7 +106,7 @@ Execute all quality gates. These are non-negotiable:
 
 Create a `references/` folder when:
 - The skill has detailed workflow documentation that would make SKILL.md too long
-- You want to maintain canonical contract documentation separately
+- You want to keep extended examples/checklists separate from the core skill
 - The skill implements a complex multi-step process
 
 Keep SKILL.md under 500 lines by moving detailed content to references/.
@@ -126,9 +124,9 @@ If migrating from the old Skills 2.0 format:
    - Replace `<HARD-GATE>...</HARD-GATE>` with `## Hard Gates`
    - Replace `Canonical Contract: docs/workflows/X.md` with `## References` section
 
-3. Move canonical contract content:
-   - Copy `docs/workflows/{name}.md` to `references/workflow.md`
-   - Update SKILL.md to reference it with relative link
+3. Move detailed workflow content:
+   - Add a local `references/workflow.md` inside the skill folder
+   - Update SKILL.md to reference it with relative links
 
 4. Expand description:
    - Include trigger phrases in the description
@@ -154,26 +152,19 @@ Tests validate:
 - References/ folder exists (when applicable)
 - OpenCode and Claude skill names stay in sync when mirrored
 
-## Versioning
-
-Skills use [Semantic Versioning](https://semver.org/) in the `version` frontmatter field:
-
-- **MAJOR**: Breaking changes to hard gates, status vocabulary, or workflow steps
-- **MINOR**: New features, additional references, non-breaking enhancements
-- **PATCH**: Bug fixes, documentation updates, clarifications
+## Change Management
 
 When updating a skill:
 
-1. Update SKILL.md with new behavior
-2. Bump `version` according to SemVer rules
-3. Update references/ if applicable
-4. Run tests to ensure compliance
-5. Commit with conventional commit message
-6. Update documentation if behavior changes
+1. Update SKILL.md with the behavior change
+2. Update `references/` files (if applicable)
+3. Run tests to ensure compliance
+4. Commit with a conventional commit message
+5. Update docs if the invocation contract changed
 
 ## Quick Checklist
 
-- [ ] Skill has required frontmatter: `name`, `description`, `version`, `category`
+- [ ] Skill has required frontmatter: `name`, `description`
 - [ ] Description includes trigger phrases
 - [ ] Skill is under 500 lines
 - [ ] Has `## Hard Gates` section

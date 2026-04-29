@@ -1,77 +1,25 @@
-# Canonical Workflow Contracts
+# Legacy Workflow Archive
 
-This directory contains canonical workflow contracts that serve as the single source of truth for shared workflows across all tool adapters.
+This directory is a historical archive from the pre-migration hybrid architecture.
 
-## Contract Format
+## Status
 
-Each canonical workflow contract follows this template:
+- `docs/workflows/` is **not** the active source of truth for skill behavior.
+- Current skill behavior is defined by each skill's own `SKILL.md` and local `references/` files.
+- These archived workflow contracts are retained for historical context and learning.
 
-```markdown
-# [Workflow Name] Canonical Contract
+## Why It Exists
 
-## Purpose
-Brief description of what this workflow accomplishes.
+Earlier revisions used canonical contracts in this folder plus tool-specific adapters. The repository now targets Agent Skills-compliant, self-contained skills, so canonical-contract-driven behavior is deprecated.
 
-## Trigger Conditions
-When this workflow should be invoked (specific phrases, conditions, contexts).
+## Archived Files
 
-## Hard Gates
-Non-negotiable blocking conditions that must be enforced.
+- `pre-commit.md`
+- `micro-commit.md`
+- `tdd-enforcement.md`
 
-## Workflow Steps
-Ordered checklist of steps with clear success criteria.
+## Contributor Guidance
 
-## Status Vocabulary
-Required output terms and status indicators that adapters must preserve.
-
-## Fail/Fix/Rerun Loop
-How failures are handled and recovery actions.
-
-## Token Budget Intent
-Whether this is always-on or on-demand, with estimated token usage.
-
-## Required References
-Links to detailed standards docs for full context.
-```
-
-## Tool Adapter Alignment
-
-Each canonical contract maps to multiple tool adapters:
-
-| Workflow | Canonical Contract | Claude Adapter | OpenCode Adapter | Cursor Rule | Copilot Instruction |
-|----------|-------------------|----------------|------------------|-------------|-------------------|
-| pre-commit | `docs/workflows/pre-commit.md` | `.claude/skills/pre-commit/SKILL.md` | `.opencode/commands/pre-commit.md` | `.cursor/rules/engineering-standards.md` | `.github/instructions/micro-commit.instructions.md` |
-| micro-commit | `docs/workflows/micro-commit.md` | `.claude/skills/micro-commit/SKILL.md` | `.opencode/commands/micro-commit.md` | `.cursor/rules/engineering-standards.md` | `.github/instructions/micro-commit.instructions.md` |
-| tdd-enforcement | `docs/workflows/tdd-enforcement.md` | `.claude/skills/tdd-enforcement/SKILL.md` | `.opencode/commands/tdd-enforcement.md` | `.cursor/rules/engineering-standards.md` | `.github/instructions/micro-commit.instructions.md` |
-
-## Design Principles
-
-1. **Concise**: Keep contracts focused on essential workflow logic
-2. **Progressive Disclosure**: Link to detailed docs rather than duplicating content
-3. **Tool-Agnostic**: Avoid tool-specific implementation details
-4. **Testable**: Define clear success/failure criteria
-5. **Stable**: Changes should be rare and well-communicated
-
-## Contract Discovery
-
-Contracts are discovered by convention: any `*.md` file in this directory is treated as a canonical contract, excluding `README.md` and `TEMPLATE.md`. Automated validation tests in `tests/enforcement_integration/` use this convention to verify that every contract has the required sections listed in the template above.
-
-## Contributing
-
-See [CONTRIBUTING-SKILLS.md](./CONTRIBUTING-SKILLS.md) for detailed contributor guidelines covering contract creation, adapter mapping, enforcement testing, and the end-to-end checklist.
-
-**Quick reference — when updating a canonical contract:**
-
-1. Update the canonical contract first
-2. Update all tool adapters to reference the canonical contract
-3. Update enforcement tests to validate parity
-4. Test across all supported tools
-5. Update the workflow mapping table above
-
-**When adding a new workflow:**
-
-1. Follow the contract template format (all eight required sections)
-2. Start with one tool adapter to prove the pattern
-3. Expand to other tools incrementally
-4. Add enforcement tests and pressure fixtures
-5. Add to the mapping table above
+- Do not add new active workflows here.
+- If you need to update live behavior, update the corresponding skill under `.claude/skills/` or `.opencode/skills/`.
+- If you annotate historical docs here, keep notes clearly marked as archival.
