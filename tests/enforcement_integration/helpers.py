@@ -286,14 +286,6 @@ def validate_workflow_parity(workflow_name: str) -> list[str]:
     return problems
 
 
-VALID_CATEGORIES: list[str] = [
-    "quality-gate",
-    "workflow",
-    "review",
-    "testing",
-    "utility",
-]
-
 VALID_BUDGET_FREQUENCIES: list[str] = [
     "per-commit",
     "per-session",
@@ -323,20 +315,23 @@ def validate_skill_metadata(skill_path: Path) -> list[str]:
         problems.append("missing or malformed frontmatter")
         return problems
 
-    required_fields = ["name", "description", "version", "category"]
+    required_fields = ["name", "description"]
     for field in required_fields:
-        if field not in metadata:
+        value = metadata.get(field)
+        if value is None or str(value).strip() == "":
             problems.append(f"missing required metadata field: {field}")
 
-    version = metadata.get("version")
-    if version and not re.match(r"^\d+\.\d+\.\d+$", str(version)):
-        problems.append(f"invalid version format '{version}': expected SemVer (x.y.z)")
-
-    category = metadata.get("category")
-    if category and category not in VALID_CATEGORIES:
+    name = str(metadata.get("name", "")).strip()
+    if name and not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", name):
         problems.append(
-            f"invalid category '{category}': must be one of {', '.join(VALID_CATEGORIES)}"
+            "invalid name format: expected lowercase letters, numbers, and hyphens"
         )
+    if name and len(name) > 64:
+        problems.append("invalid name length: must be <= 64 characters")
+
+    description = str(metadata.get("description", "")).strip()
+    if description and len(description) > 1024:
+        problems.append("invalid description length: must be <= 1024 characters")
 
     return problems
 

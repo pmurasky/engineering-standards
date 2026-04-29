@@ -16,6 +16,7 @@ from helpers import (
     validate_metadata_dependencies,
     validate_metadata_budget,
     discover_skills,
+    parse_frontmatter,
 )
 
 
@@ -141,37 +142,24 @@ class SkillMetadataValidationTests(unittest.TestCase):
                     f"{skill_path.parent.name} metadata issues: {problems}",
                 )
 
-    def test_skill_metadata_validates_version_format(self) -> None:
-        fixture_skill = (
-            REPO_ROOT
-            / "tests"
-            / "fixtures"
-            / "invalid-skills"
-            / "bad-version"
-            / "SKILL.md"
-        )
-        if fixture_skill.exists():
-            problems = validate_skill_metadata(fixture_skill)
-            self.assertTrue(
-                any("invalid version format" in p for p in problems),
-                f"Expected version format error in {problems}",
-            )
+    def test_claude_skills_do_not_require_legacy_metadata_fields(self) -> None:
+        for skill_path in discover_skills("claude"):
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_skill_metadata(skill_path)
+                self.assertFalse(
+                    any("version" in problem or "category" in problem for problem in problems),
+                    f"{skill_path.parent.name} should not require legacy fields: {problems}",
+                )
 
-    def test_skill_metadata_validates_category(self) -> None:
-        fixture_skill = (
-            REPO_ROOT
-            / "tests"
-            / "fixtures"
-            / "invalid-skills"
-            / "bad-category"
-            / "SKILL.md"
-        )
-        if fixture_skill.exists():
-            problems = validate_skill_metadata(fixture_skill)
-            self.assertTrue(
-                any("invalid category" in p for p in problems),
-                f"Expected category error in {problems}",
-            )
+    def test_skill_name_matches_directory_name(self) -> None:
+        for skill_path in discover_skills("claude"):
+            with self.subTest(skill=skill_path.parent.name):
+                metadata = parse_frontmatter(skill_path)
+                self.assertEqual(
+                    metadata.get("name"),
+                    skill_path.parent.name,
+                    f"Skill name must match directory: {skill_path.parent.name}",
+                )
 
     def test_skill_dependencies_are_valid(self) -> None:
         claude_skills = discover_skills("claude")
