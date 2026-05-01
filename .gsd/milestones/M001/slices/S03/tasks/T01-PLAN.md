@@ -1,21 +1,32 @@
 ---
-estimated_steps: 1
-estimated_files: 1
+estimated_steps: 9
+estimated_files: 3
 skills_used: []
 ---
 
-# T01: Create migration execution plan
+# T01: Proof of Concept - Migrate pre-commit Skill
 
-Based on research findings, create detailed task breakdown for migrating all 9 skills. Define proof-of-concept approach, task dependencies, and success criteria.
+Create the template for other skill migrations:
+1. Create `.claude/skills/pre-commit/references/` directory
+2. Copy `docs/workflows/pre-commit.md` to `references/workflow.md`
+3. Update `SKILL.md` frontmatter (remove Claude-specific fields)
+4. Update `SKILL.md` body with inline instructions
+5. Ensure SKILL.md is under 500 lines
+6. Validate structure matches Agent Skills spec
+7. Run existing tests to ensure no breakage
+8. Commit changes
 
 ## Inputs
 
-- `M001-S02 research findings`
+- `docs/workflows/pre-commit.md`
+- `.claude/skills/pre-commit/SKILL.md`
 
 ## Expected Output
 
-- `M001-S03 execution plan`
+- `Updated SKILL.md`
+- `references/workflow.md`
+- `Passing tests`
 
 ## Verification
 
-Execution plan with 13 tasks documented and ready
+SKILL.md has only name and description in frontmatter; references/ folder exists; all tests pass

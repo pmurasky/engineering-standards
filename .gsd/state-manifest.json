@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exported_at": "2026-04-28T23:13:45.443Z",
+  "exported_at": "2026-05-01T23:31:49.200Z",
   "milestones": [
     {
       "id": "M001",
@@ -120,11 +120,11 @@
       "completed_at": null,
       "full_summary_md": "",
       "full_uat_md": "",
-      "goal": "Gather context and decisions for Agent Skills compliance refactoring",
-      "success_criteria": "- Agent Skills spec chosen as target\n- Frontmatter changes decided (remove Claude-specific fields)\n- Migration approach agreed (phase by phase)\n- All canonical refs identified",
-      "proof_level": "Documentary - decisions recorded in discuss artifact",
-      "integration_closure": "Decisions feed into research phase",
-      "observability_impact": "STATE.md updated with decisions",
+      "goal": "Gather context and decisions for migrating from hybrid canonical-contract pattern to strict Agent Skills compliance",
+      "success_criteria": "Not provided.",
+      "proof_level": "Not provided.",
+      "integration_closure": "Not provided.",
+      "observability_impact": "Not provided.",
       "sequence": 1,
       "replan_triggered_at": null,
       "is_sketch": 0,
@@ -144,11 +144,11 @@
       "completed_at": null,
       "full_summary_md": "",
       "full_uat_md": "",
-      "goal": "Research Agent Skills spec requirements and best practices",
-      "success_criteria": "- Agent Skills spec fully understood\n- Directory structure requirements documented\n- Frontmatter constraints documented\n- Progressive disclosure strategy defined\n- Migration requirements enumerated",
-      "proof_level": "Documentary - research findings recorded",
-      "integration_closure": "Findings feed into plan phase",
-      "observability_impact": "RESEARCH.md artifact created",
+      "goal": "Research Agent Skills specification and document migration requirements",
+      "success_criteria": "Not provided.",
+      "proof_level": "Not provided.",
+      "integration_closure": "Not provided.",
+      "observability_impact": "Not provided.",
       "sequence": 2,
       "replan_triggered_at": null,
       "is_sketch": 0,
@@ -168,11 +168,11 @@
       "completed_at": null,
       "full_summary_md": "",
       "full_uat_md": "",
-      "goal": "Create detailed execution plan with tasks for skill migration",
-      "success_criteria": "- 13 tasks defined with dependencies\n- Proof of concept approach specified\n- Risk mitigation documented\n- Rollback plan defined",
-      "proof_level": "Documentary - plan with task breakdown",
-      "integration_closure": "Plan feeds into execution slices",
-      "observability_impact": "PLAN.md artifact created",
+      "goal": "Execute the migration plan: migrate 9 Claude skills from hybrid canonical-contract architecture to strict Agent Skills compliance",
+      "success_criteria": "All 9 skills migrated to Agent Skills compliance. All tests pass. Documentation updated. No functionality lost. Project builds successfully.",
+      "proof_level": "validated",
+      "integration_closure": "All skills use Agent Skills format with inline instructions and references/ folders. Tests validate compliance. Documentation reflects new architecture.",
+      "observability_impact": "Test suite validates Agent Skills structure. Build passes. All skills load correctly.",
       "sequence": 3,
       "replan_triggered_at": null,
       "is_sketch": 0,
@@ -306,11 +306,11 @@
       "completed_at": null,
       "full_summary_md": "",
       "full_uat_md": "",
-      "goal": "Plan and deliver install/update workflow and OpenCode packaging",
-      "success_criteria": "- Installation model chosen\n- Init/update workflow contracts defined\n- OpenCode-native skills packaging direction set\n- Validation coverage specified",
-      "proof_level": "Documentary - plan with task breakdown",
-      "integration_closure": "Plan feeds into implementation tasks",
-      "observability_impact": "PLAN.md artifact created",
+      "goal": "Improve engineering-standards so downstream projects can adopt and update it with a simple, reviewable workflow while keeping the repo file-based rather than plugin-first.",
+      "success_criteria": "Not provided.",
+      "proof_level": "Not provided.",
+      "integration_closure": "Not provided.",
+      "observability_impact": "Not provided.",
       "sequence": 1,
       "replan_triggered_at": null,
       "is_sketch": 0,
@@ -322,7 +322,7 @@
       "milestone_id": "M001",
       "slice_id": "S01",
       "id": "T01",
-      "title": "Gather Agent Skills compliance context",
+      "title": "Gather Agent Skills context and decisions",
       "status": "pending",
       "one_liner": "",
       "narrative": "",
@@ -335,18 +335,21 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Read current skill structure, identify Claude-specific fields, document decisions for migration. Review .claude/skills/ directory and docs/workflows/ canonical contracts.",
-      "estimate": "30 min",
+      "description": "Gather all context needed for the Agent Skills migration:\n1. Understand current hybrid canonical-contract pattern\n2. Identify target Agent Skills specification (agentskills.io)\n3. Document key decisions: frontmatter changes, content strategy, migration approach\n4. Identify all 9 skills to migrate\n5. Map current structure to target structure\n6. Document deferred items (Cursor/Copilot alignment, contract versioning, CI improvements)",
+      "estimate": "1 hour",
       "files": [
         ".claude/skills/*/SKILL.md",
-        "docs/workflows/*.md"
+        "docs/workflows/*.md",
+        "docs/CONTRIBUTING-SKILLS.md"
       ],
-      "verify": "Decisions documented in discuss phase artifact",
+      "verify": "Context document captures all decisions, identifies all 9 skills, maps current→target structure, documents risks and deferred items",
       "inputs": [
-        ".claude/skills/"
+        ".claude/skills/",
+        "docs/workflows/",
+        "docs/CONTRIBUTING-SKILLS.md"
       ],
       "expected_output": [
-        "M001-S01 context document"
+        "01-CONTEXT.md with complete decisions and context"
       ],
       "observability_impact": "",
       "full_plan_md": "",
@@ -374,17 +377,20 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Study agentskills.io specification, document frontmatter requirements, directory structure, and validation rules. Compare with current hybrid implementation.",
-      "estimate": "45 min",
+      "description": "Research the Agent Skills specification and document findings:\n1. Read agentskills.io specification\n2. Document directory structure requirements\n3. Document SKILL.md format (frontmatter fields, body content guidelines)\n4. Document progressive disclosure strategy\n5. Identify key differences from current hybrid implementation\n6. Document migration requirements (frontmatter, content, directory structure, testing)\n7. Assess risks (loss of centralized management, content duplication, test coverage)\n8. Create recommendations for migration approach",
+      "estimate": "2 hours",
       "files": [
+        ".claude/skills/*/SKILL.md",
         "docs/workflows/*.md"
       ],
-      "verify": "Research findings document complete with spec summary and gap analysis",
+      "verify": "Research document covers: directory structure, frontmatter requirements, body guidelines, progressive disclosure, key differences, migration requirements, risks, recommendations",
       "inputs": [
-        "https://agentskills.io/specification"
+        "https://agentskills.io/specification",
+        ".claude/skills/",
+        "docs/workflows/"
       ],
       "expected_output": [
-        "M001-S02 research findings"
+        "02-RESEARCH.md with complete findings and migration requirements"
       ],
       "observability_impact": "",
       "full_plan_md": "",
@@ -399,7 +405,7 @@
       "milestone_id": "M001",
       "slice_id": "S03",
       "id": "T01",
-      "title": "Create migration execution plan",
+      "title": "Proof of Concept - Migrate pre-commit Skill",
       "status": "pending",
       "one_liner": "",
       "narrative": "",
@@ -412,17 +418,504 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Based on research findings, create detailed task breakdown for migrating all 9 skills. Define proof-of-concept approach, task dependencies, and success criteria.",
-      "estimate": "45 min",
+      "description": "Create the template for other skill migrations:\n1. Create `.claude/skills/pre-commit/references/` directory\n2. Copy `docs/workflows/pre-commit.md` to `references/workflow.md`\n3. Update `SKILL.md` frontmatter (remove Claude-specific fields)\n4. Update `SKILL.md` body with inline instructions\n5. Ensure SKILL.md is under 500 lines\n6. Validate structure matches Agent Skills spec\n7. Run existing tests to ensure no breakage\n8. Commit changes",
+      "estimate": "2 hours",
       "files": [
-        ".claude/skills/*/SKILL.md"
+        ".claude/skills/pre-commit/SKILL.md",
+        ".claude/skills/pre-commit/references/workflow.md",
+        "docs/workflows/pre-commit.md"
       ],
-      "verify": "Execution plan with 13 tasks documented and ready",
+      "verify": "SKILL.md has only name and description in frontmatter; references/ folder exists; all tests pass",
       "inputs": [
-        "M001-S02 research findings"
+        "docs/workflows/pre-commit.md",
+        ".claude/skills/pre-commit/SKILL.md"
       ],
       "expected_output": [
-        "M001-S03 execution plan"
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T02",
+      "title": "Migrate micro-commit Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply proof-of-concept pattern to micro-commit skill:\n1. Create `.claude/skills/micro-commit/references/` directory\n2. Copy `docs/workflows/micro-commit.md` to `references/workflow.md`\n3. Update `SKILL.md` frontmatter and body\n4. Validate and test\n5. Commit changes",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/micro-commit/SKILL.md",
+        ".claude/skills/micro-commit/references/workflow.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        "docs/workflows/micro-commit.md",
+        ".claude/skills/micro-commit/SKILL.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T03",
+      "title": "Migrate tdd-enforcement Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply pattern to tdd-enforcement skill. Same steps as Task 2.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/tdd-enforcement/SKILL.md",
+        ".claude/skills/tdd-enforcement/references/workflow.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        "docs/workflows/tdd-enforcement.md",
+        ".claude/skills/tdd-enforcement/SKILL.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T04",
+      "title": "Migrate code-quality Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Migrate code-quality skill. Check if canonical contract exists in docs/workflows/. If yes, migrate as Tasks 2-3. If no, just update frontmatter and ensure self-contained.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/code-quality/SKILL.md"
+      ],
+      "verify": "SKILL.md updated with proper frontmatter and inline instructions",
+      "inputs": [
+        ".claude/skills/code-quality/SKILL.md",
+        "docs/workflows/code-quality.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T05",
+      "title": "Migrate commit-review Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply same migration pattern to commit-review skill.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/commit-review/SKILL.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        ".claude/skills/commit-review/SKILL.md",
+        "docs/workflows/commit-review.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T06",
+      "title": "Migrate refactoring-gate Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply same migration pattern to refactoring-gate skill.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/refactoring-gate/SKILL.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        ".claude/skills/refactoring-gate/SKILL.md",
+        "docs/workflows/refactoring-gate.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T07",
+      "title": "Migrate spec-compliance Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply same migration pattern to spec-compliance skill.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/spec-compliance/SKILL.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        ".claude/skills/spec-compliance/SKILL.md",
+        "docs/workflows/spec-compliance.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T08",
+      "title": "Migrate static-analysis-gate Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply same migration pattern to static-analysis-gate skill.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/static-analysis-gate/SKILL.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        ".claude/skills/static-analysis-gate/SKILL.md",
+        "docs/workflows/static-analysis-gate.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T09",
+      "title": "Migrate test-coverage Skill",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Apply same migration pattern to test-coverage skill.",
+      "estimate": "1 hour",
+      "files": [
+        ".claude/skills/test-coverage/SKILL.md"
+      ],
+      "verify": "Same success criteria as Task 1",
+      "inputs": [
+        ".claude/skills/test-coverage/SKILL.md",
+        "docs/workflows/test-coverage.md"
+      ],
+      "expected_output": [
+        "Updated SKILL.md",
+        "references/workflow.md",
+        "Passing tests"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T10",
+      "title": "Update Enforcement Tests",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Update test suite to validate Agent Skills compliance:\n1. Review `tests/enforcement_integration/test_enforcement_gates.py`\n2. Update `validate_contract_references()` - remove or modify\n3. Update `validate_hard_gate_semantics()` - adapt for inline content\n4. Add `validate_agent_skills_structure()` - check frontmatter compliance\n5. Add `validate_skill_references()` - verify references/ folder files exist\n6. Update test fixtures if needed\n7. Run full test suite\n8. Commit changes",
+      "estimate": "3 hours",
+      "files": [
+        "tests/enforcement_integration/test_enforcement_gates.py"
+      ],
+      "verify": "Tests validate Agent Skills frontmatter, references/ folder structure, SKILL.md line count; all tests pass",
+      "inputs": [
+        "tests/enforcement_integration/test_enforcement_gates.py"
+      ],
+      "expected_output": [
+        "Updated test file",
+        "All tests passing"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T11",
+      "title": "Update CONTRIBUTING-SKILLS.md",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Update contribution guidelines for Agent Skills:\n1. Read current `docs/CONTRIBUTING-SKILLS.md`\n2. Update \"Contract Structure\" section to \"Skill Structure\"\n3. Remove references to canonical contracts\n4. Add Agent Skills frontmatter requirements\n5. Add progressive disclosure guidelines\n6. Update \"Adapter Mapping\" section\n7. Update \"Enforcement Testing\" section\n8. Commit changes",
+      "estimate": "2 hours",
+      "files": [
+        "docs/CONTRIBUTING-SKILLS.md"
+      ],
+      "verify": "Guidelines reflect Agent Skills spec; no references to canonical contracts; clear frontmatter requirements documented",
+      "inputs": [
+        "docs/CONTRIBUTING-SKILLS.md"
+      ],
+      "expected_output": [
+        "Updated CONTRIBUTING-SKILLS.md"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T12",
+      "title": "Update README.md",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Update project README to reflect new architecture:\n1. Read current `README.md`\n2. Update \"What Gets Enforced\" section if needed\n3. Update \"Project Structure\" section\n4. Update \"Tool-Specific Features\" section\n5. Update \"Workflow Parity Matrix\"\n6. Add note about Agent Skills compliance\n7. Commit changes",
+      "estimate": "2 hours",
+      "files": [
+        "README.md"
+      ],
+      "verify": "README accurately describes new structure; no outdated references to canonical contracts",
+      "inputs": [
+        "README.md"
+      ],
+      "expected_output": [
+        "Updated README.md"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M001",
+      "slice_id": "S03",
+      "id": "T13",
+      "title": "Deprecate or Archive Canonical Contracts",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Handle old canonical contracts:\n1. Decide on approach (recommend Option A: move to docs/archived-workflows/)\n2. Execute chosen approach\n3. Update any cross-references\n4. Commit changes",
+      "estimate": "1 hour",
+      "files": [
+        "docs/workflows/"
+      ],
+      "verify": "Old contracts properly archived or removed; cross-references updated",
+      "inputs": [
+        "docs/workflows/"
+      ],
+      "expected_output": [
+        "Archived workflows or updated references"
       ],
       "observability_impact": "",
       "full_plan_md": "",
@@ -629,7 +1122,7 @@
       "milestone_id": "M009",
       "slice_id": "S01",
       "id": "T01",
-      "title": "Define distribution and OpenCode alignment plan",
+      "title": "Define Supported Consumer Installation Modes",
       "status": "pending",
       "one_liner": "",
       "narrative": "",
@@ -642,19 +1135,257 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Design one-command init/update workflow. Define OpenCode-native skills packaging. Specify installer implementation surface. Create validation coverage plan.",
-      "estimate": "60 min",
+      "description": "Establish one canonical install path and clearly demote legacy/manual alternatives.\n\nSteps:\n1. Define the default downstream installation model for this repo.\n2. Decide which alternatives remain supported: copy, submodule, subtree/vendor sync, symlink.\n3. Document support tiers such as recommended, advanced, and legacy/manual.\n4. Ensure the chosen model respects ADR constraints on upstream sync architecture.\n5. Record decision points in docs or ADR-style notes if needed.\n\nSuccess Criteria:\n- One default install story is chosen\n- Alternative flows have explicit support status\n- No conflict with 0001-superpowers-upstream-sync-model.md",
+      "estimate": "2h",
       "files": [
-        "README.md",
-        "opencode.json"
+        "docs/adr/",
+        "README.md"
       ],
-      "verify": "Distribution plan documented with 7 tasks, install/update contracts defined",
+      "verify": "Installation model documented and ADR constraints verified",
       "inputs": [
-        "README.md",
-        "opencode.json"
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
       ],
       "expected_output": [
-        "M009-S01 execution plan"
+        "Installation mode decision document"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M009",
+      "slice_id": "S01",
+      "id": "T02",
+      "title": "Design One-Command Init Workflow",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Specify the bootstrap command that installs standards into a downstream repo with minimal manual work.\n\nSteps:\n1. Define command surface, expected arguments, and target repo assumptions.\n2. Decide which files are copied, generated, or linked during init.\n3. Define behavior for empty repo vs existing repo.\n4. Define idempotency rules and safe re-run behavior.\n5. Define conflict handling for existing AGENTS.md, opencode.json, .opencode/, and .claude/ content.\n\nSuccess Criteria:\n- Init command contract is explicit\n- Existing-project merge behavior is defined\n- Idempotency and conflict rules are documented",
+      "estimate": "2h",
+      "files": [
+        "scripts/",
+        "Makefile",
+        "README.md"
+      ],
+      "verify": "Init workflow documented with command contract and conflict handling",
+      "inputs": [
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
+      ],
+      "expected_output": [
+        "Init workflow specification document"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M009",
+      "slice_id": "S01",
+      "id": "T03",
+      "title": "Design One-Command Update Workflow",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Specify how downstream repos safely adopt newer engineering-standards versions.\n\nSteps:\n1. Decide whether updates are tag-based, branch-based, or file-manifest-based.\n2. Define how the update command detects installed provenance/version.\n3. Define preview/dry-run behavior before overwriting files.\n4. Define how local downstream customizations are preserved or flagged.\n5. Define rollback expectations and failure behavior.\n\nSuccess Criteria:\n- Update flow is reviewable and safe\n- Version/provenance tracking approach is chosen\n- Dry-run or preview behavior is defined",
+      "estimate": "2h",
+      "files": [
+        "scripts/",
+        "Makefile",
+        "README.md"
+      ],
+      "verify": "Update workflow documented with safety rules and rollback plan",
+      "inputs": [
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
+      ],
+      "expected_output": [
+        "Update workflow specification document"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M009",
+      "slice_id": "S01",
+      "id": "T04",
+      "title": "Add OpenCode-Native Skills Packaging Plan",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Bring the repo's OpenCode packaging in line with its documented portability story.\n\nSteps:\n1. Inventory which existing Claude skills should gain OpenCode-native counterparts.\n2. Decide whether .opencode/skills/ should mirror, adapt, or index existing skill content.\n3. Keep docs/ as source of truth where possible, avoiding unnecessary duplication.\n4. Define how OpenCode skills relate to existing instructions, commands, and agents.\n5. Set validation rules so docs never claim skills that are absent from the tree.\n\nSuccess Criteria:\n- .opencode/skills/ direction is explicit\n- Relationship to .claude/skills/ is defined\n- Source-of-truth rules avoid drift",
+      "estimate": "2h",
+      "files": [
+        ".opencode/",
+        ".claude/",
+        "README.md"
+      ],
+      "verify": "OpenCode packaging plan documented with skill inventory and source-of-truth rules",
+      "inputs": [
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
+      ],
+      "expected_output": [
+        "OpenCode skills packaging plan document"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M009",
+      "slice_id": "S01",
+      "id": "T05",
+      "title": "Specify Installer/Updater Implementation Surface",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Decide where the automation lives and how contributors invoke it.\n\nSteps:\n1. Choose implementation surface: scripts/, Makefile, both, or another minimal wrapper.\n2. Define required runtime assumptions (shell, Python, Node, etc.).\n3. Define manifest or file list used by install/update commands.\n4. Decide whether generated wrapper files should be templated.\n5. Define testability expectations for automation logic.\n\nSuccess Criteria:\n- Implementation surface chosen\n- Runtime assumptions are minimal and documented\n- File manifest strategy is defined",
+      "estimate": "2h",
+      "files": [
+        "scripts/",
+        "Makefile",
+        "package.json"
+      ],
+      "verify": "Implementation surface chosen with runtime assumptions and manifest strategy",
+      "inputs": [
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
+      ],
+      "expected_output": [
+        "Implementation surface specification document"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M009",
+      "slice_id": "S01",
+      "id": "T06",
+      "title": "Rewrite Consumer Documentation Around the New Flow",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Make README and related docs reflect the actual supported install/update story.\n\nSteps:\n1. Rewrite README install section around the canonical init/update workflow.\n2. Fix the OpenCode skills mismatch in README and compatibility guidance.\n3. Update project structure examples to include only files that actually exist.\n4. Document advanced/manual alternatives separately from the default flow.\n5. Add versioned update examples and troubleshooting guidance.\n\nSuccess Criteria:\n- README matches repo contents\n- Recommended flow is obvious in first read\n- OpenCode packaging claims are accurate",
+      "estimate": "3h",
+      "files": [
+        "README.md",
+        "docs/"
+      ],
+      "verify": "README updated with accurate install/update flow and OpenCode claims",
+      "inputs": [
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
+      ],
+      "expected_output": [
+        "Updated README.md"
+      ],
+      "observability_impact": "",
+      "full_plan_md": "",
+      "sequence": 0,
+      "blocker_source": "",
+      "escalation_pending": 0,
+      "escalation_awaiting_review": 0,
+      "escalation_artifact_path": null,
+      "escalation_override_applied_at": null
+    },
+    {
+      "milestone_id": "M009",
+      "slice_id": "S01",
+      "id": "T07",
+      "title": "Add Validation Coverage for Distribution Integrity",
+      "status": "pending",
+      "one_liner": "",
+      "narrative": "",
+      "verification_result": "",
+      "duration": "",
+      "completed_at": null,
+      "blocker_discovered": false,
+      "deviations": "",
+      "known_issues": "",
+      "key_files": [],
+      "key_decisions": [],
+      "full_summary_md": "",
+      "description": "Prevent future drift between docs, manifests, and actual packaged files.\n\nSteps:\n1. Add tests or validation scripts for installer manifest integrity.\n2. Add checks ensuring README file lists match repo structure.\n3. Add checks ensuring claimed OpenCode skills exist when documented.\n4. Add tests for init/update dry-run behavior where practical.\n5. Define minimal CI gates for packaging correctness.\n\nSuccess Criteria:\n- Packaging drift is test-detectable\n- Docs-to-tree mismatches are caught automatically\n- Installer/update behavior has regression protection",
+      "estimate": "3h",
+      "files": [
+        "tests/",
+        ".github/workflows/",
+        "scripts/"
+      ],
+      "verify": "Validation scripts added and CI gates defined",
+      "inputs": [
+        ".planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md"
+      ],
+      "expected_output": [
+        "Validation scripts and CI configuration"
       ],
       "observability_impact": "",
       "full_plan_md": "",
