@@ -7,6 +7,12 @@ description: Block refactoring when test coverage or test-health prerequisites a
 
 Run a hard-gate readiness check before any refactoring begins.
 
+## Trigger Conditions
+
+- User requests refactoring of existing code
+- Before any refactoring operation begins
+- Phrases: "refactor this", "clean up code", "improve structure", "refactoring"
+
 ## Hard Gate
 
 Do NOT allow refactoring to proceed until all mandatory prerequisites pass.
@@ -51,6 +57,13 @@ Even for exceptions:
    - Critical path result (if applicable)
    - Test health result (pass/fail with command evidence)
 3. **Required next action**
+
+## Token Budget
+
+- **Category**: On-demand workflow
+- **Estimated usage**: 500-800 tokens per invocation
+- **Frequency**: Per refactoring session (typically 1-5 times per session)
+- **Optimization**: Cache coverage results between invocations
 
 ## References
 
