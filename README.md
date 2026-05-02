@@ -6,7 +6,27 @@ Reusable engineering standards for AI coding agents. Enforces coding practices, 
 
 ## Quick Start
 
-### OpenCode One-Line Install
+### OpenCode Plugin Install (Recommended)
+
+Add the plugin to your project's `opencode.json`:
+
+```json
+{
+  "plugin": ["@pmurasky/engineering-standards"]
+}
+```
+
+Then run:
+
+```bash
+opencode plugin install
+# or
+opencode plug @pmurasky/engineering-standards
+```
+
+This installs the plugin and makes all skills, agents, and commands available in your project.
+
+### Alternative: File-Based Install
 
 Paste this prompt into OpenCode to install the recommended OpenCode profile into the current project:
 
@@ -394,6 +414,29 @@ To add project-specific standards on top of the shared ones:
 2. Reference it from your tool configs alongside the shared standards.
 3. For submodule setups, keep project-specific docs outside the submodule directory so they are not overwritten on update.
 
+## Plugin Architecture
+
+This package is distributed as an **OpenCode plugin** (`@pmurasky/engineering-standards`) with two layers:
+
+1. **NPM Package**: Provides the plugin entry point (`index.js`) with hooks and tools
+2. **Filesystem Content**: Skills, agents, and commands discovered from `.opencode/` directory
+
+### How It Works
+
+When installed via `opencode plugin install`:
+- The npm package is installed into `.opencode/node_modules/`
+- Plugin hooks are registered with the OpenCode runtime
+- Skills, agents, and commands are auto-discovered from `.opencode/skills/`, `.opencode/agents/`, and `.opencode/commands/`
+- Standards documents are accessible via relative paths from the plugin directory
+
+### Plugin Manifest
+
+The plugin exports:
+- **Hooks**: `onInit`, `beforeAgent`, `afterCommand`
+- **Tools**: `checkStandardsCompliance`
+- **Version**: `1.0.0`
+- **Engine Compatibility**: `opencode >=0.1.0`
+
 ## Compatibility Matrix
 
 | Feature | OpenCode | Claude Code | Cursor | Copilot |
@@ -405,6 +448,7 @@ To add project-specific standards on top of the shared ones:
 | Skills | .opencode/skills/ | .claude/skills/ | - | - |
 | Reads AGENTS.md | Native | - | Fallback | Fallback |
 | Reads CLAUDE.md | Fallback | Native | - | - |
+| Plugin Install | npm + `opencode.json` | - | - | - |
 
 ## Agent Skills Matrix
 
