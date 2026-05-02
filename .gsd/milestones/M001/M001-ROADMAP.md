@@ -16,8 +16,8 @@
 - [x] **S02: S02** `risk:Low - research only` `depends:[]`
   > After this: Research findings document complete
 
-- [ ] **S03: GSD Plan Phase** `risk:Low - planning only` `depends:[S02]`
-  > After this: Execution plan with 13 tasks ready
+- [x] **S03: S03** `risk:Low - planning only` `depends:[]`
+  > After this: All .opencode skills load without errors, governance docs reference correct paths, and M001 archival is complete.
 
 ## Boundary Map
 
