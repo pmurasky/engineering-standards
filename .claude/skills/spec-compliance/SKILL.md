@@ -7,6 +7,12 @@ description: Stage 1 review that verifies requirement and acceptance-criteria co
 
 Run stage-1 spec compliance review to verify requirements before code quality checks.
 
+## Trigger Conditions
+
+- User requests review of implementation against requirements
+- Before running code-quality review (stage 2)
+- Phrases: "spec compliance", "requirement review", "acceptance criteria check", "stage 1 review"
+
 ## Hard Gate
 
 Do not proceed to code-quality review while stage 1 is failing.
@@ -40,12 +46,12 @@ Do not include SOLID/style/maintainability issues in this stage.
 - Maintainability review
 - Code style checks
 
-## When to Use
+## Token Budget
 
-Run this skill first when:
-- Reviewing implementation against requirements
-- Verifying acceptance criteria are met
-- Before running code-quality checks
+- **Category**: On-demand workflow
+- **Estimated usage**: 600-900 tokens per invocation
+- **Frequency**: Per review (typically 1-2 times per PR)
+- **Optimization**: Focus on requirement gaps first
 
 ## References
 
