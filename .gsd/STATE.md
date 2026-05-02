@@ -1,8 +1,8 @@
 # GSD State
 
 **Active Milestone:** M001: Agent Skills Compliance
-**Active Slice:** S01: GSD Discuss Phase
-**Phase:** planning
+**Active Slice:** S03: GSD Plan Phase
+**Phase:** evaluating-gates
 **Requirements Status:** 0 active · 0 validated · 0 deferred · 0 out of scope
 
 ## Milestone Registry
@@ -18,4 +18,4 @@
 - None
 
 ## Next Action
-Plan slice S01 (GSD Discuss Phase).
+Evaluate 2 quality gate(s) for S03 before execution.

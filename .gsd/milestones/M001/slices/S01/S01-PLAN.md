@@ -21,7 +21,7 @@ Not provided.
 
 ## Tasks
 
-- [ ] **T01: Gather Agent Skills context and decisions** `est:1 hour`
+- [x] **T01: Gather Agent Skills context and decisions** `est:1 hour`
   Gather all context needed for the Agent Skills migration:
 1. Understand current hybrid canonical-contract pattern
 2. Identify target Agent Skills specification (agentskills.io)

@@ -10,10 +10,10 @@
 
 ## Slices
 
-- [ ] **S01: GSD Discuss Phase** `risk:Low - context gathering only` `depends:[]`
+- [x] **S01: S01** `risk:Low - context gathering only` `depends:[]`
   > After this: Decisions documented and ready for research
 
-- [ ] **S02: GSD Research Phase** `risk:Low - research only` `depends:[S01]`
+- [x] **S02: S02** `risk:Low - research only` `depends:[]`
   > After this: Research findings document complete
 
 - [ ] **S03: GSD Plan Phase** `risk:Low - planning only` `depends:[S02]`
