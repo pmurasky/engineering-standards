@@ -7,6 +7,12 @@ description: Assess test completeness and identify missing unit-test coverage fo
 
 Assess test coverage quality for targeted changes.
 
+## Trigger Conditions
+
+- User requests coverage assessment for changes
+- Before commit when coverage verification is needed
+- Phrases: "test coverage", "coverage check", "missing tests", "coverage assessment"
+
 ## Checks
 
 1. **Identify changed behavior** and existing unit tests
@@ -40,17 +46,24 @@ Assess test coverage quality for targeted changes.
 - Tests that don't verify behavior
 - Overly complex test setup
 
-## Output
+## Output Format
 
 Provide:
-1. Coverage summary for changed code
-2. Missing test scenarios identified
-3. Specific recommendations for additional tests
-4. Test quality observations
+1. **Coverage summary** for changed code
+2. **Missing test scenarios** identified
+3. **Specific recommendations** for additional tests
+4. **Test quality observations**
 
 ## Important
 
 If no automated unit test command is configured, note that explicitly in the report.
+
+## Token Budget
+
+- **Category**: On-demand workflow
+- **Estimated usage**: 700-1000 tokens per invocation
+- **Frequency**: Per commit (typically 5-20 times per development session)
+- **Optimization**: Focus on missing coverage first
 
 ## References
 
