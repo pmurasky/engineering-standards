@@ -1,4 +1,4 @@
-# Pre-Commit Workflow
+# Pre-Commit Canonical Contract
 
 ## Purpose
 Validate that staged changes meet all required quality gates before committing. Ensures every commit is production-ready and follows engineering standards.
@@ -13,7 +13,7 @@ Validate that staged changes meet all required quality gates before committing. 
 **Non-negotiable blocking conditions:**
 
 1. **Unit tests MUST pass** (when project test command exists)
-2. **Build MUST succeed** (when project build command exists)
+2. **Build MUST succeed** (when project build command exists)  
 3. **Lint MUST pass** (when project lint command exists)
 4. **Static analysis MUST pass** (when PMD/detekt/Checkstyle configured)
 
@@ -55,13 +55,20 @@ Validate that staged changes meet all required quality gates before committing. 
 - Lint failures → fix code style issues
 - Static analysis failures → address PMD/detekt/Checkstyle violations
 
-## Token Budget Intent
-**Category**: On-demand workflow
-**Estimated usage**: 800-1200 tokens per invocation
-**Frequency**: Per commit (typically 5-20 times per development session)
-
 ## Required References
 - `docs/PRE_COMMIT_CHECKLIST.md` - Comprehensive checklist with TDD workflow
 - `docs/AI_AGENT_WORKFLOW.md` - Micro-commit philosophy and TDD cycle
 - `docs/STATIC_ANALYSIS_STANDARDS.md` - PMD/detekt/Checkstyle configuration
 - `docs/CODING_PRACTICES.md` - Code quality standards and testing requirements
+
+## Tool Adapter Requirements
+**All adapters MUST preserve:**
+- Hard gate blocking semantics
+- Status vocabulary and output ordering
+- References to canonical documentation
+- Tool-specific metadata (e.g., `disable-model-invocation` for Claude)
+
+**Adapters SHOULD:**
+- Keep content minimal and reference this canonical contract
+- Include tool-specific invocation patterns (e.g., agent routing for OpenCode)
+- Maintain backward compatibility with existing consumer expectations

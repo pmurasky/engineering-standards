@@ -7,6 +7,13 @@ description: Run pre-commit readiness checks and summarize blockers before commi
 
 Validate that staged changes meet all required quality gates before committing.
 
+## Trigger Conditions
+
+- User requests pre-commit check or validation
+- Before any commit operation
+- When staged changes exist and readiness validation is needed
+- Phrases: "ready to commit", "pre-commit check", "can I commit", "validate changes"
+
 ## Hard Gates
 
 Execute all quality gates. These are non-negotiable:
@@ -54,6 +61,19 @@ When validation fails:
 2. Fix blockers in order of priority
 3. Rerun pre-commit check after fixes
 4. Repeat until all gates pass
+
+**Common fix actions:**
+- Test failures → fix code or update tests
+- Build failures → resolve compilation/syntax errors
+- Lint failures → fix code style issues
+- Static analysis failures → address PMD/detekt/Checkstyle violations
+
+## Token Budget
+
+- **Category**: On-demand workflow
+- **Estimated usage**: 800-1200 tokens per invocation
+- **Frequency**: Per commit (typically 5-20 times per development session)
+- **Optimization**: Keep content minimal, reference canonical docs for detail
 
 ## References
 
