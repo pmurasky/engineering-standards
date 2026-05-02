@@ -7,6 +7,12 @@ description: Run PMD, detekt, and Checkstyle as a hard gate before commit readin
 
 Run static-analysis enforcement for the current repository or requested scope.
 
+## Trigger Conditions
+
+- User requests static analysis check
+- Before commit when static analysis is configured
+- Phrases: "static analysis", "PMD check", "detekt", "Checkstyle", "code quality gate"
+
 ## Hard Gate
 
 Do NOT report pass status when any configured static-analysis tool reports violations.
@@ -57,6 +63,13 @@ Do NOT report pass status when any configured static-analysis tool reports viola
    - Severity classification (critical/important/info)
 3. **Blocking findings** first (if any)
 4. **Required next action**
+
+## Token Budget
+
+- **Category**: On-demand workflow
+- **Estimated usage**: 800-1200 tokens per invocation
+- **Frequency**: Per commit (typically 5-20 times per development session)
+- **Optimization**: Focus on blocking findings first
 
 ## References
 
