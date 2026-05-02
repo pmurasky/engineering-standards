@@ -7,6 +7,12 @@ description: Enforce strict test-first TDD sequencing with hard gates for RED ->
 
 Enforce strict test-first TDD sequencing with hard gates for RED → GREEN → REFACTOR cycles.
 
+## Trigger Conditions
+
+- User requests TDD workflow enforcement
+- Before implementing new functionality with TDD
+- Phrases: "TDD enforcement", "test-first", "RED GREEN REFACTOR", "enforce TDD cycle"
+
 ## Hard Gates
 
 **Mandatory TDD Sequencing (no reordering):**
@@ -74,11 +80,33 @@ When TDD violations detected:
 4. Resume workflow: Return to appropriate TDD phase
 5. Verify compliance: Ensure evidence requirements met
 
-Common corrections:
+**Common corrections:**
 - Missing RED evidence → Run test and capture failure
 - Multiple failing tests → Remove extra tests, focus on one
 - Premature implementation → Revert to minimal code for current test
 - Unrelated changes → Remove scope creep, focus on current cycle
+
+## Tool Adapter Requirements
+
+**All adapters MUST preserve:**
+- Hard gate blocking semantics for TDD violations
+- Mandatory sequencing enforcement (RED → GREEN → REFACTOR)
+- Status vocabulary and evidence requirements
+- Rationalization defense patterns
+- References to canonical documentation
+
+**Adapters SHOULD:**
+- Keep content minimal and reference this canonical contract
+- Include tool-specific metadata and invocation patterns
+- Maintain backward compatibility with existing consumer expectations
+- Do not recommend commit readiness (separate workflow)
+
+## Token Budget
+
+- **Category**: On-demand workflow
+- **Estimated usage**: 900-1200 tokens per invocation
+- **Frequency**: During feature development (typically 10-30 cycles per feature)
+- **Optimization**: Keep adapter content minimal, reference canonical docs for detail
 
 ## References
 
