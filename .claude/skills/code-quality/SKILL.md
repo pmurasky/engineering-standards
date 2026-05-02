@@ -7,6 +7,12 @@ description: Review code changes for SOLID, maintainability, and repository qual
 
 Perform a focused code quality review for SOLID compliance and maintainability.
 
+## Trigger Conditions
+
+- User requests code quality review after spec-compliance passes
+- Stage 2 review in the two-stage review workflow
+- Phrases: "code quality review", "review my code", "check SOLID", "maintainability review"
+
 ## Hard Gate
 
 This is **stage 2 of review**.
@@ -41,6 +47,13 @@ Return findings grouped by:
 1. **Critical**: Issues that must be fixed before commit
 2. **Warning**: Issues that should be addressed
 3. **Suggestion**: Improvements to consider
+
+## Token Budget
+
+- **Category**: On-demand workflow
+- **Estimated usage**: 700-1000 tokens per invocation
+- **Frequency**: Per review (typically 1-2 times per PR)
+- **Optimization**: Focus on highest-impact issues first
 
 ## References
 
