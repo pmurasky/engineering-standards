@@ -1,0 +1,44 @@
+{
+  "name": "@pmurasky/engineering-standards",
+  "version": "1.0.0",
+  "description": "Reusable engineering standards for AI coding agents. Enforces coding practices, SOLID principles, TDD micro-commit workflows, and code quality standards across any project.",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./server": "./index.js"
+  },
+  "engines": {
+    "opencode": ">=0.1.0"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "engineering-standards",
+    "code-quality",
+    "solid",
+    "tdd",
+    "micro-commits",
+    "ai-agents"
+  ],
+  "author": "pmurasky",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pmurasky/engineering-standards.git"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    "docs/",
+    "AGENTS.md",
+    "opencode.json",
+    ".opencode/",
+    "config/"
+  ],
+  "scripts": {
+    "test": "echo 'Run tests via your project test runner' && exit 0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.4.0"
+  }
+}
