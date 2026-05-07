@@ -103,6 +103,41 @@ fun generateReport(
 )
 ```
 
+### Ktor Route Function Exception
+
+Ktor route extension functions used for route wiring/registration that receive injected services as parameters are exempt from the 5-parameter limit, because Ktor's routing DSL does not provide a DI container in the route scope. Instead:
+- Group related services into a "context" or "dependencies" object if >7 parameters
+- For ≤7 parameters, direct parameter passing is acceptable without `@Suppress`
+- Document the DI limitation in a comment at the route registration site
+- Route handlers and business logic functions must still follow the normal 5-parameter limit and use a context/dependencies object when more inputs are required
+
+**Example:**
+```kotlin
+// ✅ Acceptable: Ktor route with 6 service parameters (no @Suppress needed)
+fun Route.segmentRoutes(
+    segmentService: SegmentService,
+    validationService: ValidationService,
+    authService: AuthService,
+    auditLogger: AuditLogger,
+    metricsCollector: MetricsCollector,
+    errorHandler: ErrorHandler
+) {
+    // Route implementations...
+}
+
+// ✅ Better for >7 parameters: group into dependencies object
+class SegmentRouteDeps(
+    val segmentService: SegmentService,
+    val validationService: ValidationService,
+    val authService: AuthService,
+    // ... more services
+)
+
+fun Route.segmentRoutes(deps: SegmentRouteDeps) {
+    // Route implementations using deps.segmentService, etc.
+}
+```
+
 ### Extension Functions
 
 **Use appropriately:**
@@ -152,6 +187,62 @@ sealed class ParseResult {
 - Use structured concurrency
 - Handle cancellation properly
 - Prefer `suspend` functions over returning `Deferred`
+
+### Structured Concurrency Best Practices
+
+Always use `coroutineScope` or `supervisorScope` — never launch detached coroutines from `GlobalScope` in production code.
+
+```kotlin
+// ✅ coroutineScope: all children must complete; first failure cancels siblings
+suspend fun fetchAll(ids: List<String>): List<Data> = coroutineScope {
+    ids.map { id -> async { fetch(id) } }.awaitAll()
+}
+
+// ✅ supervisorScope: children fail independently — use for dashboards, batch jobs
+suspend fun loadDashboard(): DashboardData = supervisorScope {
+    val orders = async { loadOrders() }
+    val metrics = async { loadMetrics() }
+    DashboardData(
+        orders = runCatching { orders.await() }.getOrNull(),
+        metrics = runCatching { metrics.await() }.getOrNull(),
+    )
+}
+
+// ✅ CoroutineExceptionHandler for top-level error handling
+val handler = CoroutineExceptionHandler { _, throwable ->
+    logger.error("Unhandled coroutine exception", throwable)
+}
+val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default + handler)
+```
+
+**`kotlinx.coroutines` version:** Use `1.9.x` or latest stable. Minimum `1.8.0` required for K2 compatibility.
+
+### Flow Best Practices
+
+```kotlin
+// ✅ Use StateFlow for UI state (hot, always has a value)
+private val _state = MutableStateFlow(UiState.Loading)
+val state: StateFlow<UiState> = _state.asStateFlow()
+
+// ✅ Use SharedFlow for events (hot, no initial value)
+private val _events = MutableSharedFlow<UiEvent>()
+val events: SharedFlow<UiEvent> = _events.asSharedFlow()
+
+// ✅ Cold flow for data pipelines
+fun orderUpdates(orderId: String): Flow<Order> = flow {
+    while (true) {
+        emit(repository.findById(orderId))
+        delay(5.seconds)
+    }
+}.flowOn(Dispatchers.IO)
+
+// ✅ collectLatest for UI — cancels previous when new value arrives
+viewModelScope.launch {
+    searchQuery.collectLatest { query ->
+        updateResults(search(query))
+    }
+}
+```
 
 ### Collections and Sequences
 
@@ -217,6 +308,31 @@ fun readConfig(path: Path): Result<Config> = runCatching {
 - Leverage Kotlin features in tests (named arguments, backticks for test names)
 - Consider MockK for mocking (more Kotlin-friendly than Mockito)
 - Data classes simplify test assertions
+- Use **Kotest Assertions** for fluent, idiomatic Kotlin assertions
+
+### Power Assert Plugin (Kotlin 2.0+)
+
+Enable the Power Assert compiler plugin for enhanced assertion messages — it shows the intermediate values in a failing expression without extra code.
+
+```kotlin
+// In build.gradle.kts
+plugins {
+    kotlin("plugin.power-assert") version "2.3.0"
+}
+
+powerAssert {
+    functions = listOf("kotlin.assert", "kotlin.test.assertTrue", "kotlin.test.assertEquals")
+}
+```
+
+```kotlin
+// With Power Assert enabled, a failing assert like:
+assert(user.age > 18 && user.active)
+// Produces:
+// assert(user.age > 18 && user.active)
+//        |    |   |       |    |
+//        User 17  false   User false
+```
 
 **Example:**
 ```kotlin
@@ -232,9 +348,64 @@ fun `should calculate correct score with multiple penalties`() {
     val score = scorer.calculateScore(findings)
     
     // Then
-    assertEquals(82, score)
+    score shouldBe 82
 }
 ```
+
+### Kotest Assertions
+
+Kotest Assertions is the preferred assertion library for Kotlin. It provides an idiomatic infix style, 350+ matchers, and native null-safety awareness with no Java interop friction. It works standalone with the JUnit 5 runner — the full Kotest framework is not required.
+
+**Dependency** (test scope):
+```kotlin
+testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+```
+
+**Infix style:**
+```kotlin
+name shouldBe "Frodo"
+list shouldHaveSize 3
+result shouldNotBe null
+age shouldBeGreaterThan 0
+```
+
+**Chaining:**
+```kotlin
+"substring".shouldContain("str").shouldBeLowerCase()
+```
+
+**Collection matchers:**
+```kotlin
+list.shouldContainExactly(a, b, c)
+list.shouldContainInOrder(a, b)
+list.shouldHaveSize(3)
+map.shouldContainKey("id")
+```
+
+**Exception assertions:**
+```kotlin
+shouldThrow<IllegalArgumentException> {
+    myFunction(invalidInput)
+}
+```
+
+**Soft assertions** — collect all failures before reporting:
+```kotlin
+assertSoftly {
+    name shouldBe "Alice"
+    age shouldBe 30
+    email shouldContain "@"
+}
+```
+
+**Failure context with `withClue`:**
+```kotlin
+withClue("user should be active after registration") {
+    user.active shouldBe true
+}
+```
+
+> **AssertJ note:** AssertJ is acceptable for Kotlin teams migrating from Java. Kotest Assertions is preferred for new Kotlin projects.
 
 ### Architecture Testing with ArchUnit
 
@@ -268,6 +439,30 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
 ```
+
+## Dependency Version Selection (MANDATORY)
+
+**When adding or updating any dependency, always select the latest version that has no known vulnerabilities.**
+
+1. **Identify the latest published version** on Maven Central.
+2. **Scan for vulnerabilities** using the OWASP Dependency-Check Gradle plugin.
+3. **If the latest version is vulnerable**, step back to the most-recent clean version and document why in the commit message.
+4. **Never pin an older version out of habit** — always start from latest and work backwards only if forced by a CVE.
+
+```bash
+# Check for known vulnerabilities in your dependency tree
+./gradlew dependencyCheckAnalyze
+```
+
+**Commit message example when stepping back from latest:**
+```
+chore(deps): pin jackson-module-kotlin to 2.15.4 instead of 2.16.0
+
+2.16.0 has CVE-2024-XXXXX (high severity, no fix yet).
+2.15.4 is the latest clean version. Revisit when a patched 2.16.x is released.
+```
+
+See [CODING_PRACTICES.md](./CODING_PRACTICES.md#version-selection-rule-mandatory) for the full cross-ecosystem rule and audit tool table.
 
 ## Code Quality Tools
 
@@ -470,7 +665,7 @@ detekt {
 
 ## SOLID Principles Notes
 
-Use the guide in `./SOLID_PRINCIPLES.md` and apply these Kotlin-specific practices:
+Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Kotlin-specific practices:
 - **SRP**: Use data classes for focused value objects; extract responsibilities into separate classes with constructor injection.
 - **OCP**: Use sealed interfaces with `when` for known type hierarchies (compiler-enforced exhaustiveness); use interfaces + implementations for open extension.
 - **LSP**: Sealed classes/interfaces help control substitution; avoid throwing `UnsupportedOperationException` in overrides -- redesign the hierarchy instead.
@@ -479,17 +674,55 @@ Use the guide in `./SOLID_PRINCIPLES.md` and apply these Kotlin-specific practic
 
 ## Design Patterns Notes
 
-Use the catalog in `./DESIGN_PATTERNS.md` and apply these Kotlin-specific practices:
+Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these Kotlin-specific practices:
 - **Strategy/State**: Prefer sealed interfaces with `when` for exhaustive handling.
 - **Builder**: Prefer named arguments and default parameters before introducing a builder.
 - **Singleton**: Use `object` declarations; avoid global mutable state.
 - **Decorator/Proxy**: Use delegation (`by`) to compose behavior cleanly.
 - **Factory Method**: Use companion object factories for clarity and validation.
 
+## K2 Compiler (Kotlin 2.0+)
+
+Kotlin 2.0 ships the **K2 compiler** as the default. For developers, the practical changes are:
+
+### What changed
+- **Compilation speed**: 2× faster compilation on average for large projects
+- **Improved smart casts**: K2 performs more accurate data-flow analysis — previously ambiguous casts that required explicit checks now resolve automatically
+- **Stricter inference**: Some edge-case code that compiled on K1 now produces warnings or errors; treat these as correctness improvements, not regressions
+
+### Smart cast improvements
+
+```kotlin
+// K1: required explicit check even after null-check
+class Container(val value: String?)
+
+fun process(c: Container) {
+    if (c.value != null) {
+        val length = c.value.length  // K1 sometimes needed c.value!!; K2 handles it
+    }
+}
+
+// K2: smart cast works through property access in more cases
+data class Config(val host: String?, val port: Int?)
+
+fun connect(cfg: Config) {
+    requireNotNull(cfg.host) { "host required" }
+    requireNotNull(cfg.port) { "port required" }
+    openConnection(cfg.host, cfg.port)  // K2: both smart-cast to non-null here
+}
+```
+
+### Migration checklist
+- [ ] Set `kotlin.jvm.target.validation.mode=warning` in `gradle.properties` to catch JVM target mismatches
+- [ ] Upgrade `kotlinx.coroutines` to 1.8.0+ before enabling K2 (earlier versions have K2 incompatibilities)
+- [ ] Run `./gradlew build` with K2 and address new warnings — most are correctness improvements
+- [ ] `languageVersion = "2.0"` in your Kotlin compiler options (or use `kotlin("jvm") version "2.0.0"+`)
+
 ## Kotlin 2.3.0 Features
 
 Leverage modern Kotlin features:
 - Context receivers (if appropriate)
+- Context parameters (Kotlin 2.x experimental) — successor to context receivers; pass contextual dependencies implicitly without adding them to every function signature. Status: experimental in 2.x, use with caution in production
 - Improved type inference
 - Inline value classes for type safety
 - Follow Kotlin 2.0+ idioms
@@ -504,6 +737,6 @@ Leverage modern Kotlin features:
 
 ---
 
-**Last Updated**: February 19, 2026  
-**Version**: 1.2  
+**Last Updated**: 2026-04-30  
+**Version**: 1.3  
 **Kotlin Version**: 2.3.0

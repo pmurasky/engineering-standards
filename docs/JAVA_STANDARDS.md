@@ -630,6 +630,84 @@ void shouldApplyCorrectPenaltyPerSeverity(Severity severity, int expected) {
 }
 ```
 
+### AssertJ Fluent Assertions
+
+AssertJ provides a fluent, discoverable API that produces readable failure messages. It is the preferred assertion library for all Java tests.
+
+**Dependency** (test scope):
+```xml
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <version>3.27.3</version>
+    <scope>test</scope>
+</dependency>
+```
+
+**Fluent chaining on strings and objects:**
+```java
+assertThat(name).startsWith("Fro")
+                .endsWith("do")
+                .isEqualToIgnoringCase("frodo");
+```
+
+**Collection assertions:**
+```java
+// Exactly these elements, in this order
+assertThat(results).containsExactly(a, b, c);
+
+// Exactly these elements, any order
+assertThat(results).containsExactlyInAnyOrder(a, b, c);
+
+// Contains at least these (may have others)
+assertThat(results).contains(a, b);
+
+// Pull a field from each element and assert on it
+assertThat(findings).extracting(Finding::severity)
+                    .containsExactly(HIGH, LOW);
+
+// Filter then assert
+assertThat(findings).filteredOn(f -> f.severity() == HIGH)
+                    .hasSize(1);
+```
+
+**Exception assertions:**
+```java
+assertThatThrownBy(() -> service.process(null))
+    .isInstanceOf(IllegalArgumentException.class)
+    .hasMessage("input must not be null");
+```
+
+**Soft assertions** — collect all failures before reporting:
+```java
+assertSoftly(softly -> {
+    softly.assertThat(response.getStatus()).isEqualTo(200);
+    softly.assertThat(response.getBody()).contains("success");
+    softly.assertThat(response.getHeaders()).containsKey("Content-Type");
+});
+```
+
+Use soft assertions when verifying multiple independent properties of the same result.
+Use fail-fast (default) when later assertions depend on an earlier result.
+
+**Custom error messages with `as()`:**
+```java
+// CORRECT — as() must come BEFORE the assertion
+assertThat(user.getAge()).as("check %s's age", user.getName()).isGreaterThan(0);
+
+// WRONG — as() after the assertion is silently ignored; no error, no label
+assertThat(user.getAge()).isGreaterThan(0).as("check age");  // ❌
+```
+
+**Common pitfalls:**
+```java
+// WRONG — assertThat(boolean) asserts nothing meaningful (always passes)
+assertThat(actual.equals(expected));            // ❌ compiles, passes, tests nothing
+
+// CORRECT — compare through AssertJ's fluent API
+assertThat(actual).isEqualTo(expected);         // ✅
+```
+
 ### Architecture Testing with ArchUnit
 
 ArchUnit enforces architectural constraints as standard JUnit 5 tests: layer boundaries, package cycles, dependency direction, and naming conventions. It catches violations that PMD/Checkstyle cannot detect.
@@ -668,6 +746,32 @@ java {
 }
 ```
 
+## Dependency Version Selection (MANDATORY)
+
+**When adding or updating any dependency, always select the latest version that has no known vulnerabilities.**
+
+1. **Identify the latest published version** on Maven Central.
+2. **Scan for vulnerabilities** using the OWASP Dependency-Check plugin.
+3. **If the latest version is vulnerable**, step back to the most-recent clean version and document why in the commit message.
+4. **Never pin an older version out of habit** — always start from latest and work backwards only if forced by a CVE.
+
+```bash
+# Check for known vulnerabilities in your dependency tree
+./gradlew dependencyCheckAnalyze
+# Maven equivalent
+mvn org.owasp:dependency-check-maven:check
+```
+
+**Commit message example when stepping back from latest:**
+```
+chore(deps): pin jackson-databind to 2.15.4 instead of 2.16.0
+
+2.16.0 has CVE-2024-XXXXX (high severity, no fix yet).
+2.15.4 is the latest clean version. Revisit when a patched 2.16.x is released.
+```
+
+See [CODING_PRACTICES.md](./CODING_PRACTICES.md#version-selection-rule-mandatory) for the full cross-ecosystem rule and audit tool table.
+
 ## Code Quality Tools
 
 For the overarching static analysis philosophy, zero-tolerance policy, suppression strategy, incremental adoption, and cross-language tool matrix, see [STATIC_ANALYSIS_STANDARDS.md](./STATIC_ANALYSIS_STANDARDS.md). This section covers Java-specific configuration and integration.
@@ -685,11 +789,6 @@ For the overarching static analysis philosophy, zero-tolerance policy, suppressi
 - 0-2 private methods per class (SRP guideline)
 - 80%+ unit test coverage (JaCoCo, unit tests only -- integration/E2E tests do not count toward coverage)
 - No duplicated code
-
-**Java testing scope clarification:**
-- Do not add direct unit tests for boilerplate-only `@Entity`/DTO/record classes that only contain trivial getters/setters.
-- Add direct tests when classes include behavior such as validation, derived fields, lifecycle hooks (`@PrePersist`, `@PreUpdate`), or custom `equals`/`hashCode`/`compareTo` semantics.
-- Prefer testing domain contracts and business rules over framework-generated/accessor boilerplate.
 
 ### Checkstyle Configuration
 
@@ -1053,7 +1152,7 @@ public class OrderService {
 
 ## SOLID Principles Notes
 
-Use the guide in `./SOLID_PRINCIPLES.md` and apply these Java-specific practices:
+Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Java-specific practices:
 - **SRP**: Use records for focused data carriers; extract services by domain responsibility.
 - **OCP**: Use sealed interfaces + pattern matching (`switch` expressions) for known, closed type hierarchies; use Strategy pattern (interface + implementations) for open extension.
 - **LSP**: Use sealed interfaces to control the type hierarchy; avoid `UnsupportedOperationException` -- redesign the abstraction instead.
@@ -1062,7 +1161,7 @@ Use the guide in `./SOLID_PRINCIPLES.md` and apply these Java-specific practices
 
 ## Design Patterns Notes
 
-Use the catalog in `./DESIGN_PATTERNS.md` and apply these Java-specific practices:
+Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these Java-specific practices:
 - **Strategy**: Prefer sealed interfaces for strategy families with a small, known set of implementations.
 - **Factory Method/Abstract Factory**: Use static factory methods or factory interfaces; avoid reflection-based factories.
 - **Builder**: Prefer builders for complex construction with optional fields; keep builders immutable.
@@ -1104,6 +1203,8 @@ public class Order {
 | Pattern Matching for `instanceof` | 16 | 394 |
 | Switch Pattern Matching | 21 | 441 |
 | Text Blocks | 15 | 378 |
+| Virtual Threads | 21 | 444 |
+| Sequenced Collections | 21 | 431 |
 | Unnamed Variables & Patterns (`_`) | 22 | 456 |
 | Markdown Javadoc (`///`) | 23 | 467 |
 | Stream Gatherers | 24 | 485 |
@@ -1122,6 +1223,6 @@ public class Order {
 
 ---
 
-**Last Updated**: February 19, 2026
+**Last Updated**: April 30, 2026
 **Version**: 2.1
 **Java Versions**: 21 (LTS), 25 (LTS)

@@ -3,7 +3,7 @@
 ## Overview
 This document outlines TypeScript and JavaScript-specific coding standards that supplement the language-agnostic standards in `CODING_PRACTICES.md` and `CODING_STANDARDS.md`.
 
-We support **TypeScript 5.x** with strict mode enabled. All new code MUST be written in TypeScript. JavaScript is accepted only for configuration files (e.g., `jest.config.js`, `.eslintrc.cjs`) and legacy code that has a migration plan.
+We support **TypeScript 5.4+** (stay within N-1 of latest stable) with strict mode enabled. All new code MUST be written in TypeScript. JavaScript is accepted only for configuration files (e.g., `jest.config.js`, `.eslintrc.cjs`) and legacy code that has a migration plan.
 
 ## Mandatory Rules
 
@@ -53,6 +53,32 @@ execFile("ls", [userInput]);
 - When a dependency is necessary, document the reason in the commit message
 - Audit dependencies for security vulnerabilities (`npm audit`)
 - Pin major versions in `package.json` (use `^` for minor/patch flexibility)
+
+**Version Selection Rule (MANDATORY):** When adding or updating any dependency, always select the latest version that has no known vulnerabilities.
+
+1. **Identify the latest published version** on npm.
+2. **Scan for vulnerabilities** using `npm audit` after installing.
+3. **If the latest version is vulnerable**, step back to the most-recent clean version and document why in the commit message.
+4. **Never pin an older version out of habit** — always start from latest and work backwards only if forced by a CVE.
+
+```bash
+# Install the latest version and immediately audit
+npm install <package>@latest
+npm audit
+
+# Or audit an existing install
+npm audit --audit-level=high
+```
+
+**Commit message example when stepping back from latest:**
+```
+chore(deps): pin axios to 1.6.8 instead of 1.7.0
+
+1.7.0 has CVE-2024-XXXXX (high severity, no fix yet).
+1.6.8 is the latest clean version. Revisit when a patched version is released.
+```
+
+See [CODING_PRACTICES.md](./CODING_PRACTICES.md#version-selection-rule-mandatory) for the full cross-ecosystem rule and audit tool table.
 
 ### Logging
 
@@ -241,6 +267,88 @@ type RequiredOrder = Required<Order>;
 type OrderSummary = Pick<Order, "id" | "total" | "status">;
 type PublicOrder = Omit<Order, "internalNotes">;
 type StatusMap = Record<OrderStatus, string>;
+```
+
+### TypeScript 5.x Features
+
+#### `satisfies` Operator (TS 4.9+)
+
+Use `satisfies` to validate a value against a type while keeping the widest inferred type. Prefer over `as Type` assertions.
+
+```typescript
+// Bad: `as` assertion silences the compiler — no runtime safety
+const config = { host: "localhost", port: 8080 } as Config;
+
+// Good: satisfies validates the shape without narrowing
+const config = {
+  host: "localhost",
+  port: 8080,
+} satisfies Config;
+// config.host is still typed as string literal "localhost", not string
+```
+
+**When to use `satisfies`:**
+- Object literals that must conform to an interface but you want precise literal types
+- Route maps, config objects, theme tokens — any "bag of values with a known shape"
+
+#### `using` / `await using` — Explicit Resource Management (TS 5.2)
+
+Automatically dispose of resources when they leave scope. Works with any object implementing `Symbol.dispose` or `Symbol.asyncDispose`.
+
+```typescript
+// Before: manual cleanup
+const conn = openConnection();
+try {
+  conn.query("SELECT 1");
+} finally {
+  conn.close();
+}
+
+// With using: cleanup is guaranteed even on throw
+using conn = openConnection(); // calls conn[Symbol.dispose]() on scope exit
+conn.query("SELECT 1");
+
+// Async version
+await using conn = openAsyncConnection();
+await conn.query("SELECT 1");
+```
+
+**Implementation pattern:**
+```typescript
+function openConnection(): Connection & Disposable {
+  const conn = createConnection();
+  return Object.assign(conn, {
+    [Symbol.dispose]() { conn.close(); },
+  });
+}
+```
+
+#### `NoInfer<T>` Utility Type (TS 5.4)
+
+Prevents TypeScript from using a type parameter as an inference site. Useful for constraining generic functions where one argument should not influence the inferred type.
+
+```typescript
+// Without NoInfer: TypeScript infers T from both arguments
+function createState<T>(initial: T, fallback: T): T { return initial ?? fallback; }
+// createState("hello", 42) infers T as string | number — not what you want
+
+// With NoInfer: only `initial` drives inference; fallback must match
+function createState<T>(initial: T, fallback: NoInfer<T>): T { return initial ?? fallback; }
+// createState("hello", 42) — TypeScript error: 42 is not assignable to string
+```
+
+#### Const Type Parameters (TS 5.0)
+
+Add `const` to type parameter declarations to infer the narrowest type, equivalent to `as const` on the call site.
+
+```typescript
+// Without const modifier: T inferred as string[] — caller must add 'as const' to get literal types
+function toTuple<T extends readonly unknown[]>(arr: T) { return arr; }
+toTuple(["a", "b"] as const); // type: readonly ["a", "b"] — requires caller annotation
+
+// With const modifier: infers readonly ["a", "b"] automatically
+function toTuple<const T extends readonly unknown[]>(arr: T) { return arr; }
+toTuple(["a", "b"]); // type: readonly ["a", "b"] — no caller annotation needed
 ```
 
 ### Generics
@@ -737,6 +845,66 @@ function createTestOrder(overrides: Partial<Order> = {}): Order {
 }
 ```
 
+### Vitest Assertions — Key Patterns
+
+**`toBe` vs `toEqual` — the most common confusion:**
+```typescript
+// toBe — uses === (reference / primitive equality)
+expect(42).toBe(42)               // ✅ primitives
+expect(obj).toBe(obj)             // ✅ same reference
+
+// toEqual — deep equality (use for objects and arrays)
+expect({ name: 'Alice' }).toEqual({ name: 'Alice' })   // ✅
+expect([1, 2, 3]).toEqual([1, 2, 3])                   // ✅
+```
+
+**Partial matching with `toMatchObject`:**
+```typescript
+expect(response).toMatchObject({
+    status: 'success',
+    user: { name: 'Alice' }
+    // other fields are ignored
+})
+```
+
+**Exception assertions:**
+```typescript
+expect(() => service.process(null)).toThrowError('input must not be null')
+expect(() => service.process(null)).toThrowError(/must not be null/)
+```
+
+**Async — `resolves` and `rejects`:**
+```typescript
+await expect(fetchUser(42)).resolves.toEqual({ id: 42, name: 'Alice' })
+await expect(fetchUser(-1)).rejects.toThrowError('User not found')
+```
+
+**Soft assertions with `expect.soft`** — continues after failure, all failures reported at end:
+```typescript
+test('validates response shape', () => {
+    expect.soft(response.status).toBe(200)
+    expect.soft(response.body.name).toBe('Alice')
+    expect.soft(response.headers['Content-Type']).toContain('application/json')
+})
+```
+
+**Asymmetric matchers** — for dynamic or partial data:
+```typescript
+expect(response).toEqual({
+    id: expect.any(Number),
+    name: expect.stringContaining('Alice'),
+    tags: expect.arrayContaining(['admin']),
+    meta: expect.objectContaining({ active: true })
+})
+```
+
+**Spy / mock assertions:**
+```typescript
+expect(mockFn).toHaveBeenCalledTimes(1)
+expect(mockFn).toHaveBeenCalledWith('expected-arg')
+expect(mockFn).not.toHaveBeenCalled()
+```
+
 ## Build Tools and Project Configuration
 
 **Use `tsconfig.json` with strict settings (see TypeScript Strict Mode section above).**
@@ -797,8 +965,11 @@ function createTestOrder(overrides: Partial<Order> = {}): Order {
 - **pre-commit hooks** (husky + lint-staged): Format check + lint + type check on every commit
 - **CI pipeline**: Run format check + lint + type check + tests on each PR
 
-**Recommended ESLint configuration (flat config, `eslint.config.ts`):**
-```typescript
+**Recommended ESLint configuration (flat config, `eslint.config.mjs`):**
+
+> **ESLint Flat Config**: ESLint 9.x uses `eslint.config.mjs` by default. Use `eslint.config.ts` only if your project has a bundler or ts-node/tsx runner configured — it requires `--flag unstable_ts_config` (ESLint 9.9+, still experimental). Prefer `.mjs` for new projects.
+
+```javascript
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
@@ -934,16 +1105,16 @@ function addTag(tag: string, tags: readonly string[] = []): readonly string[] {
 
 ## SOLID Principles Notes
 
-Use the guide in `./SOLID_PRINCIPLES.md` and apply these TypeScript-specific practices:
+Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these TypeScript-specific practices:
 - **SRP**: Use interfaces and classes for focused responsibilities; extract responsibilities into separate classes with constructor injection.
 - **OCP**: Use interfaces with concrete implementations; use Strategy pattern (interface + implementations) for open extension.
-- **LSP**: Interfaces enforce contracts; avoid placeholder throws in implementations by redesigning the abstraction. If a temporary guard is unavoidable, throw `new Error("Not implemented")` with a clear migration note.
+- **LSP**: Interfaces enforce contracts; avoid throwing `NotImplementedError` in implementations -- redesign the abstraction instead.
 - **ISP**: TypeScript supports interface composition natively; keep interfaces small (1-3 methods) and compose them with `extends`.
 - **DIP**: Use constructor injection with interface types; enable test injection by depending on abstractions, not concrete classes.
 
 ## Design Patterns Notes
 
-Use the catalog in `./DESIGN_PATTERNS.md` and apply these TypeScript-specific practices:
+Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these TypeScript-specific practices:
 - **Strategy**: Use interfaces for strategy contracts; pass implementations via constructor injection.
 - **Factory Method/Abstract Factory**: Use factory functions or static factory methods; avoid complex factory class hierarchies.
 - **Builder**: Use parameter objects with optional properties or the builder pattern for complex construction; leverage TypeScript's type system for compile-time validation.
@@ -972,6 +1143,6 @@ Every TypeScript/JavaScript change must satisfy these criteria before it is cons
 
 ---
 
-**Last Updated**: February 19, 2026
+**Last Updated**: 2026-04-30
 **Version**: 1.0
-**TypeScript Version**: 5.x (strict mode)
+**TypeScript Version**: 5.4+ (strict mode)

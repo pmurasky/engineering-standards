@@ -47,6 +47,34 @@ result = subprocess.run(["ls", user_input], check=True, capture_output=True, tex
 - Prefer `pathlib.Path` over `os.path` for file system operations
 - Prefer `dataclasses` over third-party alternatives for simple structured data
 
+**Version Selection Rule (MANDATORY):** When adding or updating any dependency, always select the latest version that has no known vulnerabilities.
+
+1. **Identify the latest published version** on PyPI.
+2. **Scan for vulnerabilities** using `pip-audit` (or `safety check`).
+3. **If the latest version is vulnerable**, step back to the most-recent clean version and document why in the commit message.
+4. **Never pin an older version out of habit** — always start from latest and work backwards only if forced by a CVE.
+
+```bash
+# Install pip-audit
+pip install pip-audit
+
+# Scan installed packages for known vulnerabilities
+pip-audit
+
+# Or scan a requirements file
+pip-audit -r requirements.txt
+```
+
+**Commit message example when stepping back from latest:**
+```
+chore(deps): pin requests to 2.31.0 instead of 2.32.0
+
+2.32.0 has CVE-2024-XXXXX (high severity, no fix yet).
+2.31.0 is the latest clean version. Revisit when a patched version is released.
+```
+
+See [CODING_PRACTICES.md](./CODING_PRACTICES.md#version-selection-rule-mandatory) for the full cross-ecosystem rule and audit tool table.
+
 ### Logging
 
 - Use the `logging` module for all production code (not `print`)
@@ -614,6 +642,84 @@ def order_service(mock_repository, mock_notifier) -> OrderService:
     return OrderService(repository=mock_repository, notifier=mock_notifier)
 ```
 
+### Fluent Assertions with assertpy
+
+Use **bare `assert`** for simple scalar equality checks — pytest's assertion rewriting gives good diffs. Use **assertpy** for collections, chaining, soft assertions, and when descriptive failure context is needed.
+
+**When to use which:**
+- Bare `assert` — `assert result == 42`, `assert user is not None`
+- assertpy — collections, chained checks, soft assertions, failure labels
+
+**Basic fluent chaining:**
+```python
+from assertpy import assert_that
+
+assert_that('foobar').is_length(6).starts_with('foo').ends_with('bar')
+assert_that(42).is_greater_than(0).is_less_than(100)
+```
+
+**Collection assertions:**
+```python
+assert_that(people).extracting('name').contains('Alice', 'Bob')
+assert_that(results).is_length(3).contains_only('a', 'b', 'c')
+assert_that(scores).is_sorted()
+```
+
+**Exception assertions:**
+```python
+assert_that(my_function).raises(ValueError).when_called_with(bad_input)
+```
+
+**Soft assertions** — collect all failures before reporting:
+```python
+from assertpy import soft_assertions
+
+with soft_assertions():
+    assert_that(response.status_code).is_equal_to(200)
+    assert_that(response.json()['name']).is_equal_to('Alice')
+    assert_that(response.headers['Content-Type']).contains('application/json')
+```
+
+**Failure context with `described_as`:**
+```python
+assert_that(invoice.total).described_as('invoice total after discount').is_equal_to(99.99)
+```
+
+## Package and Environment Management
+
+### uv (Recommended — 2025/2026)
+
+`uv` is the recommended Python package and environment manager. It replaces `pip`, `venv`, `pip-tools`, and virtual environment activation in one fast tool.
+
+```bash
+# Create and activate a virtual environment
+uv venv
+source .venv/bin/activate   # or .venv\Scripts\activate on Windows
+
+# Install dependencies from pyproject.toml
+uv sync
+
+# Add a dependency
+uv add pydantic>=2.0
+
+# Add a dev dependency
+uv add --dev pytest>=8.0
+
+# Run a script in the project's venv
+uv run pytest
+
+# Lock dependencies (generates uv.lock)
+uv lock
+
+# Install a tool globally (e.g., for CI)
+uv tool install ruff
+```
+
+**When to use uv vs pip:**
+- New projects: always use `uv`
+- CI pipelines: `uv sync --frozen` for reproducible installs
+- Existing projects: `uv` is pip-compatible; switch by running `uv sync` once
+
 ## Build Tools and Project Configuration
 
 **Use `pyproject.toml` (PEP 621):**
@@ -630,11 +736,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0",
-    "pytest-cov>=5.0",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
     "pytest-mock>=3.12",
-    "mypy>=1.10",
-    "ruff>=0.5",
+    "assertpy>=1.1",
+    "mypy>=1.11",
+    "ruff>=0.6",
 ]
 
 [tool.pytest.ini_options]
@@ -663,6 +770,7 @@ select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF"]
 - **mypy** or **Pyright**: Static type checking (use `strict = true` with mypy)
 - **Bandit**: Security-focused static analysis
 - **pytest**: Testing framework
+- **uv**: Fast Python package and environment manager (replaces pip/venv/pip-tools)
 - **pre-commit**: Hook automation for format check + lint + type check on every commit
 - **CI pipeline**: Run format check + lint + type check + tests on each PR
 
@@ -747,7 +855,7 @@ except (ConnectionError, TimeoutError) as e:
 
 ## SOLID Principles Notes
 
-Use the guide in `./SOLID_PRINCIPLES.md` and apply these Python-specific practices:
+Use the guide in `docs/SOLID_PRINCIPLES.md` and apply these Python-specific practices:
 - **SRP**: Use dataclasses for focused data carriers; extract responsibilities into separate classes with constructor injection.
 - **OCP**: Use Protocols or ABCs with concrete implementations for known type hierarchies; use Strategy pattern (Protocol + implementations) for open extension.
 - **LSP**: Protocols help enforce contracts structurally; avoid raising `NotImplementedError` in overrides -- redesign the abstraction instead.
@@ -756,7 +864,7 @@ Use the guide in `./SOLID_PRINCIPLES.md` and apply these Python-specific practic
 
 ## Design Patterns Notes
 
-Use the catalog in `./DESIGN_PATTERNS.md` and apply these Python-specific practices:
+Use the catalog in `docs/DESIGN_PATTERNS.md` and apply these Python-specific practices:
 - **Strategy**: Prefer Protocols for strategy interfaces -- no inheritance required.
 - **Factory Method/Abstract Factory**: Use classmethods or module-level factory functions; avoid complex factory hierarchies.
 - **Builder**: Prefer dataclasses with default values and `**kwargs` before introducing a builder.
@@ -786,7 +894,7 @@ async def fetch_score(client: httpx.AsyncClient, url: str) -> Score:
 **Guidelines:**
 - Use `async`/`await` for I/O-bound concurrency (HTTP, database, file I/O)
 - Use `asyncio.gather()` for concurrent tasks
-- Use `asyncio.TaskGroup` (3.11+) for structured concurrency
+- Use `asyncio.TaskGroup` (3.11+) for structured concurrency — prefer over `asyncio.gather()` for new code because TaskGroup propagates exceptions cleanly
 - Don't use async for CPU-bound work (use `multiprocessing` instead)
 - Prefer `httpx` over `aiohttp` for async HTTP
 
@@ -807,6 +915,9 @@ async def fetch_score(client: httpx.AsyncClient, url: str) -> Score:
 | `@override` decorator | 3.12 | 698 |
 | Improved f-string parsing | 3.12 | 701 |
 | `TypeVar` defaults | 3.13 | 696 |
+| `@deprecated` decorator | 3.13 | 702 |
+| Improved error messages | 3.13 | -- |
+| Free-threaded CPython (experimental) | 3.13 | 703 |
 
 ## Python Definition of Done Checklist
 
@@ -827,6 +938,6 @@ Every Python change must satisfy these criteria before it is considered complete
 
 ---
 
-**Last Updated**: February 18, 2026
+**Last Updated**: 2026-04-30
 **Version**: 2.0
-**Python Version**: 3.12+
+**Python Version**: 3.12+ / 3.13+

@@ -18,49 +18,6 @@ A "logical change" is:
 
 **NEVER bundle multiple logical changes into one commit.**
 
-## 🧪 Core TDD Rule: One Test at a Time
-
-During TDD, write exactly one failing test, make that test pass with the minimal implementation, refactor safely, and only then add the next test.
-
-- Do not queue multiple failing tests before implementing.
-- Repeat RED → GREEN → REFACTOR as small cycles.
-- Commit only when the suite is green and the current logical change is production-ready.
-
-### TDD Flowchart (GraphViz)
-
-Source: `docs/diagrams/tdd-workflow.dot`
-
-![TDD workflow flowchart](./diagrams/tdd-workflow.svg)
-
-### Rationalization Defense Table (TDD Excuses -> Required Action)
-
-Use this table as a hard gate. If any excuse appears, stop and apply the required action immediately.
-
-| Excuse | Why invalid | Required action |
-|---|---|---|
-| "I know the test will fail, so I skipped running it." | Assumption is not evidence. You must prove RED with observed output. | Run the targeted test now and capture the failure line before writing/changing production code. |
-| "I implemented first to move faster, then wrote tests." | This reverses TDD and hides requirement misunderstandings. | Revert or isolate implementation-first changes, write one failing test first, then re-implement minimally. |
-| "I added two failing tests because they are related." | Multiple RED tests hide which behavior drove the implementation. | Keep one failing test only. Split the second behavior into the next RED cycle. |
-| "The test failed because of setup/compile issues, close enough." | Unrelated failure does not prove missing behavior. | Fix setup/compile issues until the failure is about the intended assertion, then continue. |
-| "I fixed a few unrelated things while I was here." | Scope drift breaks micro-commit traceability and review clarity. | Remove unrelated edits from this cycle and place them in separate follow-up commits. |
-| "I will clean up tests after this commit." | Non-green commits violate production-ready rules. | Finish GREEN now: make tests pass before commit. Never defer failing tests. |
-
-### RED-Phase Red Flags (Stop Immediately)
-
-Stop and correct course when any answer is "yes":
-
-- Did I change production code before capturing a real RED failure?
-- Did I add more than one new failing test in this cycle?
-- Did the failure come from setup, compile, imports, or environment instead of the target behavior?
-- Did I implement behavior that the current failing test does not require?
-- Did I include unrelated fixes in the same RED -> GREEN cycle?
-
-If any red flag is present:
-1. Stop coding.
-2. Remove out-of-scope changes.
-3. Re-establish one failing test with valid RED evidence.
-4. Resume with minimal GREEN implementation.
-
 ### Production-Ready Commits
 
 **Every commit MUST be production-ready. No exceptions.**
@@ -79,8 +36,7 @@ A commit with failing tests is **never** acceptable. If your change breaks tests
 
 ### Selecting Work
 
-When the user asks what to work on next (or you need to suggest work), use the project's issue tracker.
-If the repository is on GitHub and `gh` is available, consult **GitHub Issues**:
+When the user asks what to work on next (or you need to suggest work), consult **GitHub Issues**:
 
 ```bash
 # List open issues by priority
@@ -91,16 +47,13 @@ gh issue list --label "P2: nice to have" --state open
 gh issue view <number>
 ```
 
-If GitHub is not available, use the equivalent tracker queries for priority labels/status and apply the same prioritization rules.
-
 **Priority order**: P1 issues before P2. Within a priority, prefer issues that unblock other work.
 
 When starting work on an issue, reference it in your commit messages (e.g., `feat(python): add Python standards (closes #2)`).
 
 ### Closing Issues When Complete
 
-**CRITICAL**: After completing work on an issue, you MUST close it in the active tracker.
-If using GitHub with `gh`, use:
+**CRITICAL**: After completing work on an issue, you MUST close it. Use the `gh` CLI:
 
 ```bash
 # Close issue with a summary comment
@@ -116,14 +69,12 @@ Implementation includes:
 All acceptance criteria met."
 ```
 
-If GitHub is not available, close the issue/ticket in your tracker with an equivalent completion summary.
-
 **Complete workflow for issues:**
 1. ✅ Implement the feature/fix
 2. ✅ Write tests and verify coverage
 3. ✅ Commit the changes
-4. ✅ Push to remote (`git push`) when remote write access is available
-5. ✅ **Close the issue/ticket with a completion summary** (or provide closure-ready notes for a maintainer when you cannot close directly)
+4. ✅ Push to remote (`git push`)
+5. ✅ **Close the GitHub issue with summary (`gh issue close`)**
 
 **Never forget step 5!** Closing issues keeps the project board clean and provides a clear audit trail of what was completed.
 
@@ -137,7 +88,7 @@ Ensure you are working on the latest code before making any changes. This preven
 
 **Step 1: Read and Acknowledge**
 ```
-AI Agent: I will follow the micro-commit workflow documented in ./AI_AGENT_WORKFLOW.md
+AI Agent: I will follow the micro-commit workflow documented in docs/AI_AGENT_WORKFLOW.md
 ```
 
 **Step 2: Create Task List**
@@ -155,6 +106,36 @@ Complete tasks sequentially, committing after each one.
 
 ---
 
+## 🏗️ Code Creation Principles
+
+These principles govern HOW you write code. Following them prevents the costly "write everything then fix" anti-pattern.
+
+### Plan Before Code
+- **Analyze before writing**: Count lines, methods, parameters, and responsibilities in the code you're about to create or modify
+- **Predict violations**: Estimate which classes will exceed size limits, which methods will have too many parameters
+- **Design the structure upfront**: Decide on class decomposition BEFORE writing any code
+- **Map domain objects first**: Identify data classes, value objects, and enums — define them before services
+
+### Write Only What's Needed
+- **Only write code to create a test or make a test pass** — no speculative code
+- **Do NOT write production code that isn't exercised by a test**
+- **Do the simplest reasonable thing** — simple first, elegant later
+- **Delete unused code during the Refactor phase**
+- **Do NOT over-engineer** — the Refactor phase exists for making things better
+
+### Build Incrementally
+- **Small, purposeful changes** — each commit describable in one sentence
+- **Build complexity gradually** — not all at once
+- **If a class needs 10 methods, write them one at a time** with tests for each
+- **Iterate** — get it working, then get it right
+
+### Domain Objects Before Services
+- **Define domain objects (data classes, value objects, enums) before writing services**
+- **If a domain object seems too large, break it up immediately**
+- **Domain objects are the foundation** — get them right early
+
+---
+
 ## 🔄 The Micro-Commit Workflow (Step-by-Step)
 
 ### Pattern 1: Feature Implementation (with existing tests)
@@ -169,7 +150,8 @@ Step 1: REFACTOR (if needed) → COMMIT
 ├─ Run tests (must pass)
 └─ Commit: "refactor: extract helper method for X"
 
-Step 2: RED - Write/update failing test (DON'T COMMIT)
+Step 2: RED - Write/update ONE failing test (DON'T COMMIT)
+├─ Write exactly one failing test — do not queue multiple RED tests before implementing
 ├─ Update existing tests to reflect new expected behavior
 ├─ Run tests (should fail - RED phase)
 └─ Don't commit yet
@@ -197,12 +179,12 @@ Step 5: DOCUMENT → COMMIT
 
 ```
 Step 1: TEST (Red) - DON'T COMMIT
-├─ Write one failing test
+├─ Write exactly ONE failing test (do not queue multiple failing tests before implementing)
 ├─ Run tests (should fail)
 └─ Don't commit yet
 
 Step 2: IMPLEMENT (Green) → COMMIT
-├─ Write minimum code to pass that one test
+├─ Write minimum code to pass test
 ├─ Run tests (must pass)
 └─ Commit: "feat: add feature X with test"
    (Include both test and implementation in one commit)
@@ -245,12 +227,8 @@ Step 3: REFACTOR PART 3 → COMMIT
 
 **Use Conventional Commits format:**
 
-Scope is recommended and may be omitted for trivial cross-cutting changes.
-
 ```
 <type>(<scope>): <description>
-# or
-<type>: <description>
 
 [optional body explaining WHY, not WHAT]
 
@@ -270,7 +248,7 @@ Scope is recommended and may be omitted for trivial cross-cutting changes.
 
 **Good commits:**
 ```
-refactor(reporting): extract timestamp generation into separate method
+refactor: extract timestamp generation into separate method
 
 - Add generateTimestamp() method to encapsulate timestamp formatting logic
 - Import java.time classes for future timestamp usage
@@ -278,7 +256,7 @@ refactor(reporting): extract timestamp generation into separate method
 ```
 
 ```
-feat(reporting): add timestamp to report filenames
+feat: add timestamp to report filenames
 
 - Modify buildReportPath to include timestamp in filename format
 - Report files now named: reportName_YYYYMMDD_HHMMSS.extension
@@ -315,8 +293,8 @@ Commit 1: "feat: add timestamp to reports"
 
 **GOOD:**
 ```
-Commit 1: "refactor(reporting): extract timestamp generation method"
-Commit 2: "feat(reporting): add timestamp to report filenames"
+Commit 1: "refactor: extract timestamp generation method"
+Commit 2: "feat: add timestamp to report filenames"
   (includes updated tests - all tests pass)
 Commit 3: "docs: update documentation for timestamped reports"
 ```
@@ -329,18 +307,14 @@ Commit 3: "docs: update documentation for timestamped reports"
 
 **ALWAYS run tests before committing:**
 ```bash
-# Run your project's test suite, e.g. one of:
-# ./gradlew test
-# npm test
-# pytest
-# go test ./...
-# dotnet test
+# Run your project's test suite, e.g.:
+# ./gradlew test | npm test | pytest | go test ./... | dotnet test
 ```
 
 ### ❌ Mistake 4: Vague Commit Messages
 
 **BAD**: "update code"
-**GOOD**: "refactor(validation): extract validation logic to separate class"
+**GOOD**: "refactor: extract validation logic to separate class"
 
 ---
 
@@ -406,7 +380,7 @@ git commit -m "refactor: extract timestamp generation into separate method"
 
 **Step 3: Execute Task 2 → COMMIT**
 ```bash
-# Write/update tests for new behavior (RED - tests fail)
+# Write/update ONE failing test for new behavior (RED - test fails; do not queue multiple)
 # Implement feature (GREEN - tests pass)
 # Run tests (all pass)
 git commit -m "feat: add timestamp to report filenames"
@@ -480,19 +454,15 @@ After committing each task, mark it complete:
    # If any fail → fix before committing
 ```
 
-**Run unit tests + integration tests before pushing:**
+**Run integration tests before pushing:**
 
 ```bash
-# Re-run unit tests and run integration tests before pushing, e.g. one of:
-# ./gradlew test integrationTest
-# npm run test:all
-# pytest && pytest tests/integration/
-# go test ./... && go test -tags=integration ./...
+# Run integration tests in addition to unit tests before pushing, e.g.:
+# ./gradlew integrationTest | npm run test:integration
+# pytest tests/integration/ | go test -tags=integration ./...
 
 # If any fail → fix locally before pushing
 ```
-
-**CI remains the hard gate** and runs the full test suite (unit + integration + E2E) on push/PR.
 
 ---
 
@@ -547,11 +517,9 @@ Before making changes, review:
 **AI Agent Process**:
 ```
 1. Check unit test coverage:
-   # Run your project's test suite with coverage reporting, e.g. one of:
-   # ./gradlew test jacocoTestReport
-   # npm run test:coverage
-   # pytest --cov
-   # go test -cover ./...
+   # Run your project's test suite with coverage reporting, e.g.:
+   # ./gradlew test jacocoTestReport | npm run test:coverage
+   # pytest --cov | go test -cover ./...
    # Verify >80% unit test coverage exists (unit tests only)
 
 2. Create task list:
@@ -599,13 +567,11 @@ Before making changes, review:
    e. Commit with clear message
    f. Mark as "completed"
 3. Update documentation (separate commit)
-4. Before pushing: run unit tests + integration tests
+4. Before pushing: run integration tests
 ```
 
 **Commit message template:**
 ```
-<type>(<scope>): <one-line description>
-# or
 <type>: <one-line description>
 
 - Bullet points explaining what changed
@@ -615,20 +581,15 @@ Before making changes, review:
 
 **Test before commit (unit tests):**
 ```bash
-# Run your project's unit test suite, e.g. one of:
-# ./gradlew test
-# npm test
-# pytest
-# go test ./...
-# dotnet test
+# Run your project's unit test suite, e.g.:
+# ./gradlew test | npm test | pytest | go test ./... | dotnet test
 ```
 
 **Test before push (unit + integration tests):**
 ```bash
-# Re-run unit tests and run integration tests before pushing, e.g.:
-# ./gradlew test integrationTest
-# npm run test:all
-# pytest && pytest tests/integration/
+# Run integration tests in addition to unit tests before pushing, e.g.:
+# ./gradlew test integrationTest | npm run test:all
+# pytest | pytest tests/integration/
 # go test ./... && go test -tags=integration ./...
 ```
 
@@ -644,9 +605,8 @@ If you encounter these situations, STOP and ask the user:
 2. **Breaking change**: "This change will break the public API"
    → Ask: "This is a breaking change. Should we maintain backward compatibility?"
 
-3. **Test failures with unclear expected behavior**: "Tests are failing after my change and the requirement is ambiguous"
-   → First action: diagnose and fix in the same branch (fix code when test is correct; update test when requirement changed)
-   → Ask user only if expected behavior cannot be inferred from existing tests, docs, or acceptance criteria
+3. **Test failures**: "Tests are failing after my change"
+   → Ask: "Tests are failing. Should I fix the implementation or update the tests?"
 
 4. **Conflicting patterns**: "The existing code doesn't follow SOLID"
    → Ask: "Should I refactor the existing code first?"
@@ -655,27 +615,91 @@ If you encounter these situations, STOP and ask the user:
 
 ## 🔄 Special Section: Refactoring Guidelines
 
+### Safe Refactoring Workflow
+
+Before changing any production code for refactoring purposes, follow this workflow in order:
+
+```
+Step 1: ESTABLISH BASELINE
+├─ Run the existing tests for the file(s) you will modify
+├─ Verify all relevant tests pass (this is your behavioral baseline)
+└─ Record which tests cover the production code under change
+
+Step 2: VERIFY COVERAGE
+├─ Check unit test coverage for the code being refactored
+├─ Requirements: ≥ 80% unit test line coverage, 100% for critical paths
+└─ If coverage is sufficient AND tests meaningfully verify behavior → proceed to Step 4
+
+Step 3: ADD CHARACTERIZATION TESTS (when coverage is insufficient or behavior is unclear)
+├─ Write characterization tests that capture current behavior — not what it "should" do,
+│  but what it actually does right now
+├─ Use Feathers' algorithm: call the code, assert what fails, change assertion to match reality
+├─ Cover all code paths you will touch during refactoring
+├─ Commit separately: "test(<scope>): add characterization tests before refactoring"
+└─ Verify all characterization tests pass
+
+Step 4: REFACTOR (behavior-preserving changes only)
+├─ Improve structure without changing observable behavior
+├─ Target: code smells, compiler/linter warnings, unnecessary complexity, duplication
+├─ One refactoring step per commit (see micro-commit rules below)
+├─ Run ALL tests after each step — baseline + characterization tests must stay green
+└─ Commit: "refactor(<scope>): <what was improved>"
+```
+
+### When Characterization Tests Are Required
+
+Add characterization tests before refactoring when ANY of the following are true:
+
+- Unit test coverage for the code being refactored is below 80%
+- Existing tests only verify happy paths (no edge cases, error paths, or boundary conditions)
+- The code has complex branching logic, external integrations, or implicit side effects
+- You cannot confidently explain what the code does by reading the existing tests alone
+- Mutation testing (if available) shows a low kill rate for the code under change
+
+**What is a characterization test?** A test that documents the current behavior of existing code. You are not asserting correctness — you are capturing reality so that refactoring does not silently change it. If the current behavior turns out to be a bug, fix the bug separately (write a failing test, fix, commit) — do not mix bug fixes with refactoring.
+
+### What Refactoring Targets
+
+Refactoring must improve code structure without changing observable behavior. Common targets:
+
+- **Code smells**: long methods, large classes, duplicated code, feature envy, primitive obsession
+- **Compiler/linter warnings**: resolve warnings rather than suppressing them
+- **Unnecessary complexity**: simplify conditionals, reduce nesting, extract clear abstractions
+- **SOLID violations**: apply SRP, OCP, DIP as appropriate (see `docs/SOLID_PRINCIPLES.md`)
+- **Dead code**: delete unused classes, methods, variables, and imports
+- **Naming**: rename for clarity when names no longer reflect purpose
+
 ### CRITICAL: Never Refactor Without Tests
 
 **Before refactoring ANY code:**
 
-1. **Check Unit Test Coverage**
+1. **Establish a Behavioral Baseline**
    ```bash
-   # Run your project's test suite with coverage reporting, e.g. one of:
-   # ./gradlew test jacocoTestReport
-   # npm run test:coverage
-   # pytest --cov
-   # go test -cover ./...
+   # Run the tests that cover the files you will modify, e.g.:
+   # ./gradlew test --tests "RelevantTestClass"
+   # npm test -- --grep "RelevantTest"
+   # pytest tests/test_relevant.py
+   # go test ./path/to/package
+   ```
+   All relevant tests must pass before you touch any production code.
+
+2. **Check Unit Test Coverage**
+   ```bash
+   # Run your project's test suite with coverage reporting, e.g.:
+   # ./gradlew test jacocoTestReport | npm run test:coverage
+   # pytest --cov | go test -cover ./...
    ```
    
-2. **Requirements (unit tests only -- integration/E2E tests do not count toward these thresholds):**
+3. **Requirements (unit tests only -- integration/E2E tests do not count toward these thresholds):**
    - ✅ Minimum 80% unit test line coverage for code being refactored
    - ✅ 100% unit test coverage for critical paths (scoring, analysis, reports)
    - ✅ All existing tests must PASS
+   - ✅ Tests meaningfully verify behavior (not just line execution)
 
-3. **If Unit Test Coverage is Insufficient:**
+4. **If Coverage or Behavioral Confidence is Insufficient:**
    - STOP refactoring
-   - Write unit tests FIRST
+   - Write characterization tests to capture current behavior (separate commit)
+   - Write additional unit tests to reach 80% coverage if needed (separate commits)
    - Use Pattern 2 (TDD approach) to add tests
    - Then proceed with refactoring
 
@@ -727,7 +751,7 @@ NEVER:
 
 **Proactive Refactoring (Do these automatically):**
 - Method exceeds language-specific line limit (15-20 lines) → Extract methods
-- Class exceeds 300 lines → Split responsibilities
+- Class exceeds 300 lines (class body, not file — package declarations/imports/comments don't count) → Split responsibilities
 - Duplicated code appears → Extract to shared method
 - Hard-coded dependencies → Inject via constructor
 - Long parameter list (>5 params) → Introduce parameter object
@@ -741,7 +765,7 @@ NEVER:
 ### Refactoring Commit Message Format
 
 ```
-refactor(<scope>): <what you refactored>
+refactor: <what you refactored>
 
 - Why: <reason for refactoring>
 - Impact: <what improved>
@@ -751,7 +775,7 @@ refactor(<scope>): <what you refactored>
 **Examples:**
 
 ```
-refactor(reporting): extract timestamp generation into separate method
+refactor: extract timestamp generation into separate method
 
 - Why: Prepare for adding timestamps to report filenames
 - Impact: Single responsibility, easier to test

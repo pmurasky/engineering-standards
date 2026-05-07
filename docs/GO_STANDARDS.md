@@ -3,7 +3,7 @@
 ## Overview
 This document outlines Go-specific coding standards that supplement the language-agnostic standards in `CODING_PRACTICES.md` and `CODING_STANDARDS.md`.
 
-We support **Go 1.22+** (stay within N-1 of latest stable) and leverage modern Go features where appropriate. Choose the version that matches your project.
+We support **Go 1.22+** (stay within N-1 of latest stable; Go 1.23+ preferred for new projects) and leverage modern Go features where appropriate. Choose the version that matches your project.
 
 ## Official Style Guide
 We follow [Effective Go](https://go.dev/doc/effective_go) and [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments) with the following project-specific additions and clarifications.
@@ -65,6 +65,31 @@ Following Go conventions:
 - Prefer standard library where reasonable
 - Document reason for new dependencies in commit message
 - Review licenses before adding dependencies
+
+**Version Selection Rule (MANDATORY):** When adding or updating any dependency, always select the latest version that has no known vulnerabilities.
+
+1. **Identify the latest published version** on pkg.go.dev.
+2. **Scan for vulnerabilities** using `govulncheck ./...` after updating `go.mod`.
+3. **If the latest version is vulnerable**, step back to the most-recent clean version and document why in the commit message.
+4. **Never pin an older version out of habit** — always start from latest and work backwards only if forced by a CVE.
+
+```bash
+# Add the latest version of a module
+go get example.com/pkg@latest
+
+# Scan for known vulnerabilities
+govulncheck ./...
+```
+
+**Commit message example when stepping back from latest:**
+```
+chore(deps): pin golang.org/x/net to v0.23.0 instead of v0.24.0
+
+v0.24.0 has CVE-2024-XXXXX (high severity, no fix yet).
+v0.23.0 is the latest clean version. Revisit when a patched version is released.
+```
+
+See [CODING_PRACTICES.md](./CODING_PRACTICES.md#version-selection-rule-mandatory) for the full cross-ecosystem rule and audit tool table.
 
 ### Framework vs. Standard Library Decision Guide
 
@@ -167,6 +192,84 @@ func NewOrderService(db *sql.DB) *OrderService {
     return &OrderService{db: db}
 }
 ```
+
+### Modern Stdlib Additions (Go 1.21+)
+
+#### min / max builtins (Go 1.21)
+
+Use the built-in `min` and `max` instead of `math.Min`/`math.Max` or manual comparisons:
+
+```go
+// Before Go 1.21
+score := int(math.Min(float64(raw), 100))
+
+// Go 1.21+
+score := min(raw, 100)
+remaining := max(0, total - used)
+```
+
+#### slices and maps packages (Go 1.21)
+
+Prefer stdlib packages over manual loops for common slice/map operations:
+
+```go
+import (
+    "slices"
+    "maps"
+)
+
+// Sort a slice
+slices.Sort(scores)
+
+// Check if slice contains a value
+if slices.Contains(allowed, input) { ... }
+
+// Clone a map
+copy := maps.Clone(original)
+
+// Delete keys matching a predicate
+maps.DeleteFunc(m, func(k, v string) bool { return v == "" })
+```
+
+#### range over integers (Go 1.22)
+
+Range over an integer to loop N times — no more manual `for i := 0; i < n; i++`:
+
+```go
+// Before Go 1.22
+for i := 0; i < 10; i++ {
+    process(i)
+}
+
+// Go 1.22+
+for i := range 10 {
+    process(i)
+}
+```
+
+#### range over functions / iterators (Go 1.23)
+
+Functions with the signature `func(yield func(V) bool)` can be ranged over:
+
+```go
+// Define an iterator
+func FilteredItems(items []Item, pred func(Item) bool) iter.Seq[Item] {
+    return func(yield func(Item) bool) {
+        for _, item := range items {
+            if pred(item) && !yield(item) {
+                return
+            }
+        }
+    }
+}
+
+// Range over it
+for item := range FilteredItems(all, isActive) {
+    process(item)
+}
+```
+
+Use the `iter` package types (`iter.Seq[V]`, `iter.Seq2[K, V]`) for iterator signatures.
 
 ### Error Handling
 
@@ -433,11 +536,54 @@ Production services MUST implement comprehensive observability:
 - Do not log sensitive data (passwords, tokens, PII)
 - Use appropriate log levels (see CODING_PRACTICES.md)
 
-**Recommended libraries:**
-- `go.uber.org/zap` (high performance, structured)
-- `github.com/rs/zerolog` (zero allocation, fast)
+**Recommended libraries (in order of preference):**
+- `log/slog` — stdlib structured logging (Go 1.21+). **Use this for all new projects.** No external dependency, JSON output, context-aware.
+- `go.uber.org/zap` — when you need the absolute highest throughput (benchmarked bottleneck)
+- `github.com/rs/zerolog` — alternative zero-allocation logger
 
-**Example:**
+### log/slog (Stdlib — Preferred)
+
+```go
+import "log/slog"
+
+func main() {
+    // JSON handler for production
+    logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+        Level: slog.LevelInfo,
+    }))
+    slog.SetDefault(logger)
+
+    // Structured log with attributes
+    slog.Info("service started",
+        slog.String("version", version),
+        slog.Int("port", port),
+    )
+
+    slog.Error("request failed",
+        slog.String("method", r.Method),
+        slog.String("path", r.URL.Path),
+        slog.Any("error", err),
+    )
+}
+
+// Pass logger via context for request-scoped logging
+func ProcessOrder(ctx context.Context, order Order) error {
+    logger := slog.With(
+        slog.String("order_id", order.ID),
+        slog.String("user_id", order.UserID),
+    )
+    logger.Info("processing order")
+    // ...
+}
+```
+
+**slog guidelines:**
+- Use `slog.NewJSONHandler` in production, `slog.NewTextHandler` in development
+- Use `slog.With(...)` to create child loggers with persistent attributes (e.g., request ID)
+- Pass logger through `context.Context` using a wrapper; avoid package-level mutable loggers
+- Log levels: `Debug`, `Info`, `Warn`, `Error` — map to the same semantics as other languages
+
+**Example with zap (when throughput requires it):**
 ```go
 import "go.uber.org/zap"
 
@@ -836,6 +982,59 @@ func TestOrderService(t *testing.T) {
 - `github.com/stretchr/testify/mock`
 - `github.com/golang/mock/gomock`
 
+### testify — Key Patterns
+
+testify is the standard assertion library for Go (25.9k GitHub stars, used by HashiCorp, Docker, and most major Go projects). It has two sub-packages with different failure behavior — understanding the distinction is the most important thing to know.
+
+**`assert` vs `require` — the critical distinction:**
+```go
+// assert — continues after failure (like soft assertions)
+// Use when failures are independent
+assert.Equal(t, expected, actual)
+assert.NoError(t, err)
+
+// require — stops the test immediately on failure
+// Use when subsequent code depends on this result
+user, err := repo.FindByID(ctx, 42)
+require.NoError(t, err)         // stop here if err != nil — user will be nil
+require.NotNil(t, user)         // stop here if user is nil — next line will panic
+assert.Equal(t, "Alice", user.Name)
+```
+
+**Key assertion methods:**
+```go
+assert.Equal(t, expected, actual)
+assert.NotEqual(t, unexpected, actual)
+assert.Nil(t, value)
+assert.NotNil(t, value)
+assert.True(t, condition)
+assert.False(t, condition)
+assert.ErrorIs(t, err, target)
+assert.ElementsMatch(t, expected, actual)  // order-independent slice equality
+assert.JSONEq(t, expectedJSON, actualJSON)
+assert.Contains(t, collection, element)
+```
+
+**Object style** — avoid passing `t` to every call:
+```go
+func TestUserService(t *testing.T) {
+    assert := assert.New(t)
+    require := require.New(t)
+
+    user, err := service.Create(ctx, input)
+    require.NoError(err)
+    assert.Equal("Alice", user.Name)
+    assert.Equal("alice@example.com", user.Email)
+}
+```
+
+**Custom failure messages:**
+```go
+assert.Equal(t, expected, actual, "invoice total should reflect applied discount")
+```
+
+> **Ginkgo/Gomega:** Ginkgo/Gomega is preferred for BDD-style e2e suites and Kubernetes operator development. The Kubernetes project uses testify for unit tests and Ginkgo/Gomega for e2e. For most Go projects, testify is the right default.
+
 ### Determinism
 
 **MUST:**
@@ -1139,5 +1338,5 @@ For deeper understanding and updates, consult:
 
 ---
 
-**Last Updated**: February 18, 2026  
-**Version**: 1.0
+**Last Updated**: 2026-04-30  
+**Version**: 1.1

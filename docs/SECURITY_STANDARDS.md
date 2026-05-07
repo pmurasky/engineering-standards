@@ -159,12 +159,30 @@ repos:
 
 ### Rules
 
-- **Start with the latest stable version**: when adding a new dependency, always use the latest stable (GA) release — never intentionally pin an older version, as it may carry known CVEs from day one.
 - **Pin dependency versions** in lock files (`package-lock.json`, `go.sum`, `Cargo.lock`, `poetry.lock`, etc.).
 - **Audit dependencies regularly** for known vulnerabilities using automated tools.
 - **Use trusted registries** -- prefer official package registries and verify package provenance when available.
 - **Review new dependencies** before adding them: check maintenance activity, license, download count, and known issues.
 - **Generate and maintain SBOMs** (Software Bill of Materials) for production artifacts.
+
+### Version Selection Rule (MANDATORY)
+
+**When adding or updating any dependency, always select the latest version that has no known vulnerabilities.**
+
+Follow this process every time:
+
+1. **Identify the latest published version** of the library (Maven Central, npm, PyPI, pkg.go.dev, etc.).
+2. **Scan that version for known vulnerabilities** using the audit tool for your ecosystem (see table below).
+3. **If the latest version is vulnerable**, step back to the most-recent clean version and document the reason in the commit message.
+4. **Never pin an older version out of habit or convenience** — always start from the latest and work backwards only if a vulnerability forces it.
+
+**Commit message example when stepping back from latest:**
+```
+chore(deps): pin requests to 2.31.0 instead of 2.32.0
+
+2.32.0 has CVE-2024-XXXXX (high severity, no fix yet).
+2.31.0 is the latest clean version. Revisit when a patched version is released.
+```
 
 ### Recommended Tools
 
@@ -172,7 +190,7 @@ repos:
 |-----------|---------------|---------------|
 | npm/Node | `npm audit` | Dependabot, Snyk |
 | Python | `pip-audit` | Safety, Snyk |
-| Go | `govulncheck` | Dependabot, Snyk |
+| Go | `govulncheck ./...` | Dependabot, Snyk |
 | Java/Kotlin | `./gradlew dependencyCheckAnalyze` (OWASP plugin) | Dependabot, Snyk |
 | Rust | `cargo audit` | Dependabot |
 | General | -- | Renovate, Dependabot |
@@ -182,8 +200,8 @@ repos:
 - [ ] Lock files are committed and reviewed in PRs
 - [ ] Dependency scanning runs in CI (fails on critical/high vulnerabilities)
 - [ ] New dependencies are reviewed for trustworthiness before adoption
+- [ ] **Version selection follows the latest-without-vulnerabilities rule** (see Version Selection Rule above)
 - [ ] Dependency updates are applied regularly (automated PRs via Dependabot/Renovate)
-- [ ] New dependencies were added at their latest stable (GA) version, verified vulnerability-free
 - [ ] SBOM is generated for release artifacts
 
 ## Encryption
@@ -379,20 +397,23 @@ Run DAST tools against running applications in staging or pre-production environ
 
 ### Examples
 
+BAD — leaks internal details:
+
 ```json
-// BAD: Leaks internal details
 {
   "error": "SQLException: table 'users' column 'email' - duplicate entry 'user@example.com'",
   "stack": "at com.example.UserDao.insert(UserDao.java:42)..."
 }
+```
 
-// GOOD: Generic client-facing error with correlation ID
+GOOD — generic client-facing error with correlation ID (detailed error logged server-side with `requestId` for correlation):
+
+```json
 {
   "error": "Unable to process request",
   "code": "CONFLICT",
   "requestId": "req-abc123"
 }
-// Detailed error logged server-side with requestId for correlation
 ```
 
 ### Checklist
@@ -440,4 +461,4 @@ Use this to prioritize security findings:
 ---
 
 **Last Updated**: February 19, 2026
-**Version**: 1.0 (Initial release -- closes #6)
+**Version**: 1.0 (Initial release -- closes #7)
