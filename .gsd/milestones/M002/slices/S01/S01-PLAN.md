@@ -46,7 +46,7 @@ Commit: `chore(skills): add references/ dirs for pre-commit, micro-commit, tdd-e
   - Files: `.opencode/skills/pre-commit/references/workflow.md`, `.opencode/skills/micro-commit/references/workflow.md`, `.opencode/skills/tdd-enforcement/references/workflow.md`
   - Verify: ls .opencode/skills/pre-commit/references/ .opencode/skills/micro-commit/references/ .opencode/skills/tdd-enforcement/references/ — all 3 present
 
-- [ ] **T04: Verify enforcement tests still pass** `est:5 min`
+- [x] **T04: Verify enforcement tests still pass** `est:5 min`
   Run the enforcement integration test suite to confirm no regressions from directory additions.
 python3 -m pytest tests/enforcement_integration/test_enforcement_gates.py -v
 Fix any regressions before moving to S02.
