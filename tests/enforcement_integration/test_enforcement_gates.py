@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import unittest
-from pathlib import Path
 
 from helpers import (
     REPO_ROOT,
@@ -9,8 +8,6 @@ from helpers import (
     validate_contract_references,
     validate_contract_structure,
     validate_hard_gate_semantics,
-    validate_status_vocabulary,
-    validate_workflow_parity,
     discover_contracts,
     validate_skill_metadata,
     validate_metadata_dependencies,
