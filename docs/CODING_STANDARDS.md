@@ -60,6 +60,13 @@ This document serves as the table of contents for all coding standards and pract
 ### [TYPESCRIPT_STANDARDS.md](./TYPESCRIPT_STANDARDS.md)
 **TypeScript/JavaScript-specific conventions** (read when working with TypeScript or JavaScript)
 
+### [FRONTEND_STANDARDS.md](./FRONTEND_STANDARDS.md)
+**Frontend standards for React and component-based UIs**
+- React 19, component design, props, hooks, state management
+- Vitest 2 testing patterns and Storybook integration
+- Accessibility, performance, and TypeScript in frontend
+- FSM-driven async state patterns
+
 ### [NEXTJS_STANDARDS.md](./NEXTJS_STANDARDS.md)
 **Next.js-specific conventions** (read when working with Next.js applications)
 
@@ -155,6 +162,109 @@ This document serves as the table of contents for all coding standards and pract
 - Acceptance test pass rate tracking (target: 100%)
 - Summary metrics and lessons learned
 
+### [CONVERSION_PROMPT_TEMPLATE.md](./CONVERSION_PROMPT_TEMPLATE.md)
+**Prompt template for conversion/porting projects**
+- CLI invocation patterns for conversion agents
+- Pre-flight checklist and phase sequencing
+- Behavioral baseline capture prompts
+
+### [TESTING_STANDARDS.md](./TESTING_STANDARDS.md)
+**Comprehensive testing standards — test pyramid, types, and quality gates**
+- Unit, integration, E2E, contract, and performance testing
+- Test pyramid philosophy and coverage thresholds
+- Mocking strategy, test isolation, and data management
+- TDD workflow integration and anti-patterns to avoid
+
+### [TDD_STRATEGIES.md](./TDD_STRATEGIES.md)
+**TDD scaffolding strategies and compile-fail-as-RED patterns**
+- Red/green/refactor discipline with concrete examples
+- Compile-fail as a valid RED phase
+- Incremental scaffold approach for large features
+- When to use characterization tests vs pure TDD
+
+### [VERIFICATION_STANDARDS.md](./VERIFICATION_STANDARDS.md)
+**Evidence principle — verification before completion claims**
+- Fresh test/build/status output required before claiming done
+- Verification command patterns by language
+- Pre-commit and pre-push verification gates
+
+### [DEBUGGING_STANDARDS.md](./DEBUGGING_STANDARDS.md)
+**Four-phase debugging protocol**
+- Hypothesis-driven debugging workflow
+- Evidence gathering before code changes
+- Reproduce → Isolate → Fix → Verify cycle
+
+### [DESIGN_DOC_STANDARDS.md](./DESIGN_DOC_STANDARDS.md)
+**Design document standards — format, when/why, required sections**
+- When to write a design doc (scope/risk thresholds)
+- Required sections (context, options, decision, trade-offs)
+- Review and approval workflow
+
+### [DESIGN_WORKFLOW.md](./DESIGN_WORKFLOW.md)
+**Design-first workflow process**
+- Design before implementation gate
+- Iterative design refinement
+- Design handoff to implementation
+
+### [IMPLEMENTATION_PLANNING.md](./IMPLEMENTATION_PLANNING.md)
+**Implementation planning formats and task specifications**
+- Task spec format and required fields
+- Estimation guidelines
+- Dependency mapping and ordering
+
+### [GIT_SETUP_STANDARDS.md](./GIT_SETUP_STANDARDS.md)
+**Repository setup, .gitignore generation, and git configuration**
+- Git init and remote configuration
+- .gitignore bootstrap workflow (gitignore.io)
+- Branch protection and commit signing standards
+
+### [CONTEXT_BUDGET_STANDARDS.md](./CONTEXT_BUDGET_STANDARDS.md)
+**Context window budget management for AI agents**
+- Token budget thresholds and mid-session health checks
+- Commit-count triggers and handoff rules
+- Context exhaustion protocol
+
+### [SKILL_AUTHORING_STANDARDS.md](./SKILL_AUTHORING_STANDARDS.md)
+**Skill authoring — metadata, triggers, and progressive disclosure**
+- Skill frontmatter schema and required fields
+- Trigger phrase design and invocation patterns
+- Hard Gates and Status Vocabulary conventions
+- Progressive disclosure structure
+
+### [STANDARDS_OWNERSHIP_MATRIX.md](./STANDARDS_OWNERSHIP_MATRIX.md)
+**Standards ownership, parity checks, and drift management**
+- Owner assignment per standards document
+- Parity check cadence
+- Drift detection and remediation process
+
+### [TELEMETRY.md](./TELEMETRY.md)
+**Runtime metadata contract and adoption reporting**
+- Telemetry fields and schema
+- Opt-out configuration
+- Adoption and usage reporting patterns
+
+### Templates
+
+### [templates/DESIGN_TEMPLATE.md](./templates/DESIGN_TEMPLATE.md)
+**Reusable design document template**
+- Fill-in-the-blank template aligned to DESIGN_DOC_STANDARDS.md
+
+### [templates/PLAN_TEMPLATE.md](./templates/PLAN_TEMPLATE.md)
+**Reusable implementation plan template**
+- Fill-in-the-blank template aligned to IMPLEMENTATION_PLANNING.md
+
+### Specs
+
+### [specs/skill-test-invariants.md](./specs/skill-test-invariants.md)
+**Skill testing contract and invariants**
+- Structural invariants all skills must satisfy
+- Test oracle patterns for skill validation
+
+### [specs/skill-test-promotion-rubric.md](./specs/skill-test-promotion-rubric.md)
+**Skill promotion rubric — criteria for promoting a skill to production**
+- Scoring dimensions (coverage, trigger clarity, hard gates, references)
+- Promotion threshold and review process
+
 ## Quick Reference
 
 ### For New Team Members
@@ -186,5 +296,5 @@ If anything is unclear or needs discussion:
 
 ---
 
-**Last Updated**: February 21, 2026
-**Version**: 17.0 (Added DEVOPS_STANDARDS.md to index)
+**Last Updated**: May 07, 2026
+**Version**: 18.0 (Added 18 new standards documents from ford integration)
