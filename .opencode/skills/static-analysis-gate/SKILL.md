@@ -1,34 +1,137 @@
 ---
-name: static-analysis-gate
-description: Run PMD, detekt, and Checkstyle as a hard gate before commit readiness. Use when the repo has static-analysis tooling configured.
-version: 1.0.0
-category: quality-gate
+name: static-analysis
+description: >
+  Use when configuring or running static analysis for Java or Kotlin — PMD 7 configuration
+  best practices and recommended thresholds, CPD (Copy-Paste Detection) setup and DRY
+  enforcement, detekt configuration for Kotlin, and suppression strategy (what to fix vs.
+  what to suppress, with required justification comments).
+triggers:
+  - "configuring pmd or cpd for java project"
+  - "setting up detekt for kotlin codebase"
+  - "choosing static analysis thresholds and suppressions"
+  - "reviewing pull request for new suppressions"
+  - "adopting static analysis gradually in existing codebase"
+not_for:
+  - "general design advice without analysis tooling"
+  - "deep java spotbugs checkstyle or archunit work"
+  - "runtime debugging profiling or executed code issues"
+disable-model-invocation: true
 ---
 
-# Static Analysis Gate
+# Static Analysis Standards
 
-Validate configured static-analysis tools before declaring code ready.
+Canonical owner: STATIC_ANALYSIS_STANDARDS (see STANDARDS_OWNERSHIP_MATRIX).
 
-## Hard Gates
+## Table of Contents
 
-1. Run every configured static-analysis tool relevant to the project.
-2. Treat PMD, detekt, and Checkstyle failures as blocking.
-3. Do not waive violations silently or recommend suppression as the first response.
+- [Use when](#use-when)
+- [Zero-Tolerance Policy](#zero-tolerance-policy)
+- [Standards Enforced by Tool](#standards-enforced-by-tool)
+- [PMD 7 — Java](#pmd-7--java)
+- [CPD — Copy-Paste Detection](#cpd--copy-paste-detection)
+- [detekt — Kotlin](#detekt--kotlin)
+- [Suppression Strategy](#suppression-strategy)
 
-## Workflow
+## Use when
 
-1. Detect which static-analysis tools are configured in the repository.
-2. Run each applicable tool or project wrapper command.
-3. Group failures by tool and severity.
-4. Report blocking issues and any missing configuration explicitly.
+- Configuring PMD 7, CPD, or detekt for a Java or Kotlin project
+- Reviewing a PR for suppression increases or banned suppressions
+- Selecting thresholds for complexity, method length, class size, or parameter count
 
-## Status Vocabulary
+## Not for
 
-- `PASS`: Configured static-analysis tools passed.
-- `BLOCK`: Static-analysis failures require fixes.
-- `NOT CONFIGURED`: No relevant static-analysis tooling is available.
+- General refactoring or design advice when no static-analysis tool is involved
+- Deep Java SpotBugs, Checkstyle, or ArchUnit work — use `java-static-analysis`
+- Runtime testing, profiling, or debugging
 
-## References
+---
 
-- `docs/STATIC_ANALYSIS_STANDARDS.md` - Tooling expectations and policy
-- `docs/PRE_COMMIT_CHECKLIST.md` - Static-analysis commit gate
+## Zero-Tolerance Policy
+
+**PMD/detekt violations MUST fail the build.** Static analysis is a hard gate, not advisory.
+
+- Gradle: never `ignoreFailures = true`; Maven: never `failOnViolation = false`
+- CI/CD: violations block PRs from merging
+
+## Standards Enforced by Tool
+
+| Standard | Threshold | Tool |
+|----------|-----------|------|
+| Method length | 20 lines (Java) / 15 lines (Kotlin) | PMD `NcssCount`, detekt `LongMethod` |
+| Class length | 300 lines (class body) | PMD `NcssCount`, detekt `LargeClass` |
+| Cyclomatic complexity | 10 per method | PMD `CyclomaticComplexity`, detekt `CyclomaticComplexMethod` |
+| Cognitive complexity | 15 per method | PMD `CognitiveComplexity`, detekt `CognitiveComplexMethod` |
+| Parameter count | 5 max | PMD `ExcessiveParameterList`, detekt `LongParameterList` |
+| Nesting depth | 3 levels | detekt `NestedBlockDepth` |
+| Duplicated code | DRY principle | CPD, detekt `StringLiteralDuplication` |
+
+---
+
+## PMD 7 — Java
+
+Use **custom rulesets** — never rely on default category imports. Every included rule needs a documented reason; every excluded rule needs a justification.
+
+**Key thresholds:**
+
+| Rule | Threshold |
+|------|-----------|
+| `CyclomaticComplexity` | method ≤ 10, class ≤ 40 |
+| `NcssCount` | method ≤ 20, class ≤ 300 |
+| `ExcessiveParameterList` | 5 |
+| `AvoidDeeplyNestedIfStmts` | depth 3 |
+| `TooManyFields` | 15 |
+
+Document every inclusion/exclusion with a comment:
+```xml
+<!-- Included: Enforces our 20-line method max -->
+<rule ref="category/java/design.xml/NcssCount">
+    <properties>
+        <property name="methodReportLevel" value="20" />
+        <property name="classReportLevel" value="300" />
+    </properties>
+</rule>
+```
+
+→ [Full Maven + Gradle integration](./REFERENCE.md#pmd-7-configuration-best-practices)
+
+---
+
+## CPD — Copy-Paste Detection
+
+Min tokens: **100** (Java), **80** (Kotlin). Exclude generated code and test fixtures.
+
+Violations → extract shared method, abstract base class, or utility function. Never suppress duplication.
+
+→ [Full CPD config](./REFERENCE.md#cpd-copy-paste-detection)
+
+---
+
+## detekt — Kotlin
+
+Enable `allRules = false`; configure explicitly. Use `baseline.xml` for legacy projects.
+
+**Key rules:** `LongMethod` (≤ 20), `LargeClass` (≤ 300), `CyclomaticComplexMethod` (≤ 10), `LongParameterList` (≤ 5), `NestedBlockDepth` (≤ 3), `MagicNumber`, `StringLiteralDuplication`.
+
+→ [Full detekt.yml config](./REFERENCE.md#detekt-for-kotlin)
+
+---
+
+## Suppression Strategy
+
+| Situation | Action |
+|-----------|--------|
+| Rule fires on generated code | Exclude the path in tool config |
+| Rule fires on legacy code | Add to baseline, track as tech debt |
+| Rule is wrong for this case | Suppress at narrowest scope with justification |
+| Team disagrees with rule | Disable in ruleset with documented rationale |
+
+**Suppress format:**
+```java
+@SuppressWarnings("PMD.CyclomaticComplexity") // Dispatcher: complexity inherent in routing logic
+```
+
+```kotlin
+@Suppress("LongMethod") // Parsing logic: sequential steps cannot be meaningfully split
+```
+
+**PR review:** New suppressions require reviewer approval. Suppression count should trend down.
