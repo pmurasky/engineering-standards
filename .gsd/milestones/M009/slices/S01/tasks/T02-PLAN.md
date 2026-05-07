@@ -1,33 +1,23 @@
 ---
-estimated_steps: 11
+estimated_steps: 1
 estimated_files: 3
 skills_used: []
 ---
 
 # T02: Design One-Command Init Workflow
 
-Specify the bootstrap command that installs standards into a downstream repo with minimal manual work.
-
-Steps:
-1. Define command surface, expected arguments, and target repo assumptions.
-2. Decide which files are copied, generated, or linked during init.
-3. Define behavior for empty repo vs existing repo.
-4. Define idempotency rules and safe re-run behavior.
-5. Define conflict handling for existing AGENTS.md, opencode.json, .opencode/, and .claude/ content.
-
-Success Criteria:
-- Init command contract is explicit
-- Existing-project merge behavior is defined
-- Idempotency and conflict rules are documented
+Design the surface of a one-command init workflow for first-time consumers. Specify: command name and args (e.g. `make init` or `scripts/init.sh`), what files it creates (AGENTS.md, .opencode/skills/*, .claude/skills/*, docs/ symlinks or copies), idempotency rules, conflict detection for pre-existing files (merge vs skip vs error), dry-run flag behavior, and post-init verification step. Document the decision as a spec in docs/distribution/init-workflow.md.
 
 ## Inputs
 
-- `.planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md`
+- `docs/distribution/installation-modes.md (T01 output)`
+- `Existing scripts/ directory structure`
+- `Current AGENTS.md and .opencode/ layout`
 
 ## Expected Output
 
-- `Init workflow specification document`
+- `docs/distribution/init-workflow.md with command spec, file manifest, conflict rules, and dry-run behavior`
 
 ## Verification
 
-Init workflow documented with command contract and conflict handling
+docs/distribution/init-workflow.md exists; covers command surface, file manifest, idempotency, conflict rules, and dry-run; ≥3 consumer scenarios documented.

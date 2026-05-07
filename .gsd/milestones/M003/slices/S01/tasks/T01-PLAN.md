@@ -1,21 +1,35 @@
 ---
-estimated_steps: 1
-estimated_files: 1
+estimated_steps: 6
+estimated_files: 2
 skills_used: []
 ---
 
-# T01: Update enforcement tests for Agent Skills
+# T01: Extend test_enforcement_gates.py to cover .opencode/skills/
 
-Remove contract reference validation. Add Agent Skills structure validation (frontmatter, references/, line count). Update test fixtures.
+Extend tests/enforcement_integration/test_enforcement_gates.py to also validate .opencode/skills/ alongside .claude/skills/. The existing tests only check .claude/skills/; both surfaces should have the same compliance requirements.
+
+Changes:
+1. Read existing test structure to understand how .claude/skills/ path is parameterized
+2. Add .opencode/skills/ as a second surface to all compliance checks (frontmatter, line count, hard gates, status vocabulary, metadata)
+3. Run tests locally to confirm both surfaces pass
+
+Commit: `test(enforcement): extend gates to also validate .opencode/skills/ surface`
 
 ## Inputs
 
-- `tests/enforcement_integration/`
+- `.opencode/skills/`
+- `.claude/skills/`
+- `tests/enforcement_integration/test_enforcement_gates.py`
 
 ## Expected Output
 
-- `Updated test suite`
+- `tests/enforcement_integration/test_enforcement_gates.py updated`
+- `Tests pass for both .claude/skills/ and .opencode/skills/`
 
 ## Verification
 
-Tests validate Agent Skills compliance, all tests pass
+python3 -m pytest tests/enforcement_integration/test_enforcement_gates.py -v -- shows test cases for both .claude/skills/ and .opencode/skills/, all passing
+
+## Observability Impact
+
+Test output now shows compliance results for both surfaces side by side

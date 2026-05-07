@@ -1,33 +1,23 @@
 ---
-estimated_steps: 11
+estimated_steps: 1
 estimated_files: 3
 skills_used: []
 ---
 
 # T05: Specify Installer/Updater Implementation Surface
 
-Decide where the automation lives and how contributors invoke it.
-
-Steps:
-1. Choose implementation surface: scripts/, Makefile, both, or another minimal wrapper.
-2. Define required runtime assumptions (shell, Python, Node, etc.).
-3. Define manifest or file list used by install/update commands.
-4. Decide whether generated wrapper files should be templated.
-5. Define testability expectations for automation logic.
-
-Success Criteria:
-- Implementation surface chosen
-- Runtime assumptions are minimal and documented
-- File manifest strategy is defined
+Specify the implementation surface for the installer and updater: will they be shell scripts in scripts/, a Makefile, a Node.js CLI, or a combination? Document: runtime assumptions (bash version, git version, curl/wget, node optional), the complete file manifest (every file touched by init and every file touched by update), error handling expectations (exit codes, user-facing messages), and how the implementation will be tested (unit tests for scripts, integration test with a temp consuming project). Produce docs/distribution/implementation-surface.md.
 
 ## Inputs
 
-- `.planning/phases/09-standards-distribution-opencode-alignment/09-PLAN.md`
+- `T02 init spec`
+- `T03 update spec`
+- `T01 installation modes`
 
 ## Expected Output
 
-- `Implementation surface specification document`
+- `docs/distribution/implementation-surface.md with runtime assumptions, file manifest, error handling, and testability plan`
 
 ## Verification
 
-Implementation surface chosen with runtime assumptions and manifest strategy
+docs/distribution/implementation-surface.md exists; runtime assumptions listed; file manifest complete; testability plan present.

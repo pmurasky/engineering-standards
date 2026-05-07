@@ -2,3 +2,7 @@
 {"id":"23a930c1-b215-46a6-95ca-055ce5fb1eb5","ts":"2026-04-28T22:59:43.483Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
 {"id":"4941610e-d6c9-4790-a79a-f72b331ab19f","ts":"2026-04-28T23:01:59.911Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
 {"id":"2aba00ce-2daa-4e62-85fd-a295e68535ca","ts":"2026-04-28T23:01:59.994Z","severity":"warning","message":"Unknown: /gsd progress. Run /gsd help for available commands.","source":"notify","read":false}
+{"id":"86f02e8d-599b-4a76-a7ae-b876ca41315e","ts":"2026-05-07T22:31:07.750Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
+{"id":"82c5ca6b-edb2-4fd8-82d1-8e5a0b678e85","ts":"2026-05-07T22:31:07.932Z","severity":"info","message":"Step-mode started. Will loop through 4 milestones.","source":"notify","read":false}
+{"id":"f3ad3a27-0d42-4420-bddf-1eee457e515f","ts":"2026-05-07T22:31:07.933Z","severity":"info","message":"Dynamic routing: disabled — all tasks will use claude-code/claude-opus-4-6","source":"notify","read":false}
+{"id":"6cd7f076-de5f-403d-906d-e657ae9d4424","ts":"2026-05-07T22:31:07.934Z","severity":"info","message":"Pre-flight: 5 milestones queued. All have full context.","source":"notify","read":false}

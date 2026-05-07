@@ -1,12 +1,16 @@
 ---
-estimated_steps: 1
-estimated_files: 2
+estimated_steps: 5
+estimated_files: 4
 skills_used: []
 ---
 
-# T01: Create references/ directories for all skills
+# T01: Audit docs/workflows/ and create mapping
 
-Add references/ folder to each of the 9 skills. Copy canonical contract content from docs/workflows/ to references/workflow.md.
+List docs/workflows/ contents. Identify which workflow files map to which skill. Document the mapping:
+- pre-commit-workflow.md → pre-commit references/
+- tdd-workflow.md → tdd-enforcement references/
+- micro-commit content → micro-commit references/
+Verify whether references/ already partially exists in any skill.
 
 ## Inputs
 
@@ -14,8 +18,8 @@ Add references/ folder to each of the 9 skills. Copy canonical contract content 
 
 ## Expected Output
 
-- `.claude/skills/*/references/workflow.md`
+- `Mapping of docs/workflows/ files to target skill references/ paths documented in notes`
 
 ## Verification
 
-All 9 skills have references/ directories with workflow content
+ls docs/workflows/ and ls .claude/skills/*/references/ 2>/dev/null — inventory documented
