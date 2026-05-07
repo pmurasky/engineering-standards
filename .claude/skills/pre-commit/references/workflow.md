@@ -55,6 +55,12 @@ Validate that staged changes meet all required quality gates before committing. 
 - Lint failures → fix code style issues
 - Static analysis failures → address PMD/detekt/Checkstyle violations
 
+## Token Budget Intent
+**Category**: On-demand workflow
+**Estimated usage**: 800-1200 tokens per invocation
+**Frequency**: Per commit (typically 5-20 times per development session)
+**Optimization**: Keep adapter content minimal, reference canonical docs for detail
+
 ## Required References
 - `docs/PRE_COMMIT_CHECKLIST.md` - Comprehensive checklist with TDD workflow
 - `docs/AI_AGENT_WORKFLOW.md` - Micro-commit philosophy and TDD cycle
