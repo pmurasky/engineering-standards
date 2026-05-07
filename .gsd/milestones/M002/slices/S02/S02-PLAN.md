@@ -47,7 +47,7 @@ Document any gaps found.
   - Files: `.claude/skills/code-quality/SKILL.md`, `.claude/skills/micro-commit/SKILL.md`, `.claude/skills/pre-commit/SKILL.md`, `.claude/skills/tdd-enforcement/SKILL.md`, `.claude/skills/static-analysis-gate/SKILL.md`, `.claude/skills/test-coverage/SKILL.md`
   - Verify: Gap document written; no skill silently skipped
 
-- [ ] **T03: Apply fixes to remaining 6 skills** `est:30 min`
+- [x] **T03: Apply fixes to remaining 6 skills** `est:30 min`
   Apply any fixes identified in T02 to the remaining 6 skills (both .claude/ and .opencode/ surfaces). If a skill is already fully compliant, mark it PASS and skip. Commit each skill fix individually following micro-commit workflow.
 Example commit: `fix(skills): add Use when/Not for to static-analysis-gate`
   - Files: `.claude/skills/code-quality/SKILL.md`, `.opencode/skills/code-quality/SKILL.md`, `.claude/skills/micro-commit/SKILL.md`, `.opencode/skills/micro-commit/SKILL.md`, `.claude/skills/pre-commit/SKILL.md`, `.opencode/skills/pre-commit/SKILL.md`, `.claude/skills/tdd-enforcement/SKILL.md`, `.opencode/skills/tdd-enforcement/SKILL.md`, `.claude/skills/static-analysis-gate/SKILL.md`, `.opencode/skills/static-analysis-gate/SKILL.md`, `.claude/skills/test-coverage/SKILL.md`, `.opencode/skills/test-coverage/SKILL.md`

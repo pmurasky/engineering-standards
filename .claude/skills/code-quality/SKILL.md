@@ -1,17 +1,22 @@
 ---
 name: code-quality
-description: Review code changes for SOLID, maintainability, and repository quality gates. This is stage 2 of review - run spec-compliance first and proceed only when stage 1 is PASS.
+description: Stage-2 code quality review for SOLID, maintainability, and repository quality gates after spec-compliance passes.
+disable-model-invocation: true
 ---
 
 # Code Quality Review
 
-Perform a focused code quality review for SOLID compliance and maintainability.
+## Use when
 
-## Trigger Conditions
+- Stage 1 (`spec-compliance`) has passed and stage-2 review is requested
+- User asks for SOLID, maintainability, or code quality review
+- You need a strict PASS/FLAG assessment before commit readiness
 
-- User requests code quality review after spec-compliance passes
-- Stage 2 review in the two-stage review workflow
-- Phrases: "code quality review", "review my code", "check SOLID", "maintainability review"
+## Not for
+
+- Initial requirement/acceptance validation (use `spec-compliance` first)
+- Security-specific threat analysis
+- Pure style or formatting-only checks without maintainability concerns
 
 ## Hard Gate
 
@@ -26,37 +31,24 @@ This is **stage 2 of review**.
 - Duplication and coupling risks
 - Clear naming and maintainability concerns
 
-## Review Checklist
-
-**SOLID Principles:**
-- Single Responsibility: Each class has one reason to change
-- Open/Closed: Open for extension, closed for modification
-- Liskov Substitution: Subtypes substitutable for base types
-- Interface Segregation: Focused interfaces over fat ones
-- Dependency Inversion: Depend on abstractions, not concrete classes
-
-**Code Metrics:**
-- Methods ≤ 20 lines (language-specific limits apply)
-- Classes ≤ 300 lines
-- Parameters ≤ 5 per method
-- No duplicated code (DRY principle)
-
 ## Output Format
 
 Return findings grouped by:
-1. **Critical**: Issues that must be fixed before commit
-2. **Warning**: Issues that should be addressed
-3. **Suggestion**: Improvements to consider
+1. **Critical**: Must fix before commit
+2. **Warning**: Should address soon
+3. **Suggestion**: Optional improvements
 
-## Token Budget
+## Example
 
-- **Category**: On-demand workflow
-- **Estimated usage**: 700-1000 tokens per invocation
-- **Frequency**: Per review (typically 1-2 times per PR)
-- **Optimization**: Focus on highest-impact issues first
+Scenario: user says "spec-compliance passed, now run code quality review".
 
-## References
+Expected behavior:
+1. Confirm stage-1 passed.
+2. Evaluate SOLID, method/class size, duplication, and coupling.
+3. Return grouped findings: Critical, Warning, Suggestion.
 
-- `docs/CODING_PRACTICES.md` - Code quality standards
-- `docs/SOLID_PRINCIPLES.md` - SOLID principles deep-dive
-- `docs/PRE_COMMIT_CHECKLIST.md` - Quality checklist
+## Anti-patterns
+
+- Running this review before stage-1 validation
+- Returning vague feedback without file-level evidence
+- Marking READY while unresolved critical maintainability defects remain

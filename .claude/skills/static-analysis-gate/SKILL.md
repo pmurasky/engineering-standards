@@ -1,78 +1,44 @@
 ---
 name: static-analysis-gate
-description: Run PMD, detekt, and Checkstyle as a hard gate before commit readiness. Zero-tolerance for violations - all must pass.
+description: Enforce PMD, detekt, and Checkstyle as mandatory static-analysis gates before commit readiness.
+disable-model-invocation: true
 ---
 
 # Static Analysis Gate
 
-Run static-analysis enforcement for the current repository or requested scope.
+## Use when
 
-## Trigger Conditions
+- User asks whether code is ready to commit
+- Work touched Java/Kotlin or shared quality-gate scripts
+- You need explicit static-analysis pass/fail evidence
 
-- User requests static analysis check
-- Before commit when static analysis is configured
-- Phrases: "static analysis", "PMD check", "detekt", "Checkstyle", "code quality gate"
+## Not for
 
-## Hard Gate
+- Functional requirement validation
+- Style-only edits without quality-gate scope
+- Replacing test/build verification
 
-Do NOT report pass status when any configured static-analysis tool reports violations.
+## Hard Gates
 
-**Blocking Policy:**
-1. **BLOCKED (critical)**: Analyzer execution/configuration failed, report parsing failed, or security/error-prone violations
-2. **BLOCKED (important)**: Any PMD, detekt, Checkstyle, or CPD violation
-3. **NOT CONFIGURED**: No supported analyzer configured for detected stack
+1. Run configured static-analysis commands
+2. Capture exit codes and blocking findings
+3. Report pass/fail per tool
+4. Block commit recommendation on any failure
 
-**Zero-Tolerance Rule:**
-- PMD/detekt/Checkstyle violations are hard failures for commit readiness
-- CPD violations above configured thresholds are hard failures
+## Status Vocabulary
 
-## Detection and Execution
+- `PASS`
+- `FAIL`
+- `BLOCKED`
 
-1. **Detect available analyzers** from repo signals:
-   - PMD config: `config/pmd/` and/or build tasks (`pmdMain`, `pmdCheck`)
-   - detekt config: `config/detekt/detekt.yml` and/or build task (`detekt`)
-   - Checkstyle config: `config/checkstyle/checkstyle.xml` and/or build tasks (`checkstyleMain`, `checkstyle`)
+## Example
 
-2. **Detect build tool** and run smallest reliable command set:
-   - Gradle: `./gradlew pmdMain detekt checkstyleMain` or `./gradlew check`
-   - Maven: `mvn pmd:check checkstyle:check` and project-specific detekt plugin
+Input: "run static analysis gate before commit".
 
-3. **If configured tool cannot be executed** → mark BLOCKED (critical) with exact missing command/task details
+Output: PMD/detekt/Checkstyle results with actionable blockers and no completion claim unless all pass.
 
-## Severity Classification
+## Anti-patterns
 
-- **Critical**: Tool/config failures, parsing failures, security/error-prone categories
-- **Important**: All other analyzer violations
-- **Info**: Tool intentionally not configured for current stack
-
-## Pre-Commit Integration
-
-1. Run this gate as part of pre-commit readiness, alongside tests/build/lint
-2. If status is BLOCKED → pre-commit result must be NOT READY
-3. Report tool-by-tool evidence (command, outcome, key violation summary)
-4. Only READY when static-analysis status is PASS or NOT CONFIGURED
-
-## Output Format
-
-1. **Status**: `PASS`, `BLOCKED`, or `NOT CONFIGURED`
-2. **Tool matrix**:
-   - Tool name
-   - Detected config/task evidence
-   - Command executed
-   - Outcome (PASS/FAIL/NOT CONFIGURED)
-   - Severity classification (critical/important/info)
-3. **Blocking findings** first (if any)
-4. **Required next action**
-
-## Token Budget
-
-- **Category**: On-demand workflow
-- **Estimated usage**: 800-1200 tokens per invocation
-- **Frequency**: Per commit (typically 5-20 times per development session)
-- **Optimization**: Focus on blocking findings first
-
-## References
-
-- `docs/STATIC_ANALYSIS_STANDARDS.md` - Static analysis configuration
-- `docs/PRE_COMMIT_CHECKLIST.md` - Quality checklist
-- `docs/AI_AGENT_WORKFLOW.md` - Workflow documentation
+- Declaring pass without tool output
+- Ignoring failing analysis results
+- Treating warnings as automatically ignorable
