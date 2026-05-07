@@ -23,3 +23,7 @@ Earlier revisions used canonical contracts in this folder plus tool-specific ada
 - Do not add new active workflows here.
 - If you need to update live behavior, update the corresponding skill under `.claude/skills/` or `.opencode/skills/`.
 - If you annotate historical docs here, keep notes clearly marked as archival.
+- For legacy canonical-contract maintenance, use:
+  - `docs/workflows/CONTRIBUTING.md` (process)
+  - `docs/workflows/contracts.registry.json` (discovery index)
+  - `schemas/canonical-workflow-contract.schema.json` (validation schema)

@@ -200,16 +200,38 @@ REQUIRED_CONTRACT_SECTIONS: list[str] = [
     "Required References",
 ]
 
+CONTRACT_SCHEMA_PATH = REPO_ROOT / "schemas" / "canonical-workflow-contract.schema.json"
+CONTRACT_REGISTRY_PATH = REPO_ROOT / "docs" / "workflows" / "contracts.registry.json"
+CONTRACT_GUIDE_PATH = REPO_ROOT / "docs" / "workflows" / "CONTRIBUTING.md"
+
+
+def load_contract_schema() -> dict[str, object]:
+    if not CONTRACT_SCHEMA_PATH.exists():
+        return {}
+    try:
+        return json.loads(read_text(CONTRACT_SCHEMA_PATH))
+    except json.JSONDecodeError:
+        return {}
+
+
+def schema_required_sections() -> list[str]:
+    schema = load_contract_schema()
+    sections = schema.get("required_sections") if isinstance(schema, dict) else None
+    if isinstance(sections, list) and all(isinstance(item, str) for item in sections):
+        return list(sections)
+    return REQUIRED_CONTRACT_SECTIONS
+
 
 def discover_contracts() -> list[Path]:
     """Return all canonical contract files in docs/workflows/ (excludes README)."""
     workflows_dir = REPO_ROOT / "docs" / "workflows"
     if not workflows_dir.is_dir():
         return []
+    excluded = {"readme.md", "template.md", "contributing.md"}
     return sorted(
         p
         for p in workflows_dir.glob("*.md")
-        if p.name.lower() != "readme.md" and p.name.lower() != "template.md"
+        if p.name.lower() not in excluded
     )
 
 
@@ -233,9 +255,97 @@ def validate_contract_structure(contract_path: Path) -> list[str]:
     present_sections = re.findall(r"^## (.+)$", content, re.MULTILINE)
     present_set = {s.strip() for s in present_sections}
 
-    missing = [s for s in REQUIRED_CONTRACT_SECTIONS if s not in present_set]
+    missing = [s for s in schema_required_sections() if s not in present_set]
     if missing:
         problems.append(f"missing required sections: {', '.join(missing)}")
+
+    return problems
+
+
+def validate_contract_registry() -> list[str]:
+    problems: list[str] = []
+
+    schema = load_contract_schema()
+    if not schema:
+        problems.append("missing or invalid canonical contract schema")
+        return problems
+
+    if not CONTRACT_REGISTRY_PATH.exists():
+        problems.append(f"missing contract registry: {CONTRACT_REGISTRY_PATH}")
+        return problems
+
+    try:
+        registry = json.loads(read_text(CONTRACT_REGISTRY_PATH))
+    except json.JSONDecodeError as exc:
+        problems.append(f"invalid registry JSON: {exc}")
+        return problems
+
+    if not isinstance(registry, dict):
+        problems.append("registry root must be an object")
+        return problems
+
+    contracts = registry.get("contracts")
+    if not isinstance(contracts, list):
+        problems.append("registry must include a contracts array")
+        return problems
+
+    required_fields = {"id", "contract_path", "adapter_paths", "status"}
+    for entry in contracts:
+        if not isinstance(entry, dict):
+            problems.append("registry contracts entries must be objects")
+            continue
+
+        missing = sorted(field for field in required_fields if field not in entry)
+        if missing:
+            problems.append(f"registry entry missing fields: {', '.join(missing)}")
+            continue
+
+        contract_value = entry.get("contract_path")
+        if not isinstance(contract_value, str) or not contract_value.endswith(".md"):
+            problems.append("registry contract_path must be a markdown path")
+            continue
+
+        contract_path = REPO_ROOT / contract_value
+        problems.extend(validate_contract_structure(contract_path))
+
+    discovered = {
+        f"docs/workflows/{path.name}"
+        for path in discover_contracts()
+    }
+    indexed = {
+        item.get("contract_path")
+        for item in contracts
+        if isinstance(item, dict) and isinstance(item.get("contract_path"), str)
+    }
+
+    missing_in_registry = sorted(discovered - indexed)
+    if missing_in_registry:
+        problems.append(
+            "registry missing discovered contracts: " + ", ".join(missing_in_registry)
+        )
+
+    return problems
+
+
+def validate_contract_contributor_guide() -> list[str]:
+    problems: list[str] = []
+
+    if not CONTRACT_GUIDE_PATH.exists():
+        return [f"missing contributor guide: {CONTRACT_GUIDE_PATH}"]
+
+    content = read_text(CONTRACT_GUIDE_PATH)
+    required_phrases = [
+        "when to create contracts",
+        "adapter update process",
+        "versioning strategy",
+        "discovery mechanism",
+    ]
+
+    missing_phrases = [phrase for phrase in required_phrases if phrase not in content.lower()]
+    if missing_phrases:
+        problems.append(
+            "contributor guide missing required topics: " + ", ".join(missing_phrases)
+        )
 
     return problems
 

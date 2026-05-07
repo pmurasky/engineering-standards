@@ -17,6 +17,8 @@ from helpers import (
     validate_metadata_budget,
     discover_skills,
     parse_frontmatter,
+    validate_contract_registry,
+    validate_contract_contributor_guide,
 )
 
 
@@ -300,6 +302,22 @@ class ContractStructurePressureTests(unittest.TestCase):
         self.assertTrue(
             any("does not exist" in p for p in problems),
             f"Expected 'does not exist' in {problems}",
+        )
+
+
+class CanonicalContractGovernanceTests(unittest.TestCase):
+    """Validate canonical contract schema/registry and contributor guidance."""
+
+    def test_contract_registry_is_valid(self) -> None:
+        problems = validate_contract_registry()
+        self.assertEqual(problems, [], f"Contract registry issues: {problems}")
+
+    def test_contract_contributor_guide_is_discoverable_and_complete(self) -> None:
+        problems = validate_contract_contributor_guide()
+        self.assertEqual(
+            problems,
+            [],
+            f"Contract contributor guide issues: {problems}",
         )
 
 

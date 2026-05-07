@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-standards.dev/schemas/canonical-workflow-contract.schema.json",
+  "title": "Canonical Workflow Contract Registry",
+  "type": "object",
+  "required_sections": [
+    "Purpose",
+    "Trigger Conditions",
+    "Hard Gates",
+    "Workflow Steps",
+    "Status Vocabulary",
+    "Fail/Fix/Rerun Loop",
+    "Token Budget Intent",
+    "Required References"
+  ],
+  "required": [
+    "contracts"
+  ],
+  "properties": {
+    "contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "contract_path",
+          "adapter_paths",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contract_path": {
+            "type": "string",
+            "pattern": "^docs/workflows/.+\\.md$"
+          },
+          "adapter_paths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "legacy-archive"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

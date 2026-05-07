@@ -1,0 +1,9 @@
+{
+  "contracts": [
+    {
+      "id": "broken-entry",
+      "contract_path": "docs/workflows/pre-commit.md",
+      "status": "legacy-archive"
+    }
+  ]
+}
