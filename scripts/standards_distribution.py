@@ -192,7 +192,6 @@ def classify_update_changes(
             conflicts.append(relative_path)
 
     for managed_file in managed_files:
-        target_path = target_root / managed_file.relative_path
         source_hash = sha256_file(managed_file.source_path)
         current_hash = target_checksum(target_root, managed_file.relative_path)
 

@@ -304,16 +304,6 @@ def main() -> int:
         print(f"Baseline captured: {total_tokens} tokens across {len(baseline['categories'])} categories")
         return 0
     
-    # Determine if using legacy or multi-category mode
-    is_legacy_mode = (
-        args.always_on_threshold == DEFAULT_THRESHOLDS["always-on"] and
-        args.skills_threshold == DEFAULT_THRESHOLDS["claude-skills"] and  
-        args.commands_threshold == DEFAULT_THRESHOLDS["opencode-commands"] and
-        args.contracts_threshold == DEFAULT_THRESHOLDS["canonical-contracts"] and
-        not args.json_output and
-        not args.compare_baseline
-    )
-    
     # Check if user explicitly used only legacy arguments
     used_legacy_only = (
         "--max-tokens" in sys.argv or 

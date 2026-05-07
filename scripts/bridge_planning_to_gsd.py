@@ -17,14 +17,13 @@ Requirements:
 
 import argparse
 import json
-import os
 import re
 import sqlite3
 import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 
 @dataclass
@@ -298,7 +297,7 @@ class GSDBridge:
 
             result = subprocess.run(cmd, capture_output=True, text=True, cwd=self.project_dir)
             if result.returncode == 0:
-                print(f"  ✓ Updated successfully")
+                print("  ✓ Updated successfully")
                 return True
             else:
                 print(f"  ✗ CLI failed: {result.stderr}")
@@ -306,7 +305,7 @@ class GSDBridge:
                 return self._update_slice_db(milestone_id, slice_data)
 
         except FileNotFoundError:
-            print(f"  gsd CLI not found, falling back to direct DB update")
+            print("  gsd CLI not found, falling back to direct DB update")
             return self._update_slice_db(milestone_id, slice_data)
         except Exception as e:
             print(f"  ✗ Error: {e}")
@@ -348,7 +347,7 @@ class GSDBridge:
 
             conn.commit()
             conn.close()
-            print(f"  ✓ Updated via direct DB write")
+            print("  ✓ Updated via direct DB write")
             return True
 
         except Exception as e:
@@ -379,8 +378,8 @@ Examples:
     project_dir = Path(args.project_dir).resolve()
     planning_dir = project_dir / args.planning_dir
 
-    print(f"Planning → GSD Bridge")
-    print(f"=" * 50)
+    print("Planning → GSD Bridge")
+    print("=" * 50)
     print(f"Project: {project_dir}")
     print(f"Planning: {planning_dir}")
     print(f"Mode: {'DRY RUN' if args.dry_run else 'LIVE'}")
