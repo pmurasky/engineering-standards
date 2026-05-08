@@ -1,19 +1,26 @@
 {
   "nodes": [
     {
-      "id": "milestone:M001",
-      "label": "M001: Agent Skills Compliance",
+      "id": "milestone:M002",
+      "label": "M002: Skills Restructuring",
       "type": "milestone",
-      "description": "Active milestone: M001",
+      "description": "Active milestone: M002",
       "confidence": "EXTRACTED",
       "sourceFile": "STATE.md"
     },
     {
-      "id": "concept:phase:validating-milestone",
-      "label": "Phase: validating-milestone",
+      "id": "concept:phase:evaluating-gates",
+      "label": "Phase: evaluating-gates",
       "type": "concept",
       "confidence": "EXTRACTED",
       "sourceFile": "STATE.md"
+    },
+    {
+      "id": "milestone:M001",
+      "label": "M001: Agent Skills Compliance",
+      "type": "milestone",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M001/M001-ROADMAP.md"
     },
     {
       "id": "slice:M001:S01",
@@ -139,28 +146,96 @@
       "confidence": "EXTRACTED"
     },
     {
-      "id": "milestone:M002",
-      "label": "M002: Skills Restructuring",
-      "type": "milestone",
+      "id": "slice:M002:S01",
+      "label": "S01: Restructure Skill Directories",
+      "type": "slice",
       "confidence": "EXTRACTED",
-      "sourceFile": "milestones/M002/M002-ROADMAP.md"
+      "sourceFile": "milestones/M002/slices/S01/S01-PLAN.md"
     },
     {
-      "id": "slice:M002:S01",
-      "label": "M002/S01",
-      "type": "slice",
+      "id": "task:M002:S01:T01",
+      "label": "T01: Audit docs/workflows/ and create mapping",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S01:T02",
+      "label": "T02: Create references/ for .claude/skills workflow skills",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S01:T03",
+      "label": "T03: Create references/ for .opencode/skills workflow skills",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S01:T04",
+      "label": "T04: Verify enforcement tests still pass",
+      "type": "task",
       "confidence": "EXTRACTED"
     },
     {
       "id": "slice:M002:S02",
-      "label": "M002/S02",
+      "label": "S02: Update SKILL.md Files",
       "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M002/slices/S02/S02-PLAN.md"
+    },
+    {
+      "id": "task:M002:S02:T01",
+      "label": "T01: Fix spec-compliance, commit-review, refactoring-gate",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S02:T02",
+      "label": "T02: Audit remaining 6 skills for compliance gaps",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S02:T03",
+      "label": "T03: Apply fixes to remaining 6 skills",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S02:T04",
+      "label": "T04: Full enforcement test suite green",
+      "type": "task",
       "confidence": "EXTRACTED"
     },
     {
       "id": "slice:M002:S03",
-      "label": "M002/S03",
+      "label": "S03: Archive Legacy Canonical Contracts",
       "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M002/slices/S03/S03-PLAN.md"
+    },
+    {
+      "id": "task:M002:S03:T01",
+      "label": "T01: Grep all active references to docs/workflows/",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S03:T02",
+      "label": "T02: Update or remove active docs/workflows/ references",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S03:T03",
+      "label": "T03: Archive or delete docs/workflows/",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M002:S03:T04",
+      "label": "T04: Final verification — tests green, zero active references",
+      "type": "task",
       "confidence": "EXTRACTED"
     },
     {
@@ -172,19 +247,69 @@
     },
     {
       "id": "slice:M003:S01",
-      "label": "M003/S01",
+      "label": "S01: CI Pipeline, Skill Scenario Tests, and Enforcement Coverage",
       "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M003/slices/S01/S01-PLAN.md"
+    },
+    {
+      "id": "task:M003:S01:T01",
+      "label": "T01: Extend test_enforcement_gates.py to cover .opencode/skills/",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M003:S01:T02",
+      "label": "T02: Create scenario tests for all 9 skills",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M003:S01:T03",
+      "label": "T03: Add .github/workflows/ci.yml and fix npm test",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M003:S01:T04",
+      "label": "T04: Add dependabot.yml and SECURITY.md",
+      "type": "task",
       "confidence": "EXTRACTED"
     },
     {
       "id": "slice:M003:S02",
-      "label": "M003/S02",
+      "label": "S02: Update Documentation",
       "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M003/slices/S02/S02-PLAN.md"
+    },
+    {
+      "id": "task:M003:S02:T01",
+      "label": "T01: Update README.md",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M003:S02:T02",
+      "label": "T02: Update CONTRIBUTING-SKILLS.md",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M003:S02:T03",
+      "label": "T03: Update SKILL_AUTHORING_STANDARDS.md §8",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M003:S02:T04",
+      "label": "T04: Final verification and clean-up",
+      "type": "task",
       "confidence": "EXTRACTED"
     },
     {
       "id": "milestone:M009",
-      "label": "M009: Standards Distribution & OpenCode Alignment",
+      "label": "M009: Distribution Planning",
       "type": "milestone",
       "confidence": "EXTRACTED",
       "sourceFile": "milestones/M009/M009-ROADMAP.md"
@@ -235,6 +360,150 @@
     {
       "id": "task:M009:S01:T07",
       "label": "T07: Add Validation Coverage for Distribution Integrity",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "milestone:M010",
+      "label": "M010: OpenCode Plugin Packaging",
+      "type": "milestone",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M010/M010-ROADMAP.md"
+    },
+    {
+      "id": "slice:M010:S01",
+      "label": "S01: Research OpenCode Plugin Architecture",
+      "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M010/slices/S01/S01-PLAN.md"
+    },
+    {
+      "id": "task:M010:S01:T01",
+      "label": "T01: Read OpenCode Plugin Documentation",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S01:T02",
+      "label": "T02: Map Existing Files to Plugin Structure",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S01:T03",
+      "label": "T03: Document Findings and Unblocking Plan",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "slice:M010:S02",
+      "label": "S02: Create Plugin Manifest and Structure",
+      "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M010/slices/S02/S02-PLAN.md"
+    },
+    {
+      "id": "task:M010:S02:T01",
+      "label": "T01: Create Plugin Manifest File",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S02:T02",
+      "label": "T02: Establish Canonical Plugin Directory Structure",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S02:T03",
+      "label": "T03: Add Manifest Validation to CI",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "slice:M010:S03",
+      "label": "S03: Package Standards Documents as Plugin Resources",
+      "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M010/slices/S03/S03-PLAN.md"
+    },
+    {
+      "id": "task:M010:S03:T01",
+      "label": "T01: Inventory Standards Documents for Resource Registration",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S03:T02",
+      "label": "T02: Register Standards Documents in Plugin Manifest",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S03:T03",
+      "label": "T03: Verify Resource Loading and Add Enforcement Tests",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "slice:M010:S04",
+      "label": "S04: Expose Skills via Plugin",
+      "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M010/slices/S04/S04-PLAN.md"
+    },
+    {
+      "id": "task:M010:S04:T01",
+      "label": "T01: Inventory Skills and Decide Source of Truth",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S04:T02",
+      "label": "T02: Register Skills in Plugin Manifest",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S04:T03",
+      "label": "T03: Verify Skill Loading and Update Enforcement Tests",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S04:T04",
+      "label": "T04: Document Skill Auto-Load vs Manual Config Requirement",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "slice:M010:S05",
+      "label": "S05: Create Installation and Usage Documentation",
+      "type": "slice",
+      "confidence": "EXTRACTED",
+      "sourceFile": "milestones/M010/slices/S05/S05-PLAN.md"
+    },
+    {
+      "id": "task:M010:S05:T01",
+      "label": "T01: Rewrite README Installation Section",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S05:T02",
+      "label": "T02: Add Skill and Resource Usage Examples",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S05:T03",
+      "label": "T03: Document Plugin Update Workflow and Versioning",
+      "type": "task",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "task:M010:S05:T04",
+      "label": "T04: End-to-End Walkthrough and Documentation QA",
       "type": "task",
       "confidence": "EXTRACTED"
     }
@@ -367,8 +636,56 @@
       "confidence": "EXTRACTED"
     },
     {
+      "from": "slice:M002:S01",
+      "to": "task:M002:S01:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S01",
+      "to": "task:M002:S01:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S01",
+      "to": "task:M002:S01:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S01",
+      "to": "task:M002:S01:T04",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
       "from": "milestone:M002",
       "to": "slice:M002:S02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S02",
+      "to": "task:M002:S02:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S02",
+      "to": "task:M002:S02:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S02",
+      "to": "task:M002:S02:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S02",
+      "to": "task:M002:S02:T04",
       "type": "contains",
       "confidence": "EXTRACTED"
     },
@@ -379,14 +696,86 @@
       "confidence": "EXTRACTED"
     },
     {
+      "from": "slice:M002:S03",
+      "to": "task:M002:S03:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S03",
+      "to": "task:M002:S03:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S03",
+      "to": "task:M002:S03:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M002:S03",
+      "to": "task:M002:S03:T04",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
       "from": "milestone:M003",
       "to": "slice:M003:S01",
       "type": "contains",
       "confidence": "EXTRACTED"
     },
     {
+      "from": "slice:M003:S01",
+      "to": "task:M003:S01:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S01",
+      "to": "task:M003:S01:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S01",
+      "to": "task:M003:S01:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S01",
+      "to": "task:M003:S01:T04",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
       "from": "milestone:M003",
       "to": "slice:M003:S02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S02",
+      "to": "task:M003:S02:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S02",
+      "to": "task:M003:S02:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S02",
+      "to": "task:M003:S02:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M003:S02",
+      "to": "task:M003:S02:T04",
       "type": "contains",
       "confidence": "EXTRACTED"
     },
@@ -437,7 +826,139 @@
       "to": "task:M009:S01:T07",
       "type": "contains",
       "confidence": "EXTRACTED"
+    },
+    {
+      "from": "milestone:M010",
+      "to": "slice:M010:S01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S01",
+      "to": "task:M010:S01:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S01",
+      "to": "task:M010:S01:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S01",
+      "to": "task:M010:S01:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "milestone:M010",
+      "to": "slice:M010:S02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S02",
+      "to": "task:M010:S02:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S02",
+      "to": "task:M010:S02:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S02",
+      "to": "task:M010:S02:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "milestone:M010",
+      "to": "slice:M010:S03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S03",
+      "to": "task:M010:S03:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S03",
+      "to": "task:M010:S03:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S03",
+      "to": "task:M010:S03:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "milestone:M010",
+      "to": "slice:M010:S04",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S04",
+      "to": "task:M010:S04:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S04",
+      "to": "task:M010:S04:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S04",
+      "to": "task:M010:S04:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S04",
+      "to": "task:M010:S04:T04",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "milestone:M010",
+      "to": "slice:M010:S05",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S05",
+      "to": "task:M010:S05:T01",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S05",
+      "to": "task:M010:S05:T02",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S05",
+      "to": "task:M010:S05:T03",
+      "type": "contains",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "from": "slice:M010:S05",
+      "to": "task:M010:S05:T04",
+      "type": "contains",
+      "confidence": "EXTRACTED"
     }
   ],
-  "builtAt": "2026-05-02T00:54:57.812Z"
+  "builtAt": "2026-05-08T10:31:44.562Z"
 }

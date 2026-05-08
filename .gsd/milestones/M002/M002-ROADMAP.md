@@ -12,7 +12,7 @@
 
 ## Slices
 
-- [ ] **S01: Restructure Skill Directories** `risk:low` `depends:[]`
+- [x] **S01: S01** `risk:low` `depends:[]`
   > After this: After this: each of the 3 workflow-heavy skills has a references/ directory with workflow.md content; other 6 skills directories are clean and ready for SKILL.md updates.
 
 - [ ] **S02: Update SKILL.md Files** `risk:medium` `depends:[S01]`
