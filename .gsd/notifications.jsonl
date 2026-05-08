@@ -21,3 +21,7 @@
 {"id":"7b681ccc-e08b-43bb-a1b5-0971b52224e5","ts":"2026-05-08T10:36:50.230Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
 {"id":"caa218cd-ec8a-4228-8088-ff4b18720c84","ts":"2026-05-08T10:36:50.317Z","severity":"info","message":"Resuming paused session for M002.","source":"notify","read":false}
 {"id":"406f7338-fac9-42f7-83f3-7196fed2c161","ts":"2026-05-08T10:36:50.318Z","severity":"info","message":"Step-mode resumed.","source":"notify","read":false}
+{"id":"da231249-c900-4ee1-8df3-4f28ce1fff3e","ts":"2026-05-08T10:36:51.446Z","severity":"info","message":"Resume: applied 6 fix(es) to state.","source":"notify","read":false}
+{"id":"bad5b9f9-3e86-4b3c-a2f8-a44a4a9e1363","ts":"2026-05-08T10:36:54.896Z","severity":"warning","message":"Rate limited: API Error: Rate limit reached. Auto-resuming in 60s...","source":"notify","read":false}
+{"id":"7f824cf8-d139-46e0-9f0b-b32d48279cce","ts":"2026-05-08T10:36:54.919Z","severity":"warning","message":"Auto-mode paused due to provider errorProvider error: : API Error: Rate limit reached","source":"notify","read":false}
+{"id":"dcfa194a-0c0a-4c18-bb28-90d7d805866d","ts":"2026-05-08T10:36:55.251Z","severity":"info","message":"Step-mode paused (Escape). Type to interact, or /gsd next to resume.","source":"notify","read":false}

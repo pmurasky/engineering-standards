@@ -1,39 +1,43 @@
-# T03 Summary — Apply fixes to remaining 6 skills
+---
+id: T03
+parent: S02
+milestone: M002
+key_files:
+  - (none)
+key_decisions:
+  - (none)
+duration: 
+verification_result: untested
+completed_at: 2026-05-08T10:31:44.549Z
+blocker_discovered: false
+---
 
-## Scope
+# T03: Apply fixes to remaining 6 skills
 
-Applied compliance fixes for the remaining six skills across both surfaces:
+****
 
-- code-quality
-- micro-commit
-- pre-commit
-- tdd-enforcement
-- static-analysis-gate
-- test-coverage
+## What Happened
 
-Files updated: 12 SKILL.md files under `.claude/skills/*` and `.opencode/skills/*`.
-
-## Fixes applied
-
-- Normalized frontmatter to required contract:
-  - `name`
-  - `description`
-  - `disable-model-invocation: true`
-- Added explicit `## Use when` and `## Not for` near the top.
-- Removed external `docs/...` reference redirects.
-- Added concrete `## Example` and `## Anti-patterns` sections.
+No summary recorded.
 
 ## Verification
 
-Executed required gates:
+No verification recorded.
 
-- `python3 -m pytest tests/enforcement_integration/test_enforcement_gates.py -v`
-  - Result: `26 passed, 79 subtests passed`
-- `ruff check tests/enforcement_integration`
-  - Result: `All checks passed`
-- `python3 -m compileall -q .`
-  - Result: pass
+## Verification Evidence
 
-## Outcome
+| # | Command | Exit Code | Verdict | Duration |
+|---|---------|-----------|---------|----------|
+| — | No verification commands discovered | — | — | — |
 
-T03 objective met: remaining six skills were brought to compliance across both surfaces, with enforcement tests green.
+## Deviations
+
+None.
+
+## Known Issues
+
+None.
+
+## Files Created/Modified
+
+None.
