@@ -299,6 +299,17 @@ engineering-standards/
 │   │   ├── test_bootstrap_hook.py      # Bootstrap hook integration tests
 │   │   ├── test_enforcement_gates.py   # Pre-commit/TDD/refactor gate tests
 │   │   └── test_token_usage_report.py  # Token usage script integration tests
+│   ├── skills/
+│   │   └── scenarios/                  # Skill scenario tests (per SKILL_AUTHORING_STANDARDS.md §8)
+│   │       ├── code-quality/basic.yaml
+│   │       ├── commit-review/basic.yaml
+│   │       ├── micro-commit/basic.yaml
+│   │       ├── pre-commit/basic.yaml
+│   │       ├── refactoring-gate/basic.yaml
+│   │       ├── spec-compliance/basic.yaml
+│   │       ├── static-analysis-gate/basic.yaml
+│   │       ├── tdd-enforcement/basic.yaml
+│   │       └── test-coverage/basic.yaml
 │   └── fixtures/
 │       ├── claude-project-with-bootstrap/
 │       └── invalid-skills/
@@ -488,3 +499,16 @@ All skills are validated by [`tests/enforcement_integration/test_enforcement_gat
 - Hard Gates section present
 - Status Vocabulary section present
 - References folder exists (when applicable)
+
+### CI
+
+Every push and pull request to `main` triggers the CI workflow (`.github/workflows/ci.yml`), which runs:
+- Enforcement integration tests (`pytest tests/enforcement_integration/`)
+- Scenario test YAML validation
+
+Run tests locally:
+```bash
+npm test
+# or directly:
+python3 -m pytest tests/enforcement_integration/ -v
+```
