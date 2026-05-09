@@ -21,7 +21,7 @@ Closes M003. M009 and M010 proceed on a documented, tested foundation.
 
 ## Tasks
 
-- [ ] **T01: Update README.md** `est:20 min`
+- [x] **T01: Update README.md** `est:20 min`
   Update README.md:
 1. Agent Skills Matrix section: verify all 9 skills listed; update 'references' column if any skills now have references/ folders
 2. Remove or annotate any mention of docs/workflows/ as active source of truth; update to 'historical archive'
@@ -32,7 +32,7 @@ Commit: `docs(readme): update post-M002 Agent Skills Matrix and CI section`
   - Files: `README.md`
   - Verify: Manual review: all 9 skills in matrix, CI section present, docs/workflows/ not referenced as active
 
-- [ ] **T02: Update CONTRIBUTING-SKILLS.md** `est:20 min`
+- [x] **T02: Update CONTRIBUTING-SKILLS.md** `est:20 min`
   Update CONTRIBUTING-SKILLS.md (or CONTRIBUTING.md if that is where skill contribution guidance lives):
 1. Add scenario test requirement: every new skill must include tests/skills/scenarios/<name>/basic.yaml
 2. Add CI requirement: PRs must pass the CI workflow
@@ -44,7 +44,7 @@ Commit: `docs(contributing): add scenario test, CI, and frontmatter requirements
   - Files: `CONTRIBUTING-SKILLS.md`, `CONTRIBUTING.md`
   - Verify: Manual review: all 4 new requirements present. No mention of docs/workflows/ as active source.
 
-- [ ] **T03: Update SKILL_AUTHORING_STANDARDS.md §8** `est:15 min`
+- [x] **T03: Update SKILL_AUTHORING_STANDARDS.md §8** `est:15 min`
   Update docs/SKILL_AUTHORING_STANDARDS.md §8:
 1. Add or update the scenario test section with the exact basic.yaml format/template
 2. Note that tests/skills/scenarios/<skill-name>/basic.yaml is mandatory for every skill (PR checklist item)
@@ -54,7 +54,7 @@ Commit: `docs(standards): add scenario test template and CI enforcement notes to
   - Files: `docs/SKILL_AUTHORING_STANDARDS.md`
   - Verify: Manual review: §8 has YAML example, mandatory requirement stated, CI reference present. File under 500 lines.
 
-- [ ] **T04: Final verification and clean-up** `est:10 min`
+- [x] **T04: Final verification and clean-up** `est:10 min`
   Final check: run enforcement tests, validate no broken links to docs/workflows/ remain in updated docs, confirm all files updated are under size limits.
 
 python3 -m pytest tests/enforcement_integration/ -v

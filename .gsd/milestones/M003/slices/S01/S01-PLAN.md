@@ -21,7 +21,7 @@ S02 (documentation) uses the completed CI config and scenario test format as inp
 
 ## Tasks
 
-- [ ] **T01: Extend test_enforcement_gates.py to cover .opencode/skills/** `est:30 min`
+- [x] **T01: Extend test_enforcement_gates.py to cover .opencode/skills/** `est:30 min`
   Extend tests/enforcement_integration/test_enforcement_gates.py to also validate .opencode/skills/ alongside .claude/skills/. The existing tests only check .claude/skills/; both surfaces should have the same compliance requirements.
 
 Changes:
@@ -31,7 +31,7 @@ Changes:
   - Files: `tests/enforcement_integration/test_enforcement_gates.py`, `tests/enforcement_integration/helpers.py`
   - Verify: python3 -m pytest tests/enforcement_integration/test_enforcement_gates.py -v -- shows test cases for both .claude/skills/ and .opencode/skills/, all passing
 
-- [ ] **T02: Create scenario tests for all 9 skills** `est:30 min`
+- [x] **T02: Create scenario tests for all 9 skills** `est:30 min`
   Create tests/skills/scenarios/ directory and a basic.yaml scenario file for each of the 9 skills. Per SKILL_AUTHORING_STANDARDS.md §8 and the PR checklist §9.
 
 Scenario file format:
@@ -46,7 +46,7 @@ Create for: code-quality, commit-review, micro-commit, pre-commit, refactoring-g
   - Files: `tests/skills/scenarios/`
   - Verify: ls tests/skills/scenarios/ shows 9 directories, each with basic.yaml. yamllint tests/skills/scenarios/**/*.yaml (or python3 -c 'import yaml; yaml.safe_load(open(...))') validates all files are valid YAML
 
-- [ ] **T03: Add .github/workflows/ci.yml and fix npm test** `est:20 min`
+- [x] **T03: Add .github/workflows/ci.yml and fix npm test** `est:20 min`
   Create .github/workflows/ci.yml that:
 - Triggers on: push to main, pull_request to main
 - Checks out code
@@ -59,7 +59,7 @@ Also fix the root package.json npm test placeholder to run the Python tests (via
   - Files: `.github/workflows/ci.yml`, `package.json`
   - Verify: Push branch to GitHub and confirm CI workflow appears in Actions tab and passes. Locally: cat .github/workflows/ci.yml and npm test both work.
 
-- [ ] **T04: Add dependabot.yml and SECURITY.md** `est:15 min`
+- [x] **T04: Add dependabot.yml and SECURITY.md** `est:15 min`
   Add .github/dependabot.yml to auto-update GitHub Actions versions (fixes CODEOWNERS reference to missing file). Add SECURITY.md with minimal security policy (vulnerability reporting email/process), fixing the second CODEOWNERS broken reference.
   - Files: `.github/dependabot.yml`, `SECURITY.md`
   - Verify: cat .github/dependabot.yml shows valid config. cat SECURITY.md has reporting instructions. .github/CODEOWNERS references no longer broken.
