@@ -11,7 +11,7 @@
 
 ## Slices
 
-- [ ] **S01: CI Pipeline, Skill Scenario Tests, and Enforcement Coverage** `risk:medium` `depends:[M002/S03]`
+- [ ] **S01: CI Pipeline, Skill Scenario Tests, and Enforcement Coverage** `risk:medium` `depends:[]`
   > After this: After this: every push/PR triggers a CI run that validates all skills via test_enforcement_gates.py; scenario tests exist for all 9 skills; .opencode/skills/ surface is also tested for compliance.
 
 - [ ] **S02: Update Documentation** `risk:low` `depends:[S01]`
