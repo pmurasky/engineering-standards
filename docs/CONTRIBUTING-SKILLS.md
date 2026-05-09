@@ -34,10 +34,11 @@ description: Clear description of what this skill does and when to use it.
 **Requirements:**
 - Required fields: `name`, `description`
 - Optional fields: `dependencies`, `budget`
-- No Claude-specific fields (no `argument-hint`, `disable-model-invocation`, etc.)
+- Forbidden fields: `argument-hint`, `disable-model-invocation`, `user-invocable`, and any other tool-specific metadata
 - Description should include trigger phrases (e.g., "Use when user asks...")
 - Maximum 500 lines total
 - Self-contained with inline instructions
+- `## Use when` and `## Not for` sections must appear within the first 30 lines after frontmatter
 
 **Metadata governance:** See [SKILL_METADATA_GOVERNANCE.md](./SKILL_METADATA_GOVERNANCE.md) for full spec.
 
@@ -145,12 +146,42 @@ python3 -m unittest discover -s tests/enforcement_integration -p "test_*.py"
 ```
 
 Tests validate:
-- Frontmatter has only name and description
+- Frontmatter has required fields (`name`, `description`) and no forbidden fields
 - Skills are under 500 lines
 - Hard Gates section exists
 - Status Vocabulary section exists
 - References/ folder exists (when applicable)
 - OpenCode and Claude skill names stay in sync when mirrored
+
+### Scenario Tests
+
+Every skill must include a scenario test file at:
+```
+tests/skills/scenarios/{skill-name}/basic.yaml
+```
+
+Format:
+```yaml
+skill_name: <skill-name>
+trigger: "<example user phrase that should invoke this skill>"
+expected_behavior: "<what the skill should produce>"
+not_for: "<example phrase that should NOT invoke this skill>"
+```
+
+Scenario tests are validated in CI on every push and PR.
+
+### CI
+
+All pull requests must pass the CI workflow (`.github/workflows/ci.yml`), which runs:
+- Enforcement integration tests
+- Scenario test YAML validation
+
+Run tests locally before committing:
+```bash
+npm test
+# or directly:
+python3 -m pytest tests/enforcement_integration/ -v
+```
 
 ## Change Management
 
@@ -165,11 +196,15 @@ When updating a skill:
 ## Quick Checklist
 
 - [ ] Skill has required frontmatter: `name`, `description`
+- [ ] No forbidden fields in frontmatter (`argument-hint`, `disable-model-invocation`, `user-invocable`)
 - [ ] Description includes trigger phrases
+- [ ] `## Use when` and `## Not for` sections within first 30 lines after frontmatter
 - [ ] Skill is under 500 lines
 - [ ] Has `## Hard Gates` section
 - [ ] Has `## Status Vocabulary` section
 - [ ] Has `## References` section
 - [ ] Uses relative paths for references
 - [ ] Mirrored skill names stay aligned across `.claude/skills/` and `.opencode/skills/`
+- [ ] Scenario test exists at `tests/skills/scenarios/{skill-name}/basic.yaml`
 - [ ] All tests pass
+- [ ] CI passes (`npm test` or `python3 -m pytest tests/enforcement_integration/ -v`)
