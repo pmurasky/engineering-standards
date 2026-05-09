@@ -17,7 +17,6 @@ description: >
   Use when [specific situation]. Covers [key concepts]. Third-person,
   trigger-focused, ≤1024 chars. Start with "Use when" or noun phrase
   describing what the skill does — not a workflow summary.
-disable-model-invocation: true  # true = pure reference; false = interactive workflow
 ---
 ```
 
@@ -158,19 +157,33 @@ Within a single skill, pick **one** term per concept and use it everywhere:
 
 ## 8. Testing Requirement
 
-Every new or edited skill MUST have at least one documented test scenario in `tests/skills/scenarios/<skill-name>/`. See the `writing-skills` environment skill for the TDD-for-skills workflow.
+Every new or edited skill MUST have at least one documented test scenario in `tests/skills/scenarios/<skill-name>/basic.yaml`.
 
-**Minimum scenario (messy-prompt style):**
+**Required scenario format:**
 
 ```yaml
 # tests/skills/scenarios/<skill-name>/basic.yaml
-skill: skill-name
-should_trigger:
-  - "how do i [concrete task this skill handles]"
-  - "[realistic casual phrasing of trigger situation]"
-should_not_trigger:
-  - "[situation handled by a different skill]"
-  - "[out-of-scope request]"
+skill_name: <skill-name>
+trigger: "<example user phrase that should invoke this skill>"
+expected_behavior: "<what the skill should produce>"
+not_for: "<example phrase that should NOT invoke this skill>"
+```
+
+**Example:**
+
+```yaml
+skill_name: pre-commit
+trigger: "ready to commit?"
+expected_behavior: "Run pre-commit readiness checks and report blockers using strict quality gates for tests, build, lint, and static analysis."
+not_for: "Early design discussions with no staged changes"
+```
+
+**CI enforcement:**
+The CI workflow (`.github/workflows/ci.yml`) validates all scenario test YAML files on every push and pull request. PRs with missing or invalid scenario tests will fail CI.
+
+Run scenario validation locally:
+```bash
+python3 -c "import yaml; yaml.safe_load(open('tests/skills/scenarios/<skill-name>/basic.yaml'))"
 ```
 
 ---
@@ -188,10 +201,13 @@ Before submitting a skill PR:
 - [ ] No background/history prose
 - [ ] Every bullet is an imperative ("do X" / "never Y"), not a topic label
 - [ ] `description` frontmatter is trigger-focused, third-person, includes symptom/task keywords
-- [ ] At least one test scenario exists in `tests/skills/scenarios/<skill-name>/`
+- [ ] No forbidden frontmatter fields (`argument-hint`, `disable-model-invocation`, `user-invocable`)
+- [ ] At least one test scenario exists at `tests/skills/scenarios/<skill-name>/basic.yaml`
+- [ ] Scenario test follows the required format (skill_name, trigger, expected_behavior, not_for)
 - [ ] References are one level deep only (`references/*.md`, no nested subdirectories)
 - [ ] Files >250 lines have a table of contents (>350 lines = required)
-- [ ] `make verify` passes
+- [ ] `npm test` passes (or `python3 -m pytest tests/enforcement_integration/ -v`)
+- [ ] CI passes on the PR
 
 ---
 
@@ -208,4 +224,4 @@ Before submitting a skill PR:
 | >250 lines, no TOC | Missing table of contents (warning) | Add TOC heading with anchor links |
 | >350 lines, no TOC | Missing table of contents (error) | Add TOC heading with anchor links |
 | `references/sub/file.md` | Nested reference depth (error) | Flatten to `references/file.md` |
-| `disable-model-invocation` missing | Incomplete metadata | Add with explicit `true` or `false` |
+| Forbidden frontmatter fields present | Agent Skills spec violation | Remove `argument-hint`, `disable-model-invocation`, `user-invocable` |
