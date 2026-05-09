@@ -1,5 +1,5 @@
 ---
-estimated_steps: 9
+estimated_steps: 8
 estimated_files: 2
 skills_used: []
 ---
@@ -16,22 +16,15 @@ Create .github/workflows/ci.yml that:
 
 Also fix the root package.json npm test placeholder to run the Python tests (via npx or a shell command).
 
-Commit: `ci: add CI workflow to run enforcement tests on push and PR`
-
 ## Inputs
 
-- `tests/enforcement_integration/README.md`
-- `tests/enforcement_integration/test_enforcement_gates.py`
+- `package.json`
 
 ## Expected Output
 
 - `.github/workflows/ci.yml`
-- `root package.json npm test updated`
+- `Updated package.json`
 
 ## Verification
 
 Push branch to GitHub and confirm CI workflow appears in Actions tab and passes. Locally: cat .github/workflows/ci.yml and npm test both work.
-
-## Observability Impact
-
-GitHub Actions tab shows ci.yml run status on every push and PR; npm test now runs real tests locally

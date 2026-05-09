@@ -13,10 +13,10 @@
 - ⬜ **M010:** OpenCode Plugin Packaging
 
 ## Recent Decisions
-- None recorded
+- Fixed M003/S01 cross-milestone dependency blocker by removing `depends:[M002/S03]` (M002 is complete)
 
 ## Blockers
-- No slice eligible — check dependency ordering
+- None
 
 ## Next Action
-Resolve dependency blockers or plan next slice.
+Execute M003/S01 tasks: T01 → T02 → T03 → T04

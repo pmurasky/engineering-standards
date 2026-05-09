@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exported_at": "2026-05-09T00:33:01.255Z",
+  "exported_at": "2026-05-09T01:12:47.133Z",
   "milestones": [
     {
       "id": "M001",
@@ -222,6 +222,25 @@
       ],
       "requirement_coverage": "Not provided.",
       "boundary_map_markdown": "Not provided."
+    },
+    {
+      "id": "M011",
+      "title": "",
+      "status": "queued",
+      "depends_on": [],
+      "created_at": "2026-05-09T00:35:54.124Z",
+      "completed_at": null,
+      "vision": "",
+      "success_criteria": [],
+      "key_risks": [],
+      "proof_strategy": [],
+      "verification_contract": "",
+      "verification_integration": "",
+      "verification_operational": "",
+      "verification_uat": "",
+      "definition_of_done": [],
+      "requirement_coverage": "",
+      "boundary_map_markdown": ""
     }
   ],
   "slices": [
@@ -373,7 +392,7 @@
       "full_uat_md": "",
       "goal": "Close the 3 critical audit gaps: CI pipeline, skill scenario tests for all 9 skills, and extend enforcement tests to cover .opencode/skills/.",
       "success_criteria": "CI runs on push/PR and passes. 9 scenario test YAML files exist. test_enforcement_gates.py covers .opencode/skills/. All local tests green.",
-      "proof_level": "CI green run on GitHub + local pytest exit code 0 + YAML lint on scenario files.",
+      "proof_level": "This slice proves: CI green run on GitHub + local pytest exit code 0 + YAML lint on scenario files.",
       "integration_closure": "S02 (documentation) uses the completed CI config and scenario test format as input. M009/M010 proceed on a tested foundation.",
       "observability_impact": "Primary observability surface: GitHub Actions run output visible in the PR/push timeline. Local test output via pytest -v. Scenario test validation surfaced via test_enforcement_gates.py extension.",
       "sequence": 1,
@@ -1832,7 +1851,7 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Extend tests/enforcement_integration/test_enforcement_gates.py to also validate .opencode/skills/ alongside .claude/skills/. The existing tests only check .claude/skills/; both surfaces should have the same compliance requirements.\n\nChanges:\n1. Read existing test structure to understand how .claude/skills/ path is parameterized\n2. Add .opencode/skills/ as a second surface to all compliance checks (frontmatter, line count, hard gates, status vocabulary, metadata)\n3. Run tests locally to confirm both surfaces pass\n\nCommit: `test(enforcement): extend gates to also validate .opencode/skills/ surface`",
+      "description": "Extend tests/enforcement_integration/test_enforcement_gates.py to also validate .opencode/skills/ alongside .claude/skills/. The existing tests only check .claude/skills/; both surfaces should have the same compliance requirements.\n\nChanges:\n1. Read existing test structure to understand how .claude/skills/ path is parameterized\n2. Add .opencode/skills/ as a second surface to all compliance checks (frontmatter, line count, hard gates, status vocabulary, metadata)\n3. Run tests locally to confirm both surfaces pass",
       "estimate": "30 min",
       "files": [
         "tests/enforcement_integration/test_enforcement_gates.py",
@@ -1840,15 +1859,13 @@
       ],
       "verify": "python3 -m pytest tests/enforcement_integration/test_enforcement_gates.py -v -- shows test cases for both .claude/skills/ and .opencode/skills/, all passing",
       "inputs": [
-        ".opencode/skills/",
-        ".claude/skills/",
-        "tests/enforcement_integration/test_enforcement_gates.py"
+        "tests/enforcement_integration/test_enforcement_gates.py",
+        "tests/enforcement_integration/helpers.py"
       ],
       "expected_output": [
-        "tests/enforcement_integration/test_enforcement_gates.py updated",
-        "Tests pass for both .claude/skills/ and .opencode/skills/"
+        "Updated test file covering both surfaces"
       ],
-      "observability_impact": "Test output now shows compliance results for both surfaces side by side",
+      "observability_impact": "",
       "full_plan_md": "",
       "sequence": 0,
       "blocker_source": "",
@@ -1874,28 +1891,19 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Create tests/skills/scenarios/ directory and a basic.yaml scenario file for each of the 9 skills. Per SKILL_AUTHORING_STANDARDS.md §8 and the PR checklist §9.\n\nScenario file format (derive from standard or establish if unspecified):\n```yaml\nskill_name: <skill>\ntrigger: \"<example user phrase that should invoke this skill>\"\nexpected_behavior: \"<what the skill should produce>\"\nnot_for: \"<example phrase that should NOT invoke this skill>\"\n```\n\nCreate for: code-quality, commit-review, micro-commit, pre-commit, refactoring-gate, spec-compliance, static-analysis-gate, tdd-enforcement, test-coverage.\n\nCommit: `test(skills): add scenario tests for all 9 skills per authoring standard §8`",
+      "description": "Create tests/skills/scenarios/ directory and a basic.yaml scenario file for each of the 9 skills. Per SKILL_AUTHORING_STANDARDS.md §8 and the PR checklist §9.\n\nScenario file format:\n```yaml\nskill_name: <skill>\ntrigger: \"<example user phrase that should invoke this skill>\"\nexpected_behavior: \"<what the skill should produce>\"\nnot_for: \"<example phrase that should NOT invoke this skill>\"\n```\n\nCreate for: code-quality, commit-review, micro-commit, pre-commit, refactoring-gate, spec-compliance, static-analysis-gate, tdd-enforcement, test-coverage.",
       "estimate": "30 min",
       "files": [
         "tests/skills/scenarios/"
       ],
       "verify": "ls tests/skills/scenarios/ shows 9 directories, each with basic.yaml. yamllint tests/skills/scenarios/**/*.yaml (or python3 -c 'import yaml; yaml.safe_load(open(...))') validates all files are valid YAML",
       "inputs": [
-        "docs/SKILL_AUTHORING_STANDARDS.md",
-        ".claude/skills/*/SKILL.md (for trigger phrases and Use when content)"
+        "SKILL_AUTHORING_STANDARDS.md"
       ],
       "expected_output": [
-        "tests/skills/scenarios/code-quality/basic.yaml",
-        "tests/skills/scenarios/commit-review/basic.yaml",
-        "tests/skills/scenarios/micro-commit/basic.yaml",
-        "tests/skills/scenarios/pre-commit/basic.yaml",
-        "tests/skills/scenarios/refactoring-gate/basic.yaml",
-        "tests/skills/scenarios/spec-compliance/basic.yaml",
-        "tests/skills/scenarios/static-analysis-gate/basic.yaml",
-        "tests/skills/scenarios/tdd-enforcement/basic.yaml",
-        "tests/skills/scenarios/test-coverage/basic.yaml"
+        "9 scenario YAML files in tests/skills/scenarios/"
       ],
-      "observability_impact": "None at runtime; test files serve as living documentation of expected skill invocation patterns",
+      "observability_impact": "",
       "full_plan_md": "",
       "sequence": 0,
       "blocker_source": "",
@@ -1921,7 +1929,7 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Create .github/workflows/ci.yml that:\n- Triggers on: push to main, pull_request to main\n- Checks out code\n- Sets up Python (3.11 or 3.12)\n- Installs dependencies (pip install pytest pyyaml)\n- Runs: python3 -m pytest tests/enforcement_integration/ -v\n- Runs: yamllint or python YAML validation on tests/skills/scenarios/**/*.yaml\n\nAlso fix the root package.json npm test placeholder to run the Python tests (via npx or a shell command).\n\nCommit: `ci: add CI workflow to run enforcement tests on push and PR`",
+      "description": "Create .github/workflows/ci.yml that:\n- Triggers on: push to main, pull_request to main\n- Checks out code\n- Sets up Python (3.11 or 3.12)\n- Installs dependencies (pip install pytest pyyaml)\n- Runs: python3 -m pytest tests/enforcement_integration/ -v\n- Runs: yamllint or python YAML validation on tests/skills/scenarios/**/*.yaml\n\nAlso fix the root package.json npm test placeholder to run the Python tests (via npx or a shell command).",
       "estimate": "20 min",
       "files": [
         ".github/workflows/ci.yml",
@@ -1929,14 +1937,13 @@
       ],
       "verify": "Push branch to GitHub and confirm CI workflow appears in Actions tab and passes. Locally: cat .github/workflows/ci.yml and npm test both work.",
       "inputs": [
-        "tests/enforcement_integration/README.md",
-        "tests/enforcement_integration/test_enforcement_gates.py"
+        "package.json"
       ],
       "expected_output": [
         ".github/workflows/ci.yml",
-        "root package.json npm test updated"
+        "Updated package.json"
       ],
-      "observability_impact": "GitHub Actions tab shows ci.yml run status on every push and PR; npm test now runs real tests locally",
+      "observability_impact": "",
       "full_plan_md": "",
       "sequence": 0,
       "blocker_source": "",
@@ -1962,7 +1969,7 @@
       "key_files": [],
       "key_decisions": [],
       "full_summary_md": "",
-      "description": "Add .github/dependabot.yml to auto-update GitHub Actions versions (fixes CODEOWNERS reference to missing file). Add SECURITY.md with minimal security policy (vulnerability reporting email/process), fixing the second CODEOWNERS broken reference.\n\nCommit: `chore(github): add dependabot.yml and SECURITY.md`",
+      "description": "Add .github/dependabot.yml to auto-update GitHub Actions versions (fixes CODEOWNERS reference to missing file). Add SECURITY.md with minimal security policy (vulnerability reporting email/process), fixing the second CODEOWNERS broken reference.",
       "estimate": "15 min",
       "files": [
         ".github/dependabot.yml",
@@ -1976,7 +1983,7 @@
         ".github/dependabot.yml",
         "SECURITY.md"
       ],
-      "observability_impact": "Dependabot will open PRs to update GitHub Actions versions. SECURITY.md visible in GitHub security tab.",
+      "observability_impact": "",
       "full_plan_md": "",
       "sequence": 0,
       "blocker_source": "",
