@@ -1,7 +1,6 @@
 ---
 name: pre-commit
 description: Run pre-commit readiness checks and report blockers before any commit is created.
-disable-model-invocation: true
 ---
 
 # Pre-Commit

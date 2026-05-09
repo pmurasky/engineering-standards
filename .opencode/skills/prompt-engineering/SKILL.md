@@ -14,7 +14,6 @@ not_for:
   - "simple one shot prompts or quick questions"
   - "interactive prompting where user steers each step"
   - "model selection or fine tuning decisions"
-disable-model-invocation: true
 ---
 
 # Prompt Engineering for Agent Tasks

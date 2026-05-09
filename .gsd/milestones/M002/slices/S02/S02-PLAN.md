@@ -21,7 +21,7 @@ S03 (Archive Canonical Contracts) can only safely run once these files no longer
 
 ## Tasks
 
-- [ ] **T01: Fix spec-compliance, commit-review, refactoring-gate** `est:45 min`
+- [x] **T01: Fix spec-compliance, commit-review, refactoring-gate** `est:45 min`
   Fix the 3 most non-compliant skills first (highest ROI).
 
 For each of spec-compliance, commit-review, refactoring-gate in BOTH .claude/skills/ and .opencode/skills/:
@@ -53,7 +53,7 @@ Example commit: `fix(skills): add Use when/Not for to static-analysis-gate`
   - Files: `.claude/skills/code-quality/SKILL.md`, `.opencode/skills/code-quality/SKILL.md`, `.claude/skills/micro-commit/SKILL.md`, `.opencode/skills/micro-commit/SKILL.md`, `.claude/skills/pre-commit/SKILL.md`, `.opencode/skills/pre-commit/SKILL.md`, `.claude/skills/tdd-enforcement/SKILL.md`, `.opencode/skills/tdd-enforcement/SKILL.md`, `.claude/skills/static-analysis-gate/SKILL.md`, `.opencode/skills/static-analysis-gate/SKILL.md`, `.claude/skills/test-coverage/SKILL.md`, `.opencode/skills/test-coverage/SKILL.md`
   - Verify: python3 -m pytest tests/enforcement_integration/test_enforcement_gates.py -v — all 9 skills pass
 
-- [ ] **T04: Full enforcement test suite green** `est:5 min`
+- [x] **T04: Full enforcement test suite green** `est:5 min`
   Full test suite run to confirm all skills pass enforcement gates after all SKILL.md edits.
 python3 -m pytest tests/enforcement_integration/ -v
 If any skill fails, fix immediately before proceeding to S03.

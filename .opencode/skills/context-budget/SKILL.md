@@ -12,8 +12,6 @@ triggers:
 not_for:
   - "planning what issue or task to start"
   - "writing commit messages or commit strategy"
-user-invocable: false
-disable-model-invocation: true
 ---
 
 # Context Budget — Active Mid-Session Checklist

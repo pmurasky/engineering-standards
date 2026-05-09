@@ -14,8 +14,6 @@ not_for:
   - "local code review before opening a pull request"
   - "creating a pull request or doing git housekeeping"
   - "blindly applying comments without thread context"
-disable-model-invocation: true
-argument-hint: "[PR number or URL]"
 context: fork
 agent: Explore
 allowed-tools: Bash(gh *)

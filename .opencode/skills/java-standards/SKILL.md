@@ -17,7 +17,6 @@ not_for:
   - "legacy java codebases stuck below java twenty one"
   - "deep checkstyle or spotbugs tuning work"
   - "kotlin or generic jvm standards guidance"
-disable-model-invocation: true
 ---
 
 # Java Standards (Java 21 / 25)

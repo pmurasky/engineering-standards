@@ -25,3 +25,9 @@
 {"id":"bad5b9f9-3e86-4b3c-a2f8-a44a4a9e1363","ts":"2026-05-08T10:36:54.896Z","severity":"warning","message":"Rate limited: API Error: Rate limit reached. Auto-resuming in 60s...","source":"notify","read":false}
 {"id":"7f824cf8-d139-46e0-9f0b-b32d48279cce","ts":"2026-05-08T10:36:54.919Z","severity":"warning","message":"Auto-mode paused due to provider errorProvider error: : API Error: Rate limit reached","source":"notify","read":false}
 {"id":"dcfa194a-0c0a-4c18-bb28-90d7d805866d","ts":"2026-05-08T10:36:55.251Z","severity":"info","message":"Step-mode paused (Escape). Type to interact, or /gsd next to resume.","source":"notify","read":false}
+{"id":"56dbc5f5-bee2-4012-a37f-3357b699a3f5","ts":"2026-05-08T10:53:37.019Z","severity":"info","message":"MCP client ready — 1 server(s) configured","source":"notify","read":false}
+{"id":"d35c471e-7100-4638-8ce2-7ac442375af2","ts":"2026-05-08T10:53:37.099Z","severity":"info","message":"Resuming paused session for M002.","source":"notify","read":false}
+{"id":"c04b208c-c886-44a9-a9d6-28fe64c4ecba","ts":"2026-05-08T10:53:37.101Z","severity":"info","message":"Step-mode resumed.","source":"notify","read":false}
+{"id":"cd9d8174-fc18-406b-9cdd-3b159cdabed9","ts":"2026-05-08T10:53:41.585Z","severity":"warning","message":"Rate limited: API Error: Rate limit reached. Auto-resuming in 60s...","source":"notify","read":false}
+{"id":"9e12c853-eb56-4122-9527-99f38999c8a5","ts":"2026-05-08T10:53:41.611Z","severity":"warning","message":"Auto-mode paused due to provider errorProvider error: : API Error: Rate limit reached","source":"notify","read":false}
+{"id":"14b9f938-b618-43ad-beb9-f5697d781806","ts":"2026-05-08T10:53:41.922Z","severity":"info","message":"Step-mode paused (Escape). Type to interact, or /gsd next to resume.","source":"notify","read":false}

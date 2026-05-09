@@ -1,7 +1,6 @@
 ---
 name: spec-compliance
 description: Verify requirement and acceptance-criteria compliance before code quality review. Use as the first review stage for feature or bug-fix work.
-disable-model-invocation: true
 ---
 
 # Specification Compliance Review

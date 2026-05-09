@@ -18,7 +18,6 @@ not_for:
   - "non python codebases without python specific concerns"
   - "react frontend or browser automation guidance"
   - "security only review where broader security skill leads"
-disable-model-invocation: true
 ---
 
 # Python Standards (Python 3.12+/3.13+)

@@ -1,7 +1,6 @@
 ---
 name: pre-commit
 description: Run pre-commit readiness checks and report blockers using strict quality gates for tests, build, lint, and static analysis.
-disable-model-invocation: true
 ---
 
 # Pre-Commit Validation

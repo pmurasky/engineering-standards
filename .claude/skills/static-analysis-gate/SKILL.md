@@ -1,7 +1,6 @@
 ---
 name: static-analysis-gate
 description: Enforce PMD, detekt, and Checkstyle as mandatory static-analysis gates before commit readiness.
-disable-model-invocation: true
 ---
 
 # Static Analysis Gate

@@ -1,7 +1,6 @@
 ---
 name: test-coverage
 description: Assess changed behavior for unit-test completeness and report concrete coverage gaps before closure.
-disable-model-invocation: true
 ---
 
 # Test Coverage

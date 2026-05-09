@@ -1,0 +1,118 @@
+=== /tmp/opencode/packages/opencode/src/config/config.ts ===
+134:     description: "@deprecated Use 'share' field instead. Share newly created sessions automatically",
+135:   }),
+136:   autoupdate: Schema.optional(Schema.Union([Schema.Boolean, Schema.Literal("notify")])).annotate({
+137:     description:
+138:       "Automatically update to the latest version. Set to true to auto-update, false to disable, or 'notify' to show update notifications",
+139:   }),
+140:   disabled_providers: Schema.optional(Schema.mutable(Schema.Array(Schema.String))).annotate({
+---
+=== /tmp/opencode/packages/opencode/src/cli/upgrade.ts ===
+8: export async function upgrade() {
+9:   const config = await AppRuntime.runPromise(Config.Service.use((cfg) => cfg.getGlobal()))
+10:   if (config.autoupdate === false || Flag.OPENCODE_DISABLE_AUTOUPDATE) return
+11:   const method = await Installation.method()
+12:   const latest = await Installation.latest(method).catch(() => {})
+13:   if (!latest) return
+14: 
+---
+14: 
+15:   if (Flag.OPENCODE_ALWAYS_NOTIFY_UPDATE) {
+16:     await Bus.publish(Installation.Event.UpdateAvailable, { version: latest })
+17:     return
+18:   }
+19: 
+20:   if (InstallationVersion === latest) return
+---
+22:   const kind = Installation.getReleaseType(InstallationVersion, latest)
+23: 
+24:   if (config.autoupdate === "notify" || kind !== "patch") {
+25:     await Bus.publish(Installation.Event.UpdateAvailable, { version: latest })
+26:     return
+27:   }
+28: 
+---
+23: 
+24:   if (config.autoupdate === "notify" || kind !== "patch") {
+25:     await Bus.publish(Installation.Event.UpdateAvailable, { version: latest })
+26:     return
+27:   }
+28: 
+29:   if (method === "unknown") return
+---
+=== /tmp/opencode/packages/opencode/src/plugin/shared.ts ===
+205: }
+206: 
+207: export async function resolvePluginTarget(spec: string) {
+208:   if (isPathPluginSpec(spec)) return resolvePathPluginTarget(spec)
+209:   const hit = parse(spec)
+210:   const pkg = hit?.name && hit.raw === hit.name ? `${hit.name}@latest` : spec
+211:   const result = await Npm.add(pkg)
+---
+208:   if (isPathPluginSpec(spec)) return resolvePathPluginTarget(spec)
+209:   const hit = parse(spec)
+210:   const pkg = hit?.name && hit.raw === hit.name ? `${hit.name}@latest` : spec
+211:   const result = await Npm.add(pkg)
+212:   return result.directory
+213: }
+214: 
+---
+=== /tmp/opencode/packages/opencode/src/plugin/install.ts ===
+14: import { isRecord } from "@/util/record"
+15: 
+16: import { parsePluginSpecifier, readPackageThemes, readPluginPackage, resolvePluginTarget } from "./shared"
+17: 
+18: type Mode = "noop" | "add" | "replace"
+19: type Kind = "server" | "tui"
+20: 
+---
+77: 
+78: const defaultInstallDeps: InstallDeps = {
+79:   resolve: (spec) => resolvePluginTarget(spec),
+80: }
+81: 
+82: const defaultPatchDeps: PatchDeps = {
+83:   readText: (file) => Filesystem.readText(file),
+---
+=== /tmp/opencode/packages/web/src/content/docs/plugins.mdx ===
+84: ```
+85: 
+86: OpenCode runs `bun install` at startup to install these. Your plugins and tools can then import them.
+87: 
+88: ```ts title=".opencode/plugins/my-plugin.ts"
+89: import { escape } from "shescape"
+90: 
+---
+=== /tmp/opencode/packages/opencode/src/cli/cmd/tui/feature-plugins/system/plugins.tsx ===
+155: function View(props: { api: TuiPluginApi }) {
+156:   const size = useTerminalDimensions()
+157:   const [list, setList] = createSignal(props.api.plugins.list())
+158:   const [cur, setCur] = createSignal<string | undefined>()
+159:   const [lock, setLock] = createSignal(false)
+160: 
+161:   createEffect(() => {
+---
+197:           })
+198:         }
+199:         setList(props.api.plugins.list())
+200:       })
+201:       .finally(() => {
+202:         setLock(false)
+203:       })
+---
+245:     {
+246:       title: "Plugins",
+247:       value: "plugins.list",
+248:       keybind: "plugin_manager",
+249:       category: "System",
+250:       onSelect() {
+251:         show(api)
+---
+254:     {
+255:       title: "Install plugin",
+256:       value: "plugins.install",
+257:       category: "System",
+258:       onSelect() {
+259:         showInstall(api)
+260:       },
+---

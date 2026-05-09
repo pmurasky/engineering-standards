@@ -1,0 +1,18 @@
+{
+  "id": "9f87e5d2-33e1-4064-980b-e2e29081b8e8",
+  "runtime": "python",
+  "purpose": "Print npm cache check lines",
+  "script_chars": 163,
+  "started_at": "2026-05-03T00:07:12.714Z",
+  "finished_at": "2026-05-03T00:07:12.746Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "duration_ms": 32,
+  "stdout_bytes": 928,
+  "stderr_bytes": 0,
+  "stdout_truncated": false,
+  "stderr_truncated": false,
+  "stdout_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/9f87e5d2-33e1-4064-980b-e2e29081b8e8.stdout",
+  "stderr_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/9f87e5d2-33e1-4064-980b-e2e29081b8e8.stderr"
+}

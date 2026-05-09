@@ -1,0 +1,18 @@
+{
+  "id": "3eb47fb6-43df-4449-806c-bbb29a8b39f1",
+  "runtime": "python",
+  "purpose": "Print resolvePluginTarget lines",
+  "script_chars": 178,
+  "started_at": "2026-05-03T00:06:15.041Z",
+  "finished_at": "2026-05-03T00:06:15.064Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "duration_ms": 23,
+  "stdout_bytes": 1173,
+  "stderr_bytes": 0,
+  "stdout_truncated": false,
+  "stderr_truncated": false,
+  "stdout_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/3eb47fb6-43df-4449-806c-bbb29a8b39f1.stdout",
+  "stderr_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/3eb47fb6-43df-4449-806c-bbb29a8b39f1.stderr"
+}

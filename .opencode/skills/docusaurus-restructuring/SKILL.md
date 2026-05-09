@@ -15,7 +15,6 @@ not_for:
   - "small wording or typo fixes in one page"
   - "non docusaurus docs without frontmatter and sidebars"
   - "content rewrites that keep one page structure"
-disable-model-invocation: true
 ---
 
 # Docusaurus Documentation Restructuring

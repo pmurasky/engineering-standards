@@ -1,0 +1,30 @@
+90:           ignoreScripts: true,
+91:         })
+92:         return yield* Effect.tryPromise({
+93:           try: () =>
+94:             arborist.reify({
+95:               ...npmOptions,
+96:               add,
+97:               save: true,
+98:               saveType: "prod",
+99:             }),
+100:           catch: (cause) =>
+101:             new InstallFailedError({
+102:               cause,
+103:               add,
+104:               dir: input.dir,
+105:             }),
+106:         }) as Effect.Effect<ArboristTree, InstallFailedError>
+107:       }).pipe(
+108:         Effect.withSpan("Npm.reify", {
+109:           attributes: input,
+110:         }),
+111:       )
+112: 
+113:     const add = Effect.fn("Npm.add")(function* (pkg: string) {
+114:       const dir = directory(pkg)
+115:       const name = (() => {
+116:         try {
+117:           return npa(pkg).name ?? pkg
+118:         } catch {
+119:           return pkg

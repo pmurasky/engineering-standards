@@ -15,10 +15,10 @@
 - [x] **S01: S01** `risk:low` `depends:[]`
   > After this: After this: each of the 3 workflow-heavy skills has a references/ directory with workflow.md content; other 6 skills directories are clean and ready for SKILL.md updates.
 
-- [ ] **S02: Update SKILL.md Files** `risk:medium` `depends:[S01]`
+- [x] **S02: S02** `risk:medium` `depends:[]`
   > After this: After this: all 9 SKILL.md files are fully spec-compliant — correct frontmatter, Use when/Not for within 30 lines, examples, anti-patterns, under 500 lines, no external doc redirects.
 
-- [ ] **S03: Archive Legacy Canonical Contracts** `risk:low` `depends:[S02]`
+- [x] **S03: S03** `risk:low` `depends:[]`
   > After this: After this: docs/workflows/ is either removed or clearly marked as a historical archive; no active skill, agent, or command references it as a live source of truth.
 
 ## Boundary Map

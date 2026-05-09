@@ -1,7 +1,6 @@
 ---
 name: spec-compliance
 description: Stage 1 review that verifies requirement and acceptance-criteria compliance before code quality checks. Run this before code-quality review.
-disable-model-invocation: true
 ---
 
 # Spec Compliance Review

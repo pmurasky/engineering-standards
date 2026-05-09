@@ -1,7 +1,6 @@
 ---
 name: tdd-enforcement
 description: Enforce strict RED→GREEN→REFACTOR sequencing with evidence-based gates and one-test-at-a-time discipline.
-disable-model-invocation: true
 ---
 
 # TDD Enforcement

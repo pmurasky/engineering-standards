@@ -17,7 +17,6 @@ not_for:
   - "non go repositories or other language work"
   - "react frontend or browser related standards"
   - "generic design guidance better handled elsewhere"
-disable-model-invocation: true
 ---
 
 # Go Standards (Go 1.22+)

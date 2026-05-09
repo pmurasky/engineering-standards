@@ -14,7 +14,6 @@ not_for:
   - "syntax formatting or linter questions only"
   - "premature abstraction in tiny stable code"
   - "security testing or analysis configuration work"
-disable-model-invocation: true
 ---
 
 # SOLID Principles

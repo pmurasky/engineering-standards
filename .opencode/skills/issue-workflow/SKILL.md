@@ -14,8 +14,6 @@ not_for:
   - "low level implementation or testing guidance"
   - "teams using jira instead of beads or github"
   - "pull request review triage or sprint reporting"
-user-invocable: false
-disable-model-invocation: true
 ---
 
 # Issue Workflow

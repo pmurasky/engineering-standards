@@ -15,7 +15,6 @@ not_for:
   - "general java coding questions outside analysis tools"
   - "kotlin only static analysis without java tools"
   - "manual review with no related analysis concern"
-disable-model-invocation: true
 ---
 
 # Java Static Analysis — ArchUnit, SpotBugs, Checkstyle

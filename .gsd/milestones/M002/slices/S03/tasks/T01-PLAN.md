@@ -1,26 +1,21 @@
 ---
-estimated_steps: 6
-estimated_files: 5
+estimated_steps: 1
+estimated_files: 1
 skills_used: []
 ---
 
 # T01: Grep all active references to docs/workflows/
 
-Grep all active config paths for references to docs/workflows/:
-- .claude/ (agents, rules, skills)
-- .opencode/ (agents, commands, skills)
-- AGENTS.md, CLAUDE.md, README.md
-List every file that contains 'docs/workflows' and the line content.
-Classify each as: ACTIVE (needs updating) vs INFORMATIONAL (ok to leave or delete).
+Search the entire codebase for any active references to docs/workflows/ or files within it. This includes imports, links in markdown, path references in code, and any documentation. Record every hit with file path and line number.
 
 ## Inputs
 
-- None specified.
+- `docs/workflows/`
 
 ## Expected Output
 
-- `Full list of docs/workflows/ references with file:line and classification`
+- `List of all files referencing docs/workflows/ with line numbers`
 
 ## Verification
 
-grep -r 'docs/workflows' . --include='*.md' --include='*.json' -- shows full list; classification written
+Run grep/search and produce a complete list of all references. No references should be missed.

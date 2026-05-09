@@ -17,7 +17,6 @@ not_for:
   - "full authentication or secrets design outside logging"
   - "metrics or tracing architecture without logging issue"
   - "general code style review without log concerns"
-disable-model-invocation: true
 ---
 
 # Logging Standards

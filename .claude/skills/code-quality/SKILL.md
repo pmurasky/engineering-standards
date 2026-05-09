@@ -1,7 +1,6 @@
 ---
 name: code-quality
 description: Stage-2 code quality review for SOLID, maintainability, and repository quality gates after spec-compliance passes.
-disable-model-invocation: true
 ---
 
 # Code Quality Review

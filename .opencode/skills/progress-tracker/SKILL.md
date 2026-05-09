@@ -13,7 +13,6 @@ not_for:
   - "single session tasks under ten commits"
   - "planning what to work on next"
   - "monitoring context health during active session"
-disable-model-invocation: true
 ---
 
 # Progress Tracker (Boulder Pattern)

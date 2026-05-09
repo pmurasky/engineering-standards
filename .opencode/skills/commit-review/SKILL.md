@@ -1,7 +1,6 @@
 ---
 name: commit-review
 description: Review staged changes and draft a standards-compliant commit message. Use when user asks for a commit review or wants help wording a production-ready commit.
-disable-model-invocation: true
 ---
 
 # Commit Review

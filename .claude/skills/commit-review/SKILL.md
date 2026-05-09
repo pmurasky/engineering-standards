@@ -1,7 +1,6 @@
 ---
 name: commit-review
 description: Review staged changes and draft a standards-compliant commit message before commit. This skill reviews and proposes - do not create commits automatically.
-disable-model-invocation: true
 ---
 
 # Commit Review

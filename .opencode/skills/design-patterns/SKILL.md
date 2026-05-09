@@ -14,7 +14,6 @@ not_for:
   - "basic style or naming questions without design"
   - "forcing patterns into simple stable code"
   - "framework specific details after pattern choice"
-disable-model-invocation: true
 ---
 
 # Design Patterns

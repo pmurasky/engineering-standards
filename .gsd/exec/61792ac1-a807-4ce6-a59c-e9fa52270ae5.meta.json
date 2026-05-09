@@ -1,0 +1,18 @@
+{
+  "id": "61792ac1-a807-4ce6-a59c-e9fa52270ae5",
+  "runtime": "python",
+  "purpose": "Extract relevant source lines",
+  "script_chars": 882,
+  "started_at": "2026-05-03T00:06:00.030Z",
+  "finished_at": "2026-05-03T00:06:00.056Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "duration_ms": 26,
+  "stdout_bytes": 4102,
+  "stderr_bytes": 0,
+  "stdout_truncated": false,
+  "stderr_truncated": false,
+  "stdout_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/61792ac1-a807-4ce6-a59c-e9fa52270ae5.stdout",
+  "stderr_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/61792ac1-a807-4ce6-a59c-e9fa52270ae5.stderr"
+}

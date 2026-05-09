@@ -1,7 +1,6 @@
 ---
 name: static-analysis-gate
 description: Execute static-analysis gates (PMD, detekt, Checkstyle) and block commit readiness on violations.
-disable-model-invocation: true
 ---
 
 # Static Analysis Gate

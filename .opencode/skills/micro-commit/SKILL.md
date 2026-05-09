@@ -1,7 +1,6 @@
 ---
 name: micro-commit
 description: Create one production-ready micro-commit with mandatory verification evidence and conventional commit messaging.
-disable-model-invocation: true
 ---
 
 # Micro-Commit

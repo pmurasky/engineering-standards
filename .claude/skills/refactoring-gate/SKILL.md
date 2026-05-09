@@ -1,7 +1,6 @@
 ---
 name: refactoring-gate
 description: Block refactoring when test coverage or test-health prerequisites are not met. Run this gate before any refactoring begins.
-disable-model-invocation: true
 ---
 
 # Refactoring Gate

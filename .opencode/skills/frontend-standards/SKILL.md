@@ -20,7 +20,6 @@ not_for:
   - "backend or domain layer standards work"
   - "ui guidance for non react frontend stacks"
   - "browser automation or end to end verification"
-disable-model-invocation: true
 ---
 
 # Frontend Standards (React 19 + Vitest 2)

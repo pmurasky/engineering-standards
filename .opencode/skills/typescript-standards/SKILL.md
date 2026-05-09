@@ -18,7 +18,6 @@ not_for:
   - "react component ui conventions better handled elsewhere"
   - "non typescript languages without ts or js scope"
   - "browser automation or visual qa with playwright"
-disable-model-invocation: true
 ---
 
 # TypeScript Standards (TypeScript 5.4+)

@@ -1,0 +1,18 @@
+{
+  "id": "83ccf7f3-5c6b-4879-90ca-25340b7f347d",
+  "runtime": "python",
+  "purpose": "Print npm existing package check lines",
+  "script_chars": 164,
+  "started_at": "2026-05-03T00:07:33.369Z",
+  "finished_at": "2026-05-03T00:07:33.386Z",
+  "exit_code": 0,
+  "signal": null,
+  "timed_out": false,
+  "duration_ms": 17,
+  "stdout_bytes": 590,
+  "stderr_bytes": 0,
+  "stdout_truncated": false,
+  "stderr_truncated": false,
+  "stdout_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/83ccf7f3-5c6b-4879-90ca-25340b7f347d.stdout",
+  "stderr_path": "/media/peter/Linux_AppData/AIProjects/engineering-standards/.gsd/exec/83ccf7f3-5c6b-4879-90ca-25340b7f347d.stderr"
+}

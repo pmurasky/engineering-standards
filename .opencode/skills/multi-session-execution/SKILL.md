@@ -13,7 +13,6 @@ not_for:
   - "single session tasks under ten commits"
   - "progress tracker file structure design"
   - "mid session context health monitoring only"
-disable-model-invocation: true
 ---
 
 # Multi-Session Execution

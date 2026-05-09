@@ -1,0 +1,8 @@
+122: 
+123:       if (yield* afs.existsSafe(path.join(dir, "node_modules", name))) {
+124:         return resolveEntryPoint(name, path.join(dir, "node_modules", name))
+125:       }
+126: 
+127:       const tree = yield* reify({ dir, add: [pkg] })
+128:       const first = tree.edgesOut.values().next().value?.to
+129:       if (!first) {

@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "projectStartedAt": 1778193067932,
+  "units": [
+    {
+      "type": "discuss-milestone",
+      "id": "M002",
+      "model": "claude-opus-4-6",
+      "startedAt": 1778193068847,
+      "finishedAt": 1778193085859,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "cost": 0,
+      "toolCalls": 0,
+      "assistantMessages": 1,
+      "userMessages": 0,
+      "apiRequests": 1
+    },
+    {
+      "type": "discuss-milestone",
+      "id": "M002",
+      "model": "claude-opus-4-6",
+      "startedAt": 1778195326668,
+      "finishedAt": 1778195329398,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "cost": 0,
+      "toolCalls": 0,
+      "assistantMessages": 1,
+      "userMessages": 0,
+      "apiRequests": 1
+    },
+    {
+      "type": "discuss-milestone",
+      "id": "M002",
+      "model": "claude-opus-4-6",
+      "startedAt": 1778236612215,
+      "finishedAt": 1778236614920,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "cost": 0,
+      "toolCalls": 0,
+      "assistantMessages": 1,
+      "userMessages": 0,
+      "apiRequests": 1
+    },
+    {
+      "type": "discuss-milestone",
+      "id": "M002",
+      "model": "claude-opus-4-6",
+      "startedAt": 1778237618550,
+      "finishedAt": 1778237621612,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "cost": 0,
+      "toolCalls": 0,
+      "assistantMessages": 1,
+      "userMessages": 0,
+      "apiRequests": 1
+    }
+  ]
+}

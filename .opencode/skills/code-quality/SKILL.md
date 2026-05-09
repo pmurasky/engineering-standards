@@ -1,7 +1,6 @@
 ---
 name: code-quality
 description: Review changes for maintainability, SOLID alignment, and repository quality gates after requirement compliance.
-disable-model-invocation: true
 ---
 
 # Code Quality

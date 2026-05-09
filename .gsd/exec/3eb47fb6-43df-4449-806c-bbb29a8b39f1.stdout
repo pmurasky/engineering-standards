@@ -1,0 +1,26 @@
+190: 
+191:   throw new Error(`Plugin directory ${file} is missing package.json or index file`)
+192: }
+193: 
+194: export async function checkPluginCompatibility(target: string, opencodeVersion: string, pkg?: PluginPackage) {
+195:   if (!semver.valid(opencodeVersion) || semver.major(opencodeVersion) === 0) return
+196:   const hit = pkg ?? (await readPluginPackage(target).catch(() => undefined))
+197:   if (!hit) return
+198:   const engines = hit.json.engines
+199:   if (!isRecord(engines)) return
+200:   const range = engines.opencode
+201:   if (typeof range !== "string") return
+202:   if (!semver.satisfies(opencodeVersion, range)) {
+203:     throw new Error(`Plugin requires opencode ${range} but running ${opencodeVersion}`)
+204:   }
+205: }
+206: 
+207: export async function resolvePluginTarget(spec: string) {
+208:   if (isPathPluginSpec(spec)) return resolvePathPluginTarget(spec)
+209:   const hit = parse(spec)
+210:   const pkg = hit?.name && hit.raw === hit.name ? `${hit.name}@latest` : spec
+211:   const result = await Npm.add(pkg)
+212:   return result.directory
+213: }
+214: 
+215: export async function readPluginPackage(target: string): Promise<PluginPackage> {

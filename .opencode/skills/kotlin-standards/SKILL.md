@@ -17,7 +17,6 @@ not_for:
   - "java specific language feature decisions"
   - "deep spotbugs or checkstyle configuration work"
   - "react frontend conventions unrelated to kotlin"
-disable-model-invocation: true
 ---
 
 # Kotlin Standards (Kotlin 2.3 / K2 Compiler)

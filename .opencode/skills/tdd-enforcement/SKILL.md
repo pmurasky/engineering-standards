@@ -1,7 +1,6 @@
 ---
 name: tdd-enforcement
 description: Enforce strict RED→GREEN→REFACTOR sequencing with proof before progression or completion claims.
-disable-model-invocation: true
 ---
 
 # TDD Enforcement

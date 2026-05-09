@@ -19,7 +19,6 @@ not_for:
   - "routine style questions without security impact"
   - "formal penetration testing or compliance audit replacement"
   - "pure logging format choices without security angle"
-disable-model-invocation: true
 ---
 
 # Security Standards

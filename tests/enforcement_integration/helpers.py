@@ -443,6 +443,12 @@ def validate_skill_metadata(skill_path: Path) -> list[str]:
     if description and len(description) > 1024:
         problems.append("invalid description length: must be <= 1024 characters")
 
+    # Forbidden fields per Agent Skills spec compliance
+    forbidden_fields = ["disable-model-invocation", "argument-hint", "user-invocable"]
+    for field in forbidden_fields:
+        if field in metadata:
+            problems.append(f"forbidden field in frontmatter: {field}")
+
     return problems
 
 

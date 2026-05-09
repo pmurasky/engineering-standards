@@ -1,7 +1,6 @@
 ---
 name: micro-commit
 description: Enforce one logical change per production-ready commit with required quality gates and Conventional Commits format.
-disable-model-invocation: true
 ---
 
 # Micro-Commit Workflow

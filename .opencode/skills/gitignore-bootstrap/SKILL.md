@@ -15,7 +15,6 @@ not_for:
   - "tiny one line ignore tweaks"
   - "removing secrets already committed to history"
   - "dockerignore or npmignore workflow changes"
-disable-model-invocation: true
 ---
 
 # gitignore.io Bootstrap

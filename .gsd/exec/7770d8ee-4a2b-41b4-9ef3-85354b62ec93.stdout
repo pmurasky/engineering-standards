@@ -1,0 +1,37 @@
+213: 
+214:   if (!force) {
+215:     return {
+216:       mode: "noop",
+217:       text,
+218:     }
+219:   }
+220: 
+221:   const keep = dup[0]
+222:   if (!keep) {
+223:     return {
+224:       mode: "noop",
+225:       text,
+226:     }
+227:   }
+228: 
+229:   if (dup.length === 1 && keep.spec === spec) {
+230:     return {
+231:       mode: "noop",
+232:       text,
+233:     }
+234:   }
+235: 
+236:   let out = text
+237:   if (typeof keep.item === "string") {
+238:     out = patch(out, ["plugin", keep.i], next)
+239:   }
+240:   if (Array.isArray(keep.item) && typeof keep.item[0] === "string") {
+241:     out = patch(out, ["plugin", keep.i, 0], spec)
+242:   }
+243: 
+244:   const del = dup
+245:     .map((item) => item.i)
+246:     .filter((i) => i !== keep.i)
+247:     .sort((a, b) => b - a)
+248: 
+249:   for (const i of del) {
