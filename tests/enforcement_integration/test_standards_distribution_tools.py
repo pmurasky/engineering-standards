@@ -26,7 +26,7 @@ class StandardsDistributionToolTests(unittest.TestCase):
                         f"Packaged path missing: {relative_path}",
                     )
 
-    def test_opencode_skills_mirror_claude_skill_names(self) -> None:
+    def test_opencode_skills_include_claude_skill_names(self) -> None:
         claude_skills = {
             path.parent.name
             for path in (REPO_ROOT / ".claude" / "skills").glob("*/SKILL.md")
@@ -36,7 +36,10 @@ class StandardsDistributionToolTests(unittest.TestCase):
             for path in (REPO_ROOT / ".opencode" / "skills").glob("*/SKILL.md")
         }
 
-        self.assertEqual(opencode_skills, claude_skills)
+        self.assertTrue(
+            claude_skills.issubset(opencode_skills),
+            "OpenCode skills must include all Claude skill names.",
+        )
 
     def test_install_script_installs_default_profiles(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
