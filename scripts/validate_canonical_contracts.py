@@ -11,8 +11,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCHEMA = REPO_ROOT / "schemas" / "canonical-workflow-contract.schema.json"
-DEFAULT_REGISTRY = REPO_ROOT / "docs" / "workflows" / "contracts.registry.json"
-DEFAULT_WORKFLOWS = REPO_ROOT / "docs" / "workflows"
+DEFAULT_REGISTRY = REPO_ROOT / "docs" / "archived-workflows" / "contracts.registry.json"
+DEFAULT_WORKFLOWS = REPO_ROOT / "docs" / "archived-workflows"
 DEFAULT_REQUIRED_SECTIONS: tuple[str, ...] = (
     "Purpose",
     "Trigger Conditions",
@@ -101,7 +101,7 @@ def validate_registry_coverage(
         return ["registry must include a contracts array"]
 
     discovered = {
-        f"docs/workflows/{path.name}" for path in contracts
+        f"docs/archived-workflows/{path.name}" for path in contracts
     }
     indexed = {
         value.get("contract_path")

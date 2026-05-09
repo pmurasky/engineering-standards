@@ -43,8 +43,8 @@
     },
     "canonical-contracts": {
       "files": {
-        "docs/workflows/README.md": 573,
-        "docs/workflows/pre-commit.md": 881
+        "docs/archived-workflows/README.md": 573,
+        "docs/archived-workflows/pre-commit.md": 881
       },
       "total": 1454
     }

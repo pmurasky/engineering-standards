@@ -214,7 +214,7 @@ class ContractDriftPressureTests(unittest.TestCase):
         self.assertIn("MISSING", content)
 
     def test_incomplete_hard_gates_detected(self) -> None:
-        canonical_contract = REPO_ROOT / "docs" / "workflows" / "pre-commit.md"
+        canonical_contract = REPO_ROOT / "docs" / "archived-workflows" / "pre-commit.md"
         fixture_skill = (
             REPO_ROOT
             / "tests"
@@ -236,7 +236,7 @@ class ContractStructureValidationTests(unittest.TestCase):
     def test_at_least_one_contract_discovered(self) -> None:
         contracts = discover_contracts()
         self.assertGreater(
-            len(contracts), 0, "No canonical contracts found in docs/workflows/"
+            len(contracts), 0, "No canonical contracts found in docs/archived-workflows/"
         )
 
     def test_all_contracts_have_required_sections(self) -> None:

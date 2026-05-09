@@ -22,7 +22,7 @@ This suite validates enforcement behavior for Skills 2.0 canonical workflow cont
 
 ### Contract Structure Validation Tests
 - `ContractStructureValidationTests` - Validates that all discovered contracts have required sections
-- Uses `discover_contracts()` to auto-detect all `docs/workflows/*.md` files
+- Uses `discover_contracts()` to auto-detect all `docs/archived-workflows/*.md` files
 - Checks for H1 title and all eight required H2 sections from the contract template
 
 ### Contract Structure Pressure Tests
@@ -129,7 +129,7 @@ python3 -m unittest tests.enforcement_integration.test_enforcement_gates.Contrac
 
 The contract parity tests validate:
 
-1. **Contract References** - Adapters reference valid canonical contracts in `docs/workflows/`
+1. **Contract References** - Adapters reference valid canonical contracts in `docs/archived-workflows/`
 2. **Hard-Gate Semantics** - Adapters implement canonical hard gates with proper blocking semantics
 3. **Status Vocabulary** - Adapters use canonical status terms (`READY`, `NOT READY`, `NOT CONFIGURED`)
 4. **Cross-Surface Parity** - Claude skills and OpenCode commands implement same workflow logic
@@ -156,7 +156,7 @@ The multi-category token reporting validates:
 
 When adding new workflows to Skills 2.0:
 
-1. Create canonical contract in `docs/workflows/[workflow-name].md`
+1. Create canonical contract in `docs/archived-workflows/[workflow-name].md`
 2. Add contract parity test in `ContractParityIntegrationTests` 
 3. Create pressure fixtures for common failure modes
 4. Add pressure tests in `ContractDriftPressureTests`

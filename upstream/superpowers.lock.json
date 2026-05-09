@@ -18,7 +18,7 @@
     {
       "workflow": "pre-commit",
       "upstream_path": "skills",
-      "local_contract": "docs/workflows/pre-commit.md",
+      "local_contract": "docs/archived-workflows/pre-commit.md",
       "divergence": "extend",
       "owner": "@maintainers/standards",
       "adapters": {
@@ -31,7 +31,7 @@
     {
       "workflow": "micro-commit",
       "upstream_path": "skills",
-      "local_contract": "docs/workflows/micro-commit.md",
+      "local_contract": "docs/archived-workflows/micro-commit.md",
       "divergence": "extend",
       "owner": "@maintainers/standards",
       "adapters": {
@@ -44,7 +44,7 @@
     {
       "workflow": "tdd-enforcement",
       "upstream_path": "skills",
-      "local_contract": "docs/workflows/tdd-enforcement.md",
+      "local_contract": "docs/archived-workflows/tdd-enforcement.md",
       "divergence": "extend",
       "owner": "@maintainers/standards",
       "adapters": {

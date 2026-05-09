@@ -3,7 +3,7 @@ name: Contract Adapter Impact
 on:
   pull_request:
     paths:
-      - "docs/workflows/*.md"
+      - "docs/archived-workflows/*.md"
       - "scripts/report_contract_adapter_impact.py"
       - ".github/workflows/contract-adapter-impact.yml"
   workflow_dispatch:

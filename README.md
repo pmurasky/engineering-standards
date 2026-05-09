@@ -478,7 +478,7 @@ All skills comply with [agentskills.io](https://agentskills.io):
 
 ### Legacy Workflow Archive
 
-`docs/workflows/` is now a historical archive from the pre-migration hybrid architecture. It is retained for learning and change-history context only, not as an active source of truth.
+`docs/archived-workflows/` is the historical archive from the pre-migration hybrid architecture. It is retained for learning and change-history context only, not as an active source of truth.
 
 ### Enforcement Tests
 

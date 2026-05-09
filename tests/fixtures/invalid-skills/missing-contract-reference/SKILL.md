@@ -15,7 +15,7 @@ If a required gate fails, output NOT READY and list blockers first.
 If a command is not available/configured, report NOT CONFIGURED explicitly.
 </HARD-GATE>
 
-This skill should fail contract parity validation because it has no reference to docs/workflows/*.md.
+This skill should fail contract parity validation because it has no reference to docs/archived-workflows/*.md.
 
 Output format:
 1. Status: READY or NOT READY

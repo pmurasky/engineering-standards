@@ -102,7 +102,7 @@ class UpstreamLockToolIntegrationTests(unittest.TestCase):
                     {
                         "workflow": "pre-commit",
                         "upstream_path": "skills",
-                        "local_contract": "docs/workflows/pre-commit.md",
+                        "local_contract": "docs/archived-workflows/pre-commit.md",
                         "divergence": "extend",
                         "owner": "@maintainers/standards",
                         "adapters": {
@@ -167,7 +167,7 @@ class UpstreamLockToolIntegrationTests(unittest.TestCase):
                     {
                         "workflow": "pre-commit",
                         "upstream_path": "skills",
-                        "local_contract": "docs/workflows/pre-commit.md",
+                        "local_contract": "docs/archived-workflows/pre-commit.md",
                         "divergence": "extend",
                         "owner": "@maintainers/standards",
                         "adapters": {

@@ -81,7 +81,7 @@
           },
           "local_contract": {
             "type": "string",
-            "pattern": "^docs/workflows/.+\\.md$"
+            "pattern": "^docs/(?:workflows|archived-workflows)/.+\\.md$"
           },
           "divergence": {
             "type": "string",

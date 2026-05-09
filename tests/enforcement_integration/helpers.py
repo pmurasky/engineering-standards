@@ -91,17 +91,17 @@ def validate_contract_references(adapter_path: Path) -> list[str]:
     content = read_text(adapter_path)
 
     # Check for canonical contract reference
-    contract_refs = re.findall(r"`docs/workflows/([^`]+\.md)`", content)
+    contract_refs = re.findall(r"`docs/(?:workflows|archived-workflows)/([^`]+\.md)`", content)
     if not contract_refs:
-        problems.append("missing canonical contract reference (docs/workflows/*.md)")
+        problems.append("missing canonical contract reference (docs/archived-workflows/*.md)")
         return problems
 
     # Validate referenced contract files exist
     for contract_ref in contract_refs:
-        contract_path = REPO_ROOT / "docs" / "workflows" / contract_ref
+        contract_path = REPO_ROOT / "docs" / "archived-workflows" / contract_ref
         if not contract_path.exists():
             problems.append(
-                f"referenced contract does not exist: docs/workflows/{contract_ref}"
+                f"referenced contract does not exist: docs/archived-workflows/{contract_ref}"
             )
 
     return problems
@@ -201,8 +201,8 @@ REQUIRED_CONTRACT_SECTIONS: list[str] = [
 ]
 
 CONTRACT_SCHEMA_PATH = REPO_ROOT / "schemas" / "canonical-workflow-contract.schema.json"
-CONTRACT_REGISTRY_PATH = REPO_ROOT / "docs" / "workflows" / "contracts.registry.json"
-CONTRACT_GUIDE_PATH = REPO_ROOT / "docs" / "workflows" / "CONTRIBUTING.md"
+CONTRACT_REGISTRY_PATH = REPO_ROOT / "docs" / "archived-workflows" / "contracts.registry.json"
+CONTRACT_GUIDE_PATH = REPO_ROOT / "docs" / "archived-workflows" / "CONTRIBUTING.md"
 
 
 def load_contract_schema() -> dict[str, object]:
@@ -223,8 +223,8 @@ def schema_required_sections() -> list[str]:
 
 
 def discover_contracts() -> list[Path]:
-    """Return all canonical contract files in docs/workflows/ (excludes README)."""
-    workflows_dir = REPO_ROOT / "docs" / "workflows"
+    """Return all canonical contract files in docs/archived-workflows/ (excludes README)."""
+    workflows_dir = REPO_ROOT / "docs" / "archived-workflows"
     if not workflows_dir.is_dir():
         return []
     excluded = {"readme.md", "template.md", "contributing.md"}
@@ -309,7 +309,7 @@ def validate_contract_registry() -> list[str]:
         problems.extend(validate_contract_structure(contract_path))
 
     discovered = {
-        f"docs/workflows/{path.name}"
+        f"docs/archived-workflows/{path.name}"
         for path in discover_contracts()
     }
     indexed = {
@@ -357,7 +357,7 @@ def validate_workflow_parity(workflow_name: str) -> list[str]:
     # Paths for adapters
     claude_skill = REPO_ROOT / ".claude" / "skills" / workflow_name / "SKILL.md"
     opencode_command = REPO_ROOT / ".opencode" / "commands" / f"{workflow_name}.md"
-    canonical_contract = REPO_ROOT / "docs" / "workflows" / f"{workflow_name}.md"
+    canonical_contract = REPO_ROOT / "docs" / "archived-workflows" / f"{workflow_name}.md"
 
     # Check if both adapters exist
     if not claude_skill.exists():

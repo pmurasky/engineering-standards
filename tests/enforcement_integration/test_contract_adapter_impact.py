@@ -27,7 +27,7 @@ class ContractAdapterImpactIntegrationTests(unittest.TestCase):
         self.assertIn("Changed contracts: 1", result.stdout)
         self.assertIn("Impacted adapters:", result.stdout)
         self.assertIn(
-            ".opencode/commands/pre-commit.md (references docs/workflows/pre-commit.md)",
+            ".opencode/commands/pre-commit.md (references docs/archived-workflows/pre-commit.md)",
             result.stdout,
         )
         self.assertIn("::warning title=Contract adapter may need update::", result.stdout)
@@ -38,7 +38,7 @@ class ContractAdapterImpactIntegrationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("Changed contracts: 0", result.stdout)
         self.assertIn(
-            "No canonical contract changes detected under docs/workflows/*.md",
+            "No canonical contract changes detected under docs/archived-workflows/*.md",
             result.stdout,
         )
 

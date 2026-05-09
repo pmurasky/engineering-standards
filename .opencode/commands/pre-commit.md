@@ -4,7 +4,7 @@ agent: pre-commit-check
 subtask: true
 ---
 
-**Canonical Contract**: Implements the workflow defined in `docs/workflows/pre-commit.md`.
+**Canonical Contract**: Implements the workflow defined in `docs/archived-workflows/pre-commit.md`.
 
 <HARD-GATE>
 Execute all quality gates defined in the canonical contract.
@@ -23,5 +23,5 @@ Never recommend commit readiness when required gates fail.
 Execute quality gates per canonical contract workflow. Use canonical contract output format and status vocabulary.
 
 **References**:
-- `docs/workflows/pre-commit.md` (authoritative workflow)
+- `docs/archived-workflows/pre-commit.md` (authoritative workflow)
 - `docs/PRE_COMMIT_CHECKLIST.md` (detailed checklist)

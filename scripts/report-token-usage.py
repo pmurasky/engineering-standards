@@ -32,7 +32,7 @@ CATEGORY_PATTERNS = {
     ],
     "claude-skills": [".claude/skills/*/SKILL.md"],
     "opencode-commands": [".opencode/commands/*.md"],
-    "canonical-contracts": ["docs/workflows/*.md"],
+    "canonical-contracts": ["docs/archived-workflows/*.md"],
 }
 
 

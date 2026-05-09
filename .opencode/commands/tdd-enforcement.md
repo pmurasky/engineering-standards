@@ -3,7 +3,7 @@ description: Enforce strict test-first TDD sequencing with hard gates
 agent: standards-build
 ---
 
-**Canonical Contract**: Implements the workflow defined in `docs/workflows/tdd-enforcement.md`.
+**Canonical Contract**: Implements the workflow defined in `docs/archived-workflows/tdd-enforcement.md`.
 
 Enforce strict TDD for this scope: $ARGUMENTS
 
@@ -16,5 +16,5 @@ Block progression for any TDD violations per canonical contract.
 Execute TDD workflow steps per canonical contract. Apply rationalization defense patterns and must-watch-it-fail verification as defined.
 
 **References**:
-- `docs/workflows/tdd-enforcement.md` (authoritative workflow)
+- `docs/archived-workflows/tdd-enforcement.md` (authoritative workflow)
 - `docs/AI_AGENT_WORKFLOW.md` (rationalization defense table)

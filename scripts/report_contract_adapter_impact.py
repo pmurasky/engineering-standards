@@ -11,8 +11,8 @@ import re
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CONTRACT_DIR = REPO_ROOT / "docs" / "workflows"
-CONTRACT_REF_PATTERN = re.compile(r"`docs/workflows/([^`]+\.md)`")
+CONTRACT_DIR = REPO_ROOT / "docs" / "archived-workflows"
+CONTRACT_REF_PATTERN = re.compile(r"`docs/(?:workflows|archived-workflows)/([^`]+\.md)`")
 
 ADAPTER_GLOBS: tuple[str, ...] = (
     ".claude/skills/**/SKILL.md",
@@ -49,7 +49,7 @@ def parse_args() -> argparse.Namespace:
         action="append",
         default=[],
         help=(
-            "Relative contract path under docs/workflows/, for example pre-commit.md. "
+            "Relative contract path under docs/archived-workflows/, for example pre-commit.md. "
             "Can be passed multiple times."
         ),
     )
@@ -71,9 +71,9 @@ def resolve_changed_contracts(args: argparse.Namespace) -> list[str]:
     changed_files = git_diff_names(args.base, args.head)
     contracts: list[str] = []
     for file_path in changed_files:
-        if not file_path.startswith("docs/workflows/"):
+        if not file_path.startswith("docs/archived-workflows/"):
             continue
-        leaf = file_path.removeprefix("docs/workflows/")
+        leaf = file_path.removeprefix("docs/archived-workflows/")
         if not leaf.endswith(".md"):
             continue
         if leaf.lower() == "readme.md":
@@ -86,7 +86,9 @@ def normalize_contract_path(value: str) -> str:
     normalized = value.strip().replace("\\", "/")
     if not normalized:
         return ""
-    if normalized.startswith("docs/workflows/"):
+    if normalized.startswith("docs/archived-workflows/"):
+        normalized = normalized.removeprefix("docs/archived-workflows/")
+    elif normalized.startswith("docs/workflows/"):
         normalized = normalized.removeprefix("docs/workflows/")
     if normalized.lower() == "readme.md":
         return ""
@@ -147,13 +149,13 @@ def emit_results(changed_contracts: list[str], impacts: list[Impact]) -> None:
     print(f"Impacted adapters: {len(impacts)}")
 
     if not changed_contracts:
-        print("No canonical contract changes detected under docs/workflows/*.md")
+        print("No canonical contract changes detected under docs/archived-workflows/*.md")
         return
 
     print("")
     print("Changed canonical contracts:")
     for contract in changed_contracts:
-        print(f"- docs/workflows/{contract}")
+        print(f"- docs/archived-workflows/{contract}")
 
     print("")
     if not impacts:
@@ -163,10 +165,10 @@ def emit_results(changed_contracts: list[str], impacts: list[Impact]) -> None:
 
     print("Potentially affected adapters:")
     for impact in impacts:
-        print(f"- {impact.adapter} (references docs/workflows/{impact.contract})")
+        print(f"- {impact.adapter} (references docs/archived-workflows/{impact.contract})")
         print(
             "::warning title=Contract adapter may need update::"
-            f"{impact.adapter} references docs/workflows/{impact.contract}"
+            f"{impact.adapter} references docs/archived-workflows/{impact.contract}"
         )
 
 

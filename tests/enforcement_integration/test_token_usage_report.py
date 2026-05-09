@@ -198,7 +198,7 @@ class MultiCategoryTokenReportTests(unittest.TestCase):
         # Check canonical contracts are detected
         canonical_contracts = categories["canonical-contracts"] 
         self.assertGreater(canonical_contracts["file_count"], 0)
-        self.assertIn("docs/workflows/pre-commit.md", str(canonical_contracts["files"]))
+        self.assertIn("docs/archived-workflows/pre-commit.md", str(canonical_contracts["files"]))
 
 
 if __name__ == "__main__":
