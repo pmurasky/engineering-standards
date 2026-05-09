@@ -72,36 +72,78 @@ class EnforcementGateSkillIntegrationTests(unittest.TestCase):
 
 
 class AgentSkillsComplianceTests(unittest.TestCase):
-    def test_pre_commit_skill_has_hard_gates(self) -> None:
-        skill_path = REPO_ROOT / ".claude" / "skills" / "pre-commit" / "SKILL.md"
+    def _check_skill_hard_gates(self, surface: str, skill_name: str) -> None:
+        skill_path = REPO_ROOT / f".{surface}" / "skills" / skill_name / "SKILL.md"
         problems = validate_skill(skill_path, ["Hard Gates"])
-        self.assertEqual(problems, [], f"Pre-commit hard gate issues: {problems}")
+        self.assertEqual(problems, [], f"{surface}/{skill_name} hard gate issues: {problems}")
 
-    def test_pre_commit_skill_has_status_vocabulary(self) -> None:
-        skill_path = REPO_ROOT / ".claude" / "skills" / "pre-commit" / "SKILL.md"
+    def _check_skill_status_vocabulary(self, surface: str, skill_name: str) -> None:
+        skill_path = REPO_ROOT / f".{surface}" / "skills" / skill_name / "SKILL.md"
         problems = validate_skill(skill_path, ["Status Vocabulary"])
         self.assertEqual(
-            problems, [], f"Pre-commit status vocabulary issues: {problems}"
+            problems, [], f"{surface}/{skill_name} status vocabulary issues: {problems}"
         )
 
-    def test_pre_commit_skill_under_500_lines(self) -> None:
-        skill_path = REPO_ROOT / ".claude" / "skills" / "pre-commit" / "SKILL.md"
+    def _check_skill_under_500_lines(self, surface: str, skill_name: str) -> None:
+        skill_path = REPO_ROOT / f".{surface}" / "skills" / skill_name / "SKILL.md"
         content = skill_path.read_text(encoding="utf-8")
         line_count = len(content.splitlines())
         self.assertLess(
             line_count,
             500,
-            f"Pre-commit skill has {line_count} lines, must be under 500",
+            f"{surface}/{skill_name} skill has {line_count} lines, must be under 500",
         )
 
-    def test_pre_commit_skill_has_references_folder(self) -> None:
-        references_path = REPO_ROOT / ".claude" / "skills" / "pre-commit" / "references"
+    def _check_skill_has_references_folder(self, surface: str, skill_name: str) -> None:
+        references_path = REPO_ROOT / f".{surface}" / "skills" / skill_name / "references"
         self.assertTrue(
-            references_path.exists(), "Pre-commit skill missing references/ folder"
+            references_path.exists(), f"{surface}/{skill_name} skill missing references/ folder"
         )
 
-    def test_all_skills_have_name_and_description_in_frontmatter(self) -> None:
+    def test_pre_commit_skill_has_hard_gates_claude(self) -> None:
+        self._check_skill_hard_gates("claude", "pre-commit")
+
+    def test_pre_commit_skill_has_hard_gates_opencode(self) -> None:
+        self._check_skill_hard_gates("opencode", "pre-commit")
+
+    def test_pre_commit_skill_has_status_vocabulary_claude(self) -> None:
+        self._check_skill_status_vocabulary("claude", "pre-commit")
+
+    def test_pre_commit_skill_has_status_vocabulary_opencode(self) -> None:
+        self._check_skill_status_vocabulary("opencode", "pre-commit")
+
+    def test_pre_commit_skill_under_500_lines_claude(self) -> None:
+        self._check_skill_under_500_lines("claude", "pre-commit")
+
+    def test_pre_commit_skill_under_500_lines_opencode(self) -> None:
+        self._check_skill_under_500_lines("opencode", "pre-commit")
+
+    def test_pre_commit_skill_has_references_folder_claude(self) -> None:
+        self._check_skill_has_references_folder("claude", "pre-commit")
+
+    def test_pre_commit_skill_has_references_folder_opencode(self) -> None:
+        self._check_skill_has_references_folder("opencode", "pre-commit")
+
+    def test_all_claude_skills_have_name_and_description_in_frontmatter(self) -> None:
         skills_dir = REPO_ROOT / ".claude" / "skills"
+        for skill_dir in skills_dir.iterdir():
+            if skill_dir.is_dir():
+                skill_path = skill_dir / "SKILL.md"
+                if skill_path.exists():
+                    content = skill_path.read_text(encoding="utf-8")
+                    self.assertIn(
+                        "name:",
+                        content,
+                        f"{skill_dir.name} missing 'name' in frontmatter",
+                    )
+                    self.assertIn(
+                        "description:",
+                        content,
+                        f"{skill_dir.name} missing 'description' in frontmatter",
+                    )
+
+    def test_all_opencode_skills_have_name_and_description_in_frontmatter(self) -> None:
+        skills_dir = REPO_ROOT / ".opencode" / "skills"
         for skill_dir in skills_dir.iterdir():
             if skill_dir.is_dir():
                 skill_path = skill_dir / "SKILL.md"
@@ -150,17 +192,27 @@ class SkillMetadataValidationTests(unittest.TestCase):
                     f"{skill_path.parent.name} should not require legacy fields: {problems}",
                 )
 
-    def test_skill_name_matches_directory_name(self) -> None:
+    def test_claude_skill_name_matches_directory_name(self) -> None:
         for skill_path in discover_skills("claude"):
             with self.subTest(skill=skill_path.parent.name):
                 metadata = parse_frontmatter(skill_path)
                 self.assertEqual(
                     metadata.get("name"),
                     skill_path.parent.name,
-                    f"Skill name must match directory: {skill_path.parent.name}",
+                    f"Claude skill name must match directory: {skill_path.parent.name}",
                 )
 
-    def test_skill_dependencies_are_valid(self) -> None:
+    def test_opencode_skill_name_matches_directory_name(self) -> None:
+        for skill_path in discover_skills("opencode"):
+            with self.subTest(skill=skill_path.parent.name):
+                metadata = parse_frontmatter(skill_path)
+                self.assertEqual(
+                    metadata.get("name"),
+                    skill_path.parent.name,
+                    f"OpenCode skill name must match directory: {skill_path.parent.name}",
+                )
+
+    def test_claude_skill_dependencies_are_valid(self) -> None:
         claude_skills = discover_skills("claude")
         all_skill_names = {p.parent.name for p in claude_skills}
 
@@ -173,8 +225,31 @@ class SkillMetadataValidationTests(unittest.TestCase):
                     f"{skill_path.parent.name} dependency issues: {problems}",
                 )
 
-    def test_skill_budget_format_is_valid(self) -> None:
+    def test_opencode_skill_dependencies_are_valid(self) -> None:
+        opencode_skills = discover_skills("opencode")
+        all_skill_names = {p.parent.name for p in opencode_skills}
+
+        for skill_path in opencode_skills:
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_metadata_dependencies(skill_path, all_skill_names)
+                self.assertEqual(
+                    problems,
+                    [],
+                    f"{skill_path.parent.name} dependency issues: {problems}",
+                )
+
+    def test_claude_skill_budget_format_is_valid(self) -> None:
         for skill_path in discover_skills("claude"):
+            with self.subTest(skill=skill_path.parent.name):
+                problems = validate_metadata_budget(skill_path)
+                self.assertEqual(
+                    problems,
+                    [],
+                    f"{skill_path.parent.name} budget issues: {problems}",
+                )
+
+    def test_opencode_skill_budget_format_is_valid(self) -> None:
+        for skill_path in discover_skills("opencode"):
             with self.subTest(skill=skill_path.parent.name):
                 problems = validate_metadata_budget(skill_path)
                 self.assertEqual(
