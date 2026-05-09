@@ -1,11 +1,22 @@
 ---
 name: spec-compliance
 description: Stage 1 review that verifies requirement and acceptance-criteria compliance before code quality checks. Run this before code-quality review.
+disable-model-invocation: true
 ---
 
 # Spec Compliance Review
 
 Run stage-1 spec compliance review to verify requirements before code quality checks.
+
+## Use when
+
+- You need to verify implementation behavior against explicit requirements.
+- You want a stage-1 gate before maintainability or style review.
+
+## Not for
+
+- General refactoring guidance.
+- Commit message drafting or staged-diff quality checks.
 
 ## Trigger Conditions
 
@@ -53,7 +64,17 @@ Do not include SOLID/style/maintainability issues in this stage.
 - **Frequency**: Per review (typically 1-2 times per PR)
 - **Optimization**: Focus on requirement gaps first
 
-## References
+## Example
 
-- `docs/AI_AGENT_WORKFLOW.md` - Workflow documentation
-- `docs/PRE_COMMIT_CHECKLIST.md` - Quality checklist
+Input: "Check this PR against acceptance criteria before code quality review."
+
+Output:
+1. `PASS` or `FAIL`
+2. Requirement-to-evidence matrix
+3. Blocking mismatches
+4. Next action (fix gaps or proceed to stage 2)
+
+## Anti-patterns
+
+- Mixing requirement-compliance findings with style/SOLID feedback.
+- Declaring `PASS` without explicit criterion-by-criterion evidence.

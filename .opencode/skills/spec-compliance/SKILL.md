@@ -1,34 +1,57 @@
 ---
 name: spec-compliance
 description: Verify requirement and acceptance-criteria compliance before code quality review. Use as the first review stage for feature or bug-fix work.
-version: 1.0.0
-category: review
+disable-model-invocation: true
 ---
 
 # Specification Compliance Review
 
-Review whether the implementation actually satisfies the requested behavior before judging code quality.
+Review whether implementation satisfies requested behavior before any code-quality judgment.
+
+## Use when
+
+- The user asks to review if a change meets requirements
+- You are validating acceptance criteria before code-quality review
+- You need to separate behavior gaps from style or maintainability feedback
+
+## Not for
+
+- Replacing detailed code-quality review or security review
+- Approving work without verification evidence
+- Mixing requirement failures with minor stylistic suggestions
 
 ## Hard Gates
 
-1. Compare the implementation against the stated requirements and acceptance criteria.
-2. Do not pass work that misses required behavior, edge cases, or user-visible outcomes.
-3. Separate requirement gaps from code-quality suggestions.
+1. Compare implementation against stated requirements and acceptance criteria.
+2. Flag missing required behavior, edge cases, or user-visible outcomes.
+3. Separate requirement compliance outcomes from quality recommendations.
+4. Do not mark `PASS` without explicit evidence.
 
 ## Workflow
 
-1. Restate the expected behavior from the task, spec, or tests.
-2. Inspect the implementation and its verification coverage.
-3. Identify missing acceptance criteria or unverified behavior.
-4. Produce a pass/flag/block result before any stage-2 code-quality review.
+1. Restate expected behavior from task/spec/tests.
+2. Inspect implementation and verification evidence.
+3. Map each acceptance criterion to observed proof or gap.
+4. Produce a `PASS`, `FLAG`, or `BLOCK` verdict before stage-2 quality review.
 
 ## Status Vocabulary
 
-- `PASS`: The implementation satisfies the intended requirements.
-- `FLAG`: Minor ambiguity or follow-up remains, but core behavior is present.
-- `BLOCK`: Required behavior is missing or contradicted.
+- `PASS`: Requirements are satisfied with evidence.
+- `FLAG`: Core behavior exists, but ambiguity or follow-up remains.
+- `BLOCK`: Required behavior is missing, contradicted, or unverified.
 
-## References
+## Example
 
-- `docs/AI_AGENT_WORKFLOW.md` - Feature workflow and verification expectations
-- `docs/CODING_PRACTICES.md` - Testing and acceptance-quality standards
+User asks: "Check if this feature meets acceptance criteria before quality review."
+
+Expected outcome:
+- Restated acceptance criteria
+- Criterion-by-criterion compliance verdict
+- Clear `PASS`/`FLAG`/`BLOCK` status
+- Specific behavioral gaps (if any), separate from code-style notes
+
+## Anti-patterns
+
+- Saying `PASS` based on intuition without tests or evidence
+- Combining requirement violations with low-priority formatting comments
+- Skipping edge-case criteria because happy-path tests pass

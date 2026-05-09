@@ -1,11 +1,24 @@
 ---
 name: commit-review
 description: Review staged changes and draft a standards-compliant commit message before commit. This skill reviews and proposes - do not create commits automatically.
+disable-model-invocation: true
 ---
 
 # Commit Review
 
 Review staged content and prepare a commit proposal following standards.
+
+## Use when
+
+- The user asks for a commit message draft before committing
+- You need a readiness assessment of staged changes against project gates
+- You want to confirm a single logical change boundary before commit
+
+## Not for
+
+- Creating or executing commits directly
+- Reviewing unstaged-only changes as if they are commit-ready
+- Bypassing test/build/lint readiness checks
 
 ## Trigger Conditions
 
@@ -65,8 +78,18 @@ This skill **reviews and proposes only**. Do not create commits automatically.
 - **Frequency**: Per commit (typically 5-20 times per development session)
 - **Optimization**: Focus on message quality and blocker detection
 
-## References
+## Example
 
-- `docs/AI_AGENT_WORKFLOW.md` - Micro-commit philosophy
-- `docs/PRE_COMMIT_CHECKLIST.md` - Quality checklist
-- `docs/CODING_PRACTICES.md` - Production-ready requirements
+User asks: "Review my staged changes and suggest a commit message."
+
+Expected outcome:
+- Determine whether staged diff is one logical change
+- Report `READY`, `NOT READY`, or `SPLIT REQUIRED`
+- Provide a Conventional Commit message focused on why
+- List blockers if quality gates are not met
+
+## Anti-patterns
+
+- Auto-committing changes after drafting a message
+- Ignoring failing tests/build/lint and still reporting READY
+- Suggesting a single commit for unrelated staged changes

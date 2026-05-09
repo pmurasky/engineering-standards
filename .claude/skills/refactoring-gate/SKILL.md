@@ -1,11 +1,24 @@
 ---
 name: refactoring-gate
 description: Block refactoring when test coverage or test-health prerequisites are not met. Run this gate before any refactoring begins.
+disable-model-invocation: true
 ---
 
 # Refactoring Gate
 
 Run a hard-gate readiness check before any refactoring begins.
+
+## Use when
+
+- The user requests refactoring of existing production code
+- You are about to perform behavior-preserving structural changes
+- You need explicit go/no-go evidence before refactor edits
+
+## Not for
+
+- New feature implementation that changes behavior intentionally
+- Formatting-only or trivial rename operations that are exempt
+- Proceeding without coverage and test-health evidence
 
 ## Trigger Conditions
 
@@ -65,8 +78,18 @@ Even for exceptions:
 - **Frequency**: Per refactoring session (typically 1-5 times per session)
 - **Optimization**: Cache coverage results between invocations
 
-## References
+## Example
 
-- `docs/AI_AGENT_WORKFLOW.md` - Micro-commit workflow
-- `docs/CODING_PRACTICES.md` - Refactoring prerequisites
-- `docs/PRE_COMMIT_CHECKLIST.md` - Quality checklist
+User asks: "Refactor this large service class."
+
+Expected outcome:
+- Check target unit-test coverage (>= 80%)
+- Check critical-path coverage (100% where applicable)
+- Confirm current tests are green
+- Output `READY`, `BLOCKED`, or `EXEMPT` with required next action
+
+## Anti-patterns
+
+- Starting refactoring before proving coverage and test health
+- Treating integration/E2E coverage as unit-test coverage for gate thresholds
+- Mixing bug fixes and refactoring in one unscoped step
