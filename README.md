@@ -26,6 +26,44 @@ opencode plug @pmurasky/engineering-standards
 
 This installs the plugin and makes all skills, agents, and commands available in your project.
 
+### Plugin Tools
+
+Once installed, the plugin provides these OpenCode tools:
+
+| Tool | Description |
+|------|-------------|
+| `installStandards` | Install engineering standards into a target project (creates docs, AGENTS.md, .opencode/, etc.) |
+| `updateStandards` | Update an existing installation, preserving local changes unless `--force` is used |
+| `checkStandardsStatus` | Check if standards are installed and show version/profiles |
+| `checkStandardsCompliance` | Check if code changes comply with standards (method length, SOLID, coverage) |
+
+#### Example: Install standards into current project
+
+```
+installStandards --profiles core --profiles opencode
+```
+
+#### Example: Update existing installation
+
+```
+updateStandards --force
+```
+
+#### Example: Check installation status
+
+```
+checkStandardsStatus
+```
+
+### Auto-Updates
+
+The plugin automatically checks for updates when OpenCode starts. If a newer version is available, you'll see a notification:
+
+```
+[engineering-standards] Update available: v1.0.0 → v1.1.0
+[engineering-standards] Run 'updateStandards' to update.
+```
+
 ### Alternative: File-Based Install
 
 Paste this prompt into OpenCode to install the recommended OpenCode profile into the current project:
