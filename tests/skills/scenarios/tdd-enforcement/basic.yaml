@@ -1,0 +1,4 @@
+skill_name: tdd-enforcement
+trigger: "use strict test-first execution"
+expected_behavior: "Enforce strict RED→GREEN→REFACTOR sequencing with evidence-based gates and one-test-at-a-time discipline."
+not_for: "Final commit-readiness review (use pre-commit)"

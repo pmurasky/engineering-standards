@@ -1,0 +1,4 @@
+skill_name: pre-commit
+trigger: "ready to commit?"
+expected_behavior: "Run pre-commit readiness checks and report blockers using strict quality gates for tests, build, lint, and static analysis."
+not_for: "Early design discussions with no staged changes"

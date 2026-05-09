@@ -1,0 +1,4 @@
+skill_name: test-coverage
+trigger: "check test coverage"
+expected_behavior: "Assess changed behavior for unit-test completeness and identify concrete coverage gaps before completion."
+not_for: "Full code-quality review across all concerns"

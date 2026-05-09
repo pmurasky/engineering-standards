@@ -1,0 +1,4 @@
+skill_name: commit-review
+trigger: "review my commit"
+expected_behavior: "Review staged changes and draft a standards-compliant commit message before commit."
+not_for: "Creating or executing commits directly"

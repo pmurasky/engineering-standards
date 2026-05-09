@@ -1,0 +1,4 @@
+skill_name: static-analysis-gate
+trigger: "run static analysis"
+expected_behavior: "Enforce PMD, detekt, and Checkstyle as mandatory static-analysis gates before commit readiness."
+not_for: "Functional requirement validation"

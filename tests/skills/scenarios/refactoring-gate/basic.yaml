@@ -1,0 +1,4 @@
+skill_name: refactoring-gate
+trigger: "refactor this"
+expected_behavior: "Block refactoring when test coverage or test-health prerequisites are not met. Run this gate before any refactoring begins."
+not_for: "New feature implementation that changes behavior intentionally"

@@ -1,0 +1,4 @@
+skill_name: spec-compliance
+trigger: "spec compliance check"
+expected_behavior: "Stage 1 review that verifies requirement and acceptance-criteria compliance before code quality checks."
+not_for: "General refactoring guidance"

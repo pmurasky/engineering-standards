@@ -1,0 +1,4 @@
+skill_name: micro-commit
+trigger: "commit current work"
+expected_behavior: "Enforce one logical change per production-ready commit with required quality gates and Conventional Commits format."
+not_for: "Planning roadmap priorities or issue triage"

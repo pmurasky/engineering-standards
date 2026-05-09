@@ -1,0 +1,4 @@
+skill_name: code-quality
+trigger: "run stage-2 code quality review"
+expected_behavior: "Stage-2 code quality review for SOLID, maintainability, and repository quality gates after spec-compliance passes."
+not_for: "Initial requirement/acceptance validation (use spec-compliance first)"
