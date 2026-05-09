@@ -1,4 +1,0 @@
-46: ### How plugins are installed
-47: 
-48: **npm plugins** are installed automatically using Bun at startup. Packages and their dependencies are cached in `~/.cache/opencode/node_modules/`.
-49: 

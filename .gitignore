@@ -28,6 +28,10 @@ __pycache__/
 .gsd/gsd.db*
 .gsd/completed-units*.json
 .gsd/event-log.jsonl
+.gsd/exec/
+.gsd/journal/
+.gsd/doctor-history.jsonl
+.gsd/notifications.jsonl
 
 # ── GSD baseline (auto-generated) ──
 .gsd-id

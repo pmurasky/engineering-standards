@@ -1,8 +1,0 @@
-206: 
-207: export async function resolvePluginTarget(spec: string) {
-208:   if (isPathPluginSpec(spec)) return resolvePathPluginTarget(spec)
-209:   const hit = parse(spec)
-210:   const pkg = hit?.name && hit.raw === hit.name ? `${hit.name}@latest` : spec
-211:   const result = await Npm.add(pkg)
-212:   return result.directory
-213: }
